@@ -1,0 +1,338 @@
+import React, { useState, useEffect } from 'react';
+import { Mail, MapPin, Linkedin, Github, FileText, Send, Eye, CheckCircle, AlertCircle } from 'lucide-react';
+
+const Contact = () => {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    subject: 'Inquiry',
+    message: ''
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [emailJSLoaded, setEmailJSLoaded] = useState(false);
+
+  // Load EmailJS script
+  useEffect(() => {
+    if (window.emailjs) {
+      setEmailJSLoaded(true);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    script.async = true;
+    
+    script.onload = () => {
+      window.emailjs.init('M6P-QvPnvJyyNU6fn');
+      setEmailJSLoaded(true);
+    };
+    
+    script.onerror = () => {
+      console.error('Failed to load EmailJS');
+    };
+    
+    document.head.appendChild(script);
+
+    return () => {
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!emailJSLoaded) {
+      setSubmitStatus('error');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      // EmailJS configuration
+      const serviceID = 'service_bx7vrfe';
+      const templateID = 'template_gcdk229';
+      const publicKey = 'M6P-QvPnvJyyNU6fn';
+
+      // Template parameters that match your EmailJS template
+      const templateParams = {
+        from_name: formData.fullName,
+        from_email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+        to_name: 'Your Name', // Replace with your actual name
+      };
+
+      // Send email using EmailJS
+      const response = await window.emailjs.send(
+        serviceID,
+        templateID,
+        templateParams,
+        publicKey
+      );
+
+      console.log('Email sent successfully:', response);
+      setSubmitStatus('success');
+      
+      // Reset form
+      setFormData({
+        fullName: '',
+        email: '',
+        subject: 'Inquiry',
+        message: ''
+      });
+
+    } catch (error) {
+      console.error('Email sending failed:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+      
+      // Clear status message after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus(null);
+      }, 5000);
+    }
+  };
+
+  return (
+    <section id="contact" className="py-20 bg-white">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-orange-500 mb-4">
+            Get in Touch
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            I'd love to hear about your ideas or opportunities!
+          </p>
+        </div>
+
+        {/* Status Messages */}
+        {submitStatus && (
+          <div className={`max-w-md mx-auto mb-8 p-4 rounded-lg flex items-center gap-3 ${
+            submitStatus === 'success' 
+              ? 'bg-green-50 border border-green-200 text-green-800' 
+              : 'bg-red-50 border border-red-200 text-red-800'
+          }`}>
+            {submitStatus === 'success' ? (
+              <CheckCircle size={20} className="text-green-600" />
+            ) : (
+              <AlertCircle size={20} className="text-red-600" />
+            )}
+            <span>
+              {submitStatus === 'success' 
+                ? 'Message sent successfully! I\'ll get back to you soon.' 
+                : 'Failed to send message. Please try again or email me directly.'}
+            </span>
+          </div>
+        )}
+
+        {/* Content Grid */}
+        <div className="grid lg:grid-cols-2 gap-12">
+          {/* Left Column - Contact Info */}
+          <div className="space-y-8">
+            {/* Contact Information */}
+            <div className="bg-gray-50 rounded-xl p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-6">Contact Information</h3>
+              
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-orange-100 rounded-lg">
+                    <Mail size={20} className="text-orange-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Email</p>
+                    <a 
+                      href="mailto:lsibisi@icloud.com"
+                      className="text-gray-600 hover:text-orange-600 transition-colors"
+                    >
+                      lsibisi@icloud.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-orange-100 rounded-lg">
+                    <MapPin size={20} className="text-orange-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Location</p>
+                    <p className="text-gray-600">Sandton, South Africa</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Social Media Links */}
+            <div className="bg-gray-50 rounded-xl p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-6">Connect With Me</h3>
+              
+              <div className="flex gap-4">
+                <a
+                  href="#"
+                  className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105 flex-1"
+                >
+                  <Linkedin size={20} className="text-blue-600" />
+                  <span className="font-medium text-gray-700">LinkedIn</span>
+                </a>
+                
+                <a
+                  href="#"
+                  className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105 flex-1"
+                >
+                  <Github size={20} className="text-gray-600" />
+                  <span className="font-medium text-gray-700">GitHub</span>
+                </a>
+                
+                <a
+                  href="#"
+                  className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105 flex-1"
+                >
+                  <FileText size={20} className="text-gray-600" />
+                  <span className="font-medium text-gray-700">CV</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Availability Status */}
+            <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <h3 className="text-lg font-bold text-green-800">Available Now</h3>
+              </div>
+              <p className="text-green-700">
+                I am currently open to freelance work and collaborations. Let's discuss your next project!
+              </p>
+            </div>
+          </div>
+
+          {/* Right Column - Contact Form */}
+          <div className="bg-gray-50 rounded-xl p-8">
+            <h3 className="text-xl font-bold text-gray-900 mb-6">Send me a message</h3>
+            
+            <div className="space-y-6">
+              <div>
+                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
+                  Full name *
+                </label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleInputChange}
+                  disabled={isSubmitting}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  placeholder="Your full name"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  disabled={isSubmitting}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  placeholder="your.email@example.com"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                  Subject *
+                </label>
+                <select
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleInputChange}
+                  disabled={isSubmitting}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <option value="Inquiry">General Inquiry</option>
+                  <option value="Collaboration">Collaboration Opportunity</option>
+                  <option value="Job Opportunity">Job Opportunity</option>
+                  <option value="Freelance Project">Freelance Project</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                  Message *
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  disabled={isSubmitting}
+                  rows={5}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+                  placeholder="Tell me about your project or idea..."
+                />
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting || !emailJSLoaded || !formData.fullName || !formData.email || !formData.message}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:transform-none"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={18} />
+                      Send Message
+                    </>
+                  )}
+                </button>
+                
+                <button
+                  type="button"
+                  disabled={isSubmitting}
+                  className="flex-1 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-2"
+                >
+                  <Eye size={18} />
+                  View Portfolio
+                </button>
+              </div>
+
+              {!emailJSLoaded && (
+                <div className="text-sm text-gray-500 text-center">
+                  Loading email service...
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Contact;
