@@ -151,9 +151,9 @@ const Contact = () => {
           <div className="text-center mb-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
               <Code className="text-orange-500" size={28} />
-              Days I Code
+              GitHub Activity
             </h3>
-            <p className="text-gray-600">My GitHub contribution activity</p>
+            <p className="text-gray-600">My coding journey and contributions</p>
           </div>
           
           <div className="bg-gradient-to-br from-gray-50 to-orange-50 rounded-2xl p-8 border border-gray-200">
@@ -181,11 +181,11 @@ const Contact = () => {
                     
                     <div className="bg-white rounded-xl p-4 border border-gray-200 flex items-center gap-3">
                       <div className="p-2 bg-blue-100 rounded-lg">
-                        <Activity className="text-blue-600" size={20} />
+                        <Star className="text-blue-600" size={20} />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Followers</p>
-                        <p className="text-xl font-bold text-gray-900">{githubData.followers}</p>
+                        <p className="text-sm text-gray-600">Following</p>
+                        <p className="text-xl font-bold text-gray-900">{githubData.following}</p>
                       </div>
                     </div>
                     
@@ -203,46 +203,78 @@ const Contact = () => {
                   </div>
                 )}
 
-                {/* GitHub Calendar Placeholder */}
-                <div className="bg-white rounded-xl p-6 border border-gray-200">
+                {/* GitHub Badges Section */}
+                <div className="bg-white rounded-xl p-6 border border-gray-200 mb-6">
                   <div className="text-center mb-6">
-                    <p className="text-sm text-gray-600 mb-4">Contribution Activity (Last 12 Months)</p>
+                    <p className="text-lg font-semibold text-gray-800 mb-4">GitHub Badges</p>
                   </div>
                   
-                  {/* Custom Calendar Grid */}
-                  <div className="overflow-x-auto">
-                    <div className="inline-block min-w-full">
-                      {/* Month labels */}
-                      <div className="flex mb-2 text-xs text-gray-500">
-                        {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(month => (
-                          <div key={month} className="flex-1 text-center min-w-[60px]">{month}</div>
-                        ))}
-                      </div>
-                      
-                      {/* Calendar grid */}
-                      <div className="space-y-1">
-                        {[...Array(7)].map((_, dayIndex) => (
-                          <div key={dayIndex} className="flex gap-1">
-                            {[...Array(53)].map((_, weekIndex) => {
-                              const intensity = Math.random();
-                              let bgColor = 'bg-gray-100';
-                              
-                              if (intensity > 0.7) bgColor = 'bg-orange-500';
-                              else if (intensity > 0.5) bgColor = 'bg-orange-400';
-                              else if (intensity > 0.3) bgColor = 'bg-orange-300';
-                              else if (intensity > 0.1) bgColor = 'bg-orange-200';
-                              
-                              return (
-                                <div
-                                  key={`${dayIndex}-${weekIndex}`}
-                                  className={`w-3 h-3 rounded-sm ${bgColor} hover:ring-2 hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-200 cursor-pointer`}
-                                  title={`${Math.floor(intensity * 10)} contributions`}
-                                />
-                              );
-                            })}
-                          </div>
-                        ))}
-                      </div>
+                  <div className="flex flex-wrap justify-center gap-4">
+                    <img 
+                      src="https://img.shields.io/github/followers/Shotbylu?style=for-the-badge&logo=github&logoColor=white&color=orange" 
+                      alt="GitHub Followers"
+                      className="hover:scale-105 transition-transform duration-200"
+                    />
+                    <img 
+                      src="https://img.shields.io/github/stars/Shotbylu?affiliations=OWNER%2CCOLLABORATOR&style=for-the-badge&logo=github&logoColor=white&color=blue" 
+                      alt="GitHub Stars"
+                      className="hover:scale-105 transition-transform duration-200"
+                    />
+                    <img 
+                      src="https://img.shields.io/badge/Profile%20Views-Dynamic-brightgreen?style=for-the-badge&logo=github" 
+                      alt="Profile Views"
+                      className="hover:scale-105 transition-transform duration-200"
+                    />
+                  </div>
+                  
+                  <div className="flex flex-wrap justify-center gap-4 mt-4">
+                    <img 
+                      src="https://github-readme-stats.vercel.app/api?username=Shotbylu&show_icons=true&theme=default&hide_border=true&bg_color=f9fafb&title_color=f97316&icon_color=f97316" 
+                      alt="GitHub Stats"
+                      className="rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+                    />
+                  </div>
+                  
+                  <div className="flex justify-center mt-4">
+                    <img 
+                      src="https://github-readme-streak-stats.herokuapp.com/?user=Shotbylu&theme=default&hide_border=true&background=f9fafb&ring=f97316&fire=f97316&currStreakLabel=374151" 
+                      alt="GitHub Streak"
+                      className="rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+                    />
+                  </div>
+                </div>
+
+                {/* Real GitHub Contribution Calendar */}
+                <div className="bg-white rounded-xl p-6 border border-gray-200">
+                  <div className="text-center mb-6">
+                    <p className="text-lg font-semibold text-gray-800 mb-4">Contribution Calendar</p>
+                  </div>
+                  
+                  <div className="flex justify-center">
+                    <img 
+                      src="https://ghchart.rshah.org/f97316/Shotbylu" 
+                      alt="GitHub Contribution Calendar"
+                      className="rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 max-w-full h-auto"
+                      style={{ filter: 'brightness(1.1)' }}
+                    />
+                  </div>
+                  
+                  <div className="flex justify-center mt-4">
+                    <a 
+                      href="https://github.com/Shotbylu" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium"
+                    >
+                      <Github size={20} />
+                      View on GitHub
+                    </a>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
                       
                       {/* Legend */}
                       <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
