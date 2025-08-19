@@ -36,33 +36,39 @@ const Footer = () => {
           </div>
 
           {/* Contact & Social */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Get In Touch</h4>
-            <p className="text-gray-400">lsibisi@icloud.com</p>
-            <p className="text-gray-400">Johannesburg, South Africa</p>
-            
-            <div className="flex gap-4 pt-2">
-              <a
-                href="#"
-                className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <Github size={20} />
-              </a>
-              <a
-                href="#"
-                className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <Linkedin size={20} />
-              </a>
-              <a
-                href="#"
-                className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <Mail size={20} />
-              </a>
-            </div>
-          </div>
-        </div>
+<div className="space-y-4">
+  <h4 className="text-lg font-semibold">Get In Touch</h4>
+  <p className="text-gray-400">lsibisi@icloud.com</p>
+  <p className="text-gray-400">Johannesburg, South Africa</p>
+  
+  <div className="flex gap-4 pt-2">
+    <a
+      href="https://github.com/Shotbylu"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
+      aria-label="GitHub"
+    >
+      <Github size={20} />
+    </a>
+    <a
+      href="https://www.linkedin.com/in/lungelo-sibisi-6745aa21b"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
+      aria-label="LinkedIn"
+    >
+      <Linkedin size={20} />
+    </a>
+    <a
+      href="mailto:lsibisi@icloud.com"
+      className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
+      aria-label="Email"
+    >
+      <Mail size={20} />
+    </a>
+  </div>
+</div>
 
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
