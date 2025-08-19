@@ -329,9 +329,17 @@ const SpaceInvadersGame = () => {
     <div className="py-8 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-6">
-          <h3 className="text-2xl font-semibold text-gray-800 mb-3 flex items-center justify-center gap-2">
-            Try getting a high score while i reply to your email
-          </h3>
+          <div className="relative">
+            <h3 className="text-3xl font-bold bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent mb-2">
+              🚀 Try Getting a High Score 🚀
+            </h3>
+            <p className="text-lg text-gray-600 italic font-medium">
+              while I reply to your email ✉️
+            </p>
+            <div className="absolute -top-2 -left-2 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+            <div className="absolute -top-1 -right-3 w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+            <div className="absolute -bottom-1 left-1/4 w-1 h-1 bg-green-400 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+          </div>
           <button
             onClick={() => setIsVisible(!isVisible)}
             className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300"
