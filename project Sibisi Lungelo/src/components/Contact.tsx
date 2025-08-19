@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, MapPin, Linkedin, Github, FileText, Send, Eye, CheckCircle, AlertCircle } from 'lucide-react';
+import { Mail, MapPin, Linkedin, Github, FileText, Send, Eye, CheckCircle, AlertCircle, Calendar, Code, Activity } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +12,8 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [emailJSLoaded, setEmailJSLoaded] = useState(false);
+  const [githubData, setGithubData] = useState(null);
+  const [githubLoading, setGithubLoading] = useState(true);
 
   // Load EmailJS script
   useEffect(() => {
@@ -42,6 +44,27 @@ const Contact = () => {
     };
   }, []);
 
+  // Fetch GitHub data
+  useEffect(() => {
+    const fetchGitHubData = async () => {
+      try {
+        const response = await fetch('https://api.github.com/users/Shotbylu', {
+          headers: {
+            'Authorization': 
+          }
+        });
+        const data = await response.json();
+        setGithubData(data);
+      } catch (error) {
+        console.error('Failed to fetch GitHub data:', error);
+      } finally {
+        setGithubLoading(false);
+      }
+    };
+
+    fetchGitHubData();
+  }, []);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -62,21 +85,18 @@ const Contact = () => {
     setSubmitStatus(null);
 
     try {
-      // EmailJS configuration
       const serviceID = 'service_bx7vrfe';
       const templateID = 'template_gcdk229';
       const publicKey = 'M6P-QvPnvJyyNU6fn';
 
-      // Template parameters that match your EmailJS template
       const templateParams = {
         from_name: formData.fullName,
         from_email: formData.email,
         subject: formData.subject,
         message: formData.message,
-        to_name: 'Your Name', // Replace with your actual name
+        to_name: 'Your Name',
       };
 
-      // Send email using EmailJS
       const response = await window.emailjs.send(
         serviceID,
         templateID,
@@ -87,7 +107,6 @@ const Contact = () => {
       console.log('Email sent successfully:', response);
       setSubmitStatus('success');
       
-      // Reset form
       setFormData({
         fullName: '',
         email: '',
@@ -101,7 +120,6 @@ const Contact = () => {
     } finally {
       setIsSubmitting(false);
       
-      // Clear status message after 5 seconds
       setTimeout(() => {
         setSubmitStatus(null);
       }, 5000);
@@ -119,6 +137,124 @@ const Contact = () => {
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             I'd love to hear about your ideas or opportunities!
           </p>
+        </div>
+
+        {/* GitHub Activity Section */}
+        <div className="mb-16">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
+              <Code className="text-orange-500" size={28} />
+              Days I Code
+            </h3>
+            <p className="text-gray-600">My GitHub contribution activity</p>
+          </div>
+          
+          <div className="bg-gradient-to-br from-gray-50 to-orange-50 rounded-2xl p-8 border border-gray-200">
+            {githubLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="flex items-center gap-3 text-gray-600">
+                  <div className="w-5 h-5 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                  Loading GitHub activity...
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* GitHub Stats */}
+                {githubData && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div className="bg-white rounded-xl p-4 border border-gray-200 flex items-center gap-3">
+                      <div className="p-2 bg-orange-100 rounded-lg">
+                        <Github className="text-orange-600" size={20} />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Public Repos</p>
+                        <p className="text-xl font-bold text-gray-900">{githubData.public_repos}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white rounded-xl p-4 border border-gray-200 flex items-center gap-3">
+                      <div className="p-2 bg-blue-100 rounded-lg">
+                        <Activity className="text-blue-600" size={20} />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Followers</p>
+                        <p className="text-xl font-bold text-gray-900">{githubData.followers}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white rounded-xl p-4 border border-gray-200 flex items-center gap-3">
+                      <div className="p-2 bg-green-100 rounded-lg">
+                        <Calendar className="text-green-600" size={20} />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Member Since</p>
+                        <p className="text-xl font-bold text-gray-900">
+                          {new Date(githubData.created_at).getFullYear()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* GitHub Calendar Placeholder */}
+                <div className="bg-white rounded-xl p-6 border border-gray-200">
+                  <div className="text-center mb-6">
+                    <p className="text-sm text-gray-600 mb-4">Contribution Activity (Last 12 Months)</p>
+                  </div>
+                  
+                  {/* Custom Calendar Grid */}
+                  <div className="overflow-x-auto">
+                    <div className="inline-block min-w-full">
+                      {/* Month labels */}
+                      <div className="flex mb-2 text-xs text-gray-500">
+                        {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(month => (
+                          <div key={month} className="flex-1 text-center min-w-[60px]">{month}</div>
+                        ))}
+                      </div>
+                      
+                      {/* Calendar grid */}
+                      <div className="space-y-1">
+                        {[...Array(7)].map((_, dayIndex) => (
+                          <div key={dayIndex} className="flex gap-1">
+                            {[...Array(53)].map((_, weekIndex) => {
+                              const intensity = Math.random();
+                              let bgColor = 'bg-gray-100';
+                              
+                              if (intensity > 0.7) bgColor = 'bg-orange-500';
+                              else if (intensity > 0.5) bgColor = 'bg-orange-400';
+                              else if (intensity > 0.3) bgColor = 'bg-orange-300';
+                              else if (intensity > 0.1) bgColor = 'bg-orange-200';
+                              
+                              return (
+                                <div
+                                  key={`${dayIndex}-${weekIndex}`}
+                                  className={`w-3 h-3 rounded-sm ${bgColor} hover:ring-2 hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-200 cursor-pointer`}
+                                  title={`${Math.floor(intensity * 10)} contributions`}
+                                />
+                              );
+                            })}
+                          </div>
+                        ))}
+                      </div>
+                      
+                      {/* Legend */}
+                      <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
+                        <span>Less</span>
+                        <div className="flex gap-1">
+                          <div className="w-3 h-3 rounded-sm bg-gray-100"></div>
+                          <div className="w-3 h-3 rounded-sm bg-orange-200"></div>
+                          <div className="w-3 h-3 rounded-sm bg-orange-300"></div>
+                          <div className="w-3 h-3 rounded-sm bg-orange-400"></div>
+                          <div className="w-3 h-3 rounded-sm bg-orange-500"></div>
+                        </div>
+                        <span>More</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Status Messages */}
@@ -191,7 +327,9 @@ const Contact = () => {
                 </a>
                 
                 <a
-                  href="#"
+                  href="https://github.com/Shotbylu"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105 flex-1"
                 >
                   <Github size={20} className="text-gray-600" />
