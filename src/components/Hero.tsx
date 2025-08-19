@@ -41,7 +41,7 @@ const Hero = () => {
                 Lungelo Sibisi<span className="text-orange-500">.</span>
               </h1>
               <h2 className="text-2xl lg:text-3xl font-bold text-blue-700">
-                Marketing Analyticss & Communications Specialist
+                Marketing Analytics & Communications Specialist
               </h2>
             </motion.div>
 
@@ -63,7 +63,7 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Hey there stranger, I’m Lungelo, a marketing, analytics, and communications specialist who loves coding and building tools to make everything I do easier. With a background in sales and three years in marketing and data analysis, I create campaigns that are both creative and measurable. I design visuals in Adobe, dig into data with Python and SQL on Azure and AWS, and build dashboards in Power BI so stakeholders actually understand the story. I also keep CRMs (Zoho, HubSpot, Salesforce) and reporting on autopilot. Based in Johannesburg — if you want a marketer who’s creative, data-driven, and a little technical, check out my portfolio and let’s chat!
+              Hey there stranger, I’m Lungelo, a marketing, analytics, and communications specialist who loves coding and building tools to make everything I do easier. With a background in sales and three years in marketing and data analysis, I create campaigns that are both creative and measurable. I design visuals in Adobe, dig into data with Python and SQL on Azure and AWS, and build dashboards in Power BI so stakeholders actually understand the story. I also keep CRMs (Zoho, HubSpot, Salesforce) and reporting on autopilot. Based in Johannesburg, if you want a marketer who’s creative, data-driven, and a little technical, check out my portfolio and let’s chat!
             </motion.p>
 
             <motion.div
@@ -144,7 +144,7 @@ const Hero = () => {
                 </div>
                 <div className="ml-4 text-blue-300">technologies: <span className="text-green-300">[</span></div>
                 <div className="ml-8 text-orange-300">"Python", "Power BI", "Adobe Creative Suite",</div>
-                <div className="ml-8 text-orange-300">"CRM Tools", "Azure Data Services"</div>
+                <div className="ml-8 text-orange-300">"CRM Tools", "Azure & AWS Data Services"</div>
                 <div className="ml-4 text-green-300">],</div>
                 <div className="ml-4">
                   <span className="text-blue-300">available:</span> <span className="text-green-400">true</span>
