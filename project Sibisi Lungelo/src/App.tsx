@@ -9,7 +9,7 @@ import Contact from './components/Contact';
 import DinosaurGame from './components/DinosaurGame';
 import Footer from './components/Footer';
 
-function App() {
+const App: React.FC = () => {
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -31,6 +31,6 @@ function App() {
       <Footer />
     </motion.div>
   );
-}
+};
 
 export default App;
