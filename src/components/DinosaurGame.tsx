@@ -330,7 +330,7 @@ const SpaceInvadersGame = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-6">
           <h3 className="text-2xl font-semibold text-gray-800 mb-3 flex items-center justify-center gap-2">
-            Space Invaders 
+            Try getting a high score while i reply to your email
           </h3>
           <button
             onClick={() => setIsVisible(!isVisible)}
