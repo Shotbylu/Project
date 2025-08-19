@@ -12,7 +12,7 @@ const Footer = () => {
               Lungelo<span className="text-orange-500">.</span>
             </h3>
             <p className="text-gray-400 leading-relaxed">
-              Communications & Marketing Analytics Specialist passionate about creating impactful campaigns that drive measurable results through data-driven insights and creative storytelling.
+              Creative storyteller + marketing analyst, measurable campaigns, clear insights.
             </p>
           </div>
 
@@ -39,7 +39,7 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-lg font-semibold">Get In Touch</h4>
             <p className="text-gray-400">lsibisi@icloud.com</p>
-            <p className="text-gray-400">Sandton, South Africa</p>
+            <p className="text-gray-400">Johannesburg, South Africa</p>
             
             <div className="flex gap-4 pt-2">
               <a
