@@ -335,37 +335,39 @@ const Contact = () => {
             </div>
 
             {/* Social Media Links */}
-            <div className="bg-gray-50 rounded-xl p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Connect With Me</h3>
-              
-              <div className="flex gap-4">
-                <a
-                  href="#"
-                  className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105 flex-1"
-                >
-                  <Linkedin size={20} className="text-blue-600" />
-                  <span className="font-medium text-gray-700">LinkedIn</span>
-                </a>
-                
-                <a
-                  href="https://github.com/Shotbylu"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105 flex-1"
-                >
-                  <Github size={20} className="text-gray-600" />
-                  <span className="font-medium text-gray-700">GitHub</span>
-                </a>
-                
-                <a
-                  href="#"
-                  className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105 flex-1"
-                >
-                  <FileText size={20} className="text-gray-600" />
-                  <span className="font-medium text-gray-700">CV</span>
-                </a>
-              </div>
-            </div>
+<div className="bg-gray-50 rounded-xl p-6">
+  <h3 className="text-xl font-bold text-gray-900 mb-6">Connect With Me</h3>
+  
+  <div className="flex gap-4">
+    <a
+      href="https://www.linkedin.com/in/lungelo-sibisi-6745aa21b"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105 flex-1"
+    >
+      <Linkedin size={20} className="text-blue-600" />
+      <span className="font-medium text-gray-700">LinkedIn</span>
+    </a>
+    
+    <a
+      href="https://github.com/Shotbylu"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105 flex-1"
+    >
+      <Github size={20} className="text-gray-600" />
+      <span className="font-medium text-gray-700">GitHub</span>
+    </a>
+    
+    <a
+      href="#"
+      className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105 flex-1"
+    >
+      <FileText size={20} className="text-gray-600" />
+      <span className="font-medium text-gray-700">CV</span>
+    </a>
+  </div>
+</div>
 
             {/* Availability Status */}
             <div className="bg-green-50 border border-green-200 rounded-xl p-6">
