@@ -50,7 +50,7 @@ const Contact = () => {
       try {
         const response = await fetch('https://api.github.com/users/Shotbylu', {
           headers: {
-            'Authorization': 
+            'Authorization': 'token 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'
           }
         });
         const data = await response.json();
