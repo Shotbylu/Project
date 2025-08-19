@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, MapPin, Linkedin, Github, FileText, Send, Eye, CheckCircle, AlertCircle, Calendar, Code, Activity } from 'lucide-react';
+import { Mail, MapPin, Linkedin, Github, FileText, Send, Eye, CheckCircle, AlertCircle, Calendar, Code, Activity, Star } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -44,7 +44,7 @@ const Contact = () => {
     };
   }, []);
 
-    // Fetch GitHub data (without token for security)
+  // Fetch GitHub data (without token for security)
   useEffect(() => {
     const fetchGitHubData = async () => {
       try {
@@ -57,17 +57,6 @@ const Contact = () => {
         setGithubLoading(false);
       }
     };
-
-    fetchGitHubData();
-  }, []);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
 
     fetchGitHubData();
   }, []);
@@ -259,6 +248,19 @@ const Contact = () => {
                     />
                   </div>
                   
+                  {/* Legend */}
+                  <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
+                    <span>Less</span>
+                    <div className="flex gap-1">
+                      <div className="w-3 h-3 rounded-sm bg-gray-100"></div>
+                      <div className="w-3 h-3 rounded-sm bg-orange-200"></div>
+                      <div className="w-3 h-3 rounded-sm bg-orange-300"></div>
+                      <div className="w-3 h-3 rounded-sm bg-orange-400"></div>
+                      <div className="w-3 h-3 rounded-sm bg-orange-500"></div>
+                    </div>
+                    <span>More</span>
+                  </div>
+                  
                   <div className="flex justify-center mt-4">
                     <a 
                       href="https://github.com/Shotbylu" 
@@ -269,26 +271,6 @@ const Contact = () => {
                       <Github size={20} />
                       View on GitHub
                     </a>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-                      
-                      {/* Legend */}
-                      <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
-                        <span>Less</span>
-                        <div className="flex gap-1">
-                          <div className="w-3 h-3 rounded-sm bg-gray-100"></div>
-                          <div className="w-3 h-3 rounded-sm bg-orange-200"></div>
-                          <div className="w-3 h-3 rounded-sm bg-orange-300"></div>
-                          <div className="w-3 h-3 rounded-sm bg-orange-400"></div>
-                          <div className="w-3 h-3 rounded-sm bg-orange-500"></div>
-                        </div>
-                        <span>More</span>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </>
