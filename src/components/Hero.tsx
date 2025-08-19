@@ -41,7 +41,7 @@ const Hero = () => {
                 Lungelo Sibisi<span className="text-orange-500">.</span>
               </h1>
               <h2 className="text-2xl lg:text-3xl font-bold text-blue-700">
-                Communications & Marketing Analytics Specialist
+                Marketing Analyticss & Communications Specialist
               </h2>
             </motion.div>
 
@@ -63,7 +63,7 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Hi, I'm Lungelo, a Communications & Marketing Analytics Specialist who loves mixing creativity with data. With three years in marketing and five years in sales, I build campaigns grounded in insights and designed to connect. I create visuals in Adobe Creative Suite, analyse trends using Python and SQL on Azure, and bring reports to life in Power BI and Excel. I keep everything running smoothly in Zoho, Salesforce, and HubSpot, and automate reports with Power Automate so you always have the latest numbers. Get to know me by exploring my portfolio website!
+              Hey there stranger, I’m Lungelo, a marketing, analytics, and communications specialist who loves coding and building tools to make everything I do easier. With a background in sales and three years in marketing and data analysis, I create campaigns that are both creative and measurable. I design visuals in Adobe, dig into data with Python and SQL on Azure and AWS, and build dashboards in Power BI so stakeholders actually understand the story. I also keep CRMs (Zoho, HubSpot, Salesforce) and reporting on autopilot. Based in Johannesburg — if you want a marketer who’s creative, data-driven, and a little technical, check out my portfolio and let’s chat!
             </motion.p>
 
             <motion.div
@@ -133,11 +133,11 @@ const Hero = () => {
 
               {/* Code Content */}
               <div className="font-mono text-sm space-y-2">
-                <div className="text-purple-400">const <span className="text-yellow-300">Lungelo</span> = {`{`}</div>
+                <div className="text-purple-400">const <span className="text-yellow-300">Lungelo Sibisi</span> = {`{`}</div>
                 <div className="ml-4 text-blue-300">Expertise: <span className="text-green-300">[</span></div>
-                <div className="ml-8 text-orange-300">"Communications & Marketing Analytics",</div>
-                <div className="ml-8 text-orange-300">"Data Analysis & Visualization",</div>
-                <div className="ml-8 text-orange-300">"B2B Marketing & Campaign Management"</div>
+                <div className="ml-8 text-orange-300">"Marketing & Communications",</div>
+                <div className="ml-8 text-orange-300">"Data Analysis & Cloud (Azure • AWS)",</div>
+                <div className="ml-8 text-orange-300">"Graphic design & Web Development"</div>
                 <div className="ml-4 text-green-300">],</div>
                 <div className="ml-4">
                   <span className="text-blue-300">location:</span> <span className="text-orange-300">"Sandton, South Africa"</span>,
