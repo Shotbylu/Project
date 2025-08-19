@@ -61,7 +61,7 @@ const Footer = () => {
       <Linkedin size={20} />
     </a>
     <a
-      href="mailto:lsibisi@icloud.com"
+      href="https://www.linkedin.com/in/lungelo-sibisi-6745aa21b"
       className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
       aria-label="Email"
     >
