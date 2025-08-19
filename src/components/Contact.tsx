@@ -44,15 +44,11 @@ const Contact = () => {
     };
   }, []);
 
-  // Fetch GitHub data
+    // Fetch GitHub data (without token for security)
   useEffect(() => {
     const fetchGitHubData = async () => {
       try {
-        const response = await fetch('https://api.github.com/users/Shotbylu', {
-          headers: {
-            'Authorization': 'token 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'
-          }
-        });
+        const response = await fetch('https://api.github.com/users/Shotbylu');
         const data = await response.json();
         setGithubData(data);
       } catch (error) {
@@ -61,6 +57,17 @@ const Contact = () => {
         setGithubLoading(false);
       }
     };
+
+    fetchGitHubData();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
     fetchGitHubData();
   }, []);
