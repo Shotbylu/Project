@@ -249,8 +249,8 @@ const downloadPortfolio = async () => {
             <div className="relative bg-gradient-to-br from-orange-500 to-blue-500 p-1 rounded-full shadow-2xl">
               <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden border-4 border-white shadow-lg">
                                  <img
-                   src="/assets/Lungelo_DP.png"
-                   alt="/assets/Lungelo_DP.png"
+                   src="/assets/documents/Lungelo_DP.png"
+                   alt="Lungelo Sibisi - Marketing Analytics & Communications Specialist"
                    className="w-full h-full object-cover"
                   onError={(e) => {
                     // Fallback to a gradient background if image fails to load
