@@ -16,6 +16,21 @@ const Hero = () => {
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  // Download handlers
+  const downloadCV = () => {
+    const link = document.createElement('a');
+    link.href = '/assets/documents/Lungelo_Sibisi_CV.pdf'; // Path to your CV file
+    link.download = 'Lungelo_Sibisi_CV.pdf';
+    link.click();
+  };
+
+  const downloadPortfolio = () => {
+    const link = document.createElement('a');
+    link.href = '/assets/documents/Lungelo_Sibisi_Portfolio.pdf'; // Path to your portfolio file
+    link.download = 'Lungelo_Sibisi_Portfolio.pdf';
+    link.click();
+  };
   
   return (
     <section id="reception" className="min-h-screen bg-gradient-to-br from-gray-50 to-white relative overflow-hidden pt-20">
@@ -63,7 +78,7 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Hey there stranger, I’m Lungelo, a marketing, analytics, and communications specialist who loves coding and building tools to make everything I do easier. With a background in sales and three years in marketing and data analysis, I create campaigns that are both creative and measurable. I design visuals in Adobe, dig into data with Python and SQL on Azure and AWS, and build dashboards in Power BI so stakeholders actually understand the story. I also keep CRMs (Zoho, HubSpot, Salesforce) and reporting on autopilot. Based in Johannesburg, if you want a marketer who’s creative, data-driven, and a little technical, check out my portfolio and let’s chat!
+              Hey there stranger, I'm Lungelo, a marketing, analytics, and communications specialist who loves coding and building tools to make everything I do easier. With a background in sales and three years in marketing and data analysis, I create campaigns that are both creative and measurable. I design visuals in Adobe, dig into data with Python and SQL on Azure and AWS, and build dashboards in Power BI so stakeholders actually understand the story. I also keep CRMs (Zoho, HubSpot, Salesforce) and reporting on autopilot. Based in Johannesburg, if you want a marketer who's creative, data-driven, and a little technical, check out my portfolio and let's chat!
             </motion.p>
 
             <motion.div
@@ -84,13 +99,19 @@ const Hero = () => {
               >
                 Contact me
               </button>
-              <button className="px-6 py-3 bg-[#0f1a2b] text-white rounded-2xl font-semibold hover:bg-gray-800 transition-all duration-200 hover:scale-105 flex items-center space-x-2">
+              <button 
+                onClick={downloadCV}
+                className="px-6 py-3 bg-[#0f1a2b] text-white rounded-2xl font-semibold hover:bg-gray-800 transition-all duration-200 hover:scale-105 flex items-center space-x-2"
+              >
                 <FileText size={20} />
-                <span>See my CV</span>
+                <span>Download CV</span>
               </button>
-              <button className="px-6 py-3 border border-gray-300 text-gray-700 rounded-2xl font-semibold hover:bg-gray-50 transition-all duration-200 hover:scale-105 flex items-center space-x-2">
+              <button 
+                onClick={downloadPortfolio}
+                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-2xl font-semibold hover:bg-gray-50 transition-all duration-200 hover:scale-105 flex items-center space-x-2"
+              >
                 <Folder size={20} />
-                <span>See my portfolio</span>
+                <span>Download Portfolio</span>
               </button>
             </motion.div>
 
