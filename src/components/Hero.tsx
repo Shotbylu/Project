@@ -17,26 +17,75 @@ const Hero = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Correct paths matching your folder structure: public/assets/documents/
-  const downloadCV = () => {
-    const link = document.createElement('a');
-    link.href = '/assets/documents/Lungelo_Sibisi_CV.pdf';
-    link.download = 'Lungelo_Sibisi_CV.pdf';
-    link.target = '_blank'; // Opens in new tab if download fails
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  // Updated download functions with better error handling and MIME type specification
 
-  const downloadPortfolio = () => {
+const downloadCV = async () => {
+  try {
+    // First, try to fetch the file to check if it exists
+    const response = await fetch('/assets/documents/Lungelo_Sibisi_CV.pdf');
+    
+    if (!response.ok) {
+      console.error('CV file not found');
+      alert('CV file not found. Please contact the administrator.');
+      return;
+    }
+    
+    // Create blob with explicit PDF MIME type
+    const blob = await response.blob();
+    const pdfBlob = new Blob([blob], { type: 'application/pdf' });
+    
+    // Create download link
     const link = document.createElement('a');
-    link.href = '/assets/documents/Lungelo_Sibisi_Portfolio.pdf';
-    link.download = 'Lungelo_Sibisi_Portfolio.pdf';
-    link.target = '_blank'; // Opens in new tab if download fails
+    link.href = URL.createObjectURL(pdfBlob);
+    link.download = 'Lungelo_Sibisi_CV.pdf';
+    
+    // Trigger download
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+    
+    // Clean up the URL object
+    URL.revokeObjectURL(link.href);
+  } catch (error) {
+    console.error('Error downloading CV:', error);
+    // Fallback: open in new tab
+    window.open('/assets/documents/Lungelo_Sibisi_CV.pdf', '_blank');
+  }
+};
+
+const downloadPortfolio = async () => {
+  try {
+    // First, try to fetch the file to check if it exists
+    const response = await fetch('/assets/documents/Lungelo_Sibisi_Portfolio.pdf');
+    
+    if (!response.ok) {
+      console.error('Portfolio file not found');
+      alert('Portfolio file not found. Please contact the administrator.');
+      return;
+    }
+    
+    // Create blob with explicit PDF MIME type
+    const blob = await response.blob();
+    const pdfBlob = new Blob([blob], { type: 'application/pdf' });
+    
+    // Create download link
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(pdfBlob);
+    link.download = 'Lungelo_Sibisi_Portfolio.pdf';
+    
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Clean up the URL object
+    URL.revokeObjectURL(link.href);
+  } catch (error) {
+    console.error('Error downloading Portfolio:', error);
+    // Fallback: open in new tab
+    window.open('/assets/documents/Lungelo_Sibisi_Portfolio.pdf', '_blank');
+  }
+};
   
   return (
     <section id="reception" className="min-h-screen bg-gradient-to-br from-gray-50 to-white relative overflow-hidden pt-20">
