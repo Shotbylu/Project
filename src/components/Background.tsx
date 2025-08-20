@@ -112,7 +112,7 @@ const Background = () => {
       case 'indigo':
         return 'border-l-indigo-500 bg-indigo-50';
       case 'Charcoal':
-        return 'border-l-teal-500 bg-teal-50';
+        return 'border-l-teal-500 bg-Charcoal-50';
       case 'orange':
         return 'border-l-orange-500 bg-orange-50';
       default:
