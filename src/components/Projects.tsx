@@ -99,7 +99,7 @@ const Projects = () => {
   };
 
   return (
-    <section id="projects" className="py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
+    <section id="projects" className="py-12 sm:py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-10 w-72 h-72 bg-orange-500 rounded-full blur-3xl"></div>
@@ -113,13 +113,13 @@ const Projects = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
-          <h2 className="text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
             Featured Projects
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-blue-500 mx-auto mb-6 rounded-full"></div>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <div className="w-20 sm:w-24 h-1 bg-gradient-to-r from-orange-500 to-blue-500 mx-auto mb-4 sm:mb-6 rounded-full"></div>
+          <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
             Discover my latest work combining data science, marketing analytics, and creative problem-solving
           </p>
         </motion.div>
@@ -129,7 +129,7 @@ const Projects = () => {
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16"
         >
           {projects.map((project, index) => (
             <motion.div
@@ -138,11 +138,11 @@ const Projects = () => {
               className="group relative"
             >
               {/* Glassmorphism Card */}
-              <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 h-full hover:bg-white/15 transition-all duration-500 hover:scale-105 hover:shadow-2xl">
+              <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-4 sm:p-6 h-full hover:bg-white/15 transition-all duration-500 hover:scale-105 hover:shadow-2xl">
                 {/* Status Badge */}
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-sm font-medium text-gray-300">{project.year}</span>
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                <div className="flex justify-between items-start mb-3 sm:mb-4">
+                  <span className="text-xs sm:text-sm font-medium text-gray-300">{project.year}</span>
+                  <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                     project.status === 'Active' 
                       ? 'bg-green-500/20 text-green-300 border border-green-500/30' 
                       : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
@@ -152,30 +152,30 @@ const Projects = () => {
                 </div>
 
                 {/* Video Thumbnail */}
-                <div className="relative mb-6 rounded-xl overflow-hidden bg-gray-800/50 aspect-video">
+                <div className="relative mb-4 sm:mb-6 rounded-xl overflow-hidden bg-gray-800/50 aspect-video">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <button
                       onClick={() => setSelectedVideo(project.videoUrl)}
-                      className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors group-hover:scale-110 transition-transform duration-300"
+                      className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-500 rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors group-hover:scale-110 transition-transform duration-300"
                     >
-                      <Play size={24} className="text-white ml-1" />
+                      <Play size={20} className="text-white ml-1 sm:w-6 sm:h-6" />
                     </button>
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
                 </div>
 
                 {/* Content */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
-                    <p className="text-sm text-orange-400 font-medium mb-3">{project.category}</p>
-                    <p className="text-gray-300 leading-relaxed">{project.description}</p>
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">{project.title}</h3>
+                    <p className="text-xs sm:text-sm text-orange-400 font-medium mb-2 sm:mb-3">{project.category}</p>
+                    <p className="text-gray-300 leading-relaxed text-sm sm:text-base">{project.description}</p>
                   </div>
 
                   {/* Highlights */}
                   <div className="space-y-2">
-                    <h4 className="text-sm font-semibold text-white">Key Features:</h4>
-                    <div className="flex flex-wrap gap-2">
+                    <h4 className="text-xs sm:text-sm font-semibold text-white">Key Features:</h4>
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
                       {project.highlights.map((highlight, idx) => (
                         <span
                           key={idx}
@@ -189,12 +189,12 @@ const Projects = () => {
 
                   {/* Tech Stack */}
                   <div className="space-y-2">
-                    <h4 className="text-sm font-semibold text-white">Tech Stack:</h4>
-                    <div className="flex flex-wrap gap-2">
+                    <h4 className="text-xs sm:text-sm font-semibold text-white">Tech Stack:</h4>
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
                       {project.techStack.map((tech, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center gap-1 px-3 py-1 bg-gray-800/50 text-gray-300 text-xs rounded-full border border-gray-700"
+                          className="flex items-center gap-1 px-2 sm:px-3 py-1 bg-gray-800/50 text-gray-300 text-xs rounded-full border border-gray-700"
                         >
                           {getTechIcon(tech)}
                           <span>{tech}</span>
@@ -204,19 +204,19 @@ const Projects = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-3 pt-4">
+                  <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4">
                     <a
                       href={project.githubUrl}
-                      className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors text-sm font-medium"
+                      className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium"
                     >
-                      <Github size={16} />
+                      <Github size={14} className="sm:w-4 sm:h-4" />
                       Code
                     </a>
                     <a
                       href={project.liveUrl}
-                      className="flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors text-sm font-medium"
+                      className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium"
                     >
-                      <ExternalLink size={16} />
+                      <ExternalLink size={14} className="sm:w-4 sm:h-4" />
                       Live Demo
                     </a>
                   </div>
@@ -232,7 +232,7 @@ const Projects = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4"
             onClick={() => setSelectedVideo(null)}
           >
             <motion.div
@@ -244,9 +244,9 @@ const Projects = () => {
             >
               <button
                 onClick={() => setSelectedVideo(null)}
-                className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors"
+                className="absolute -top-8 sm:-top-12 right-0 text-white hover:text-gray-300 transition-colors"
               >
-                <X size={32} />
+                <X size={24} className="sm:w-8 sm:h-8" />
               </button>
               <div className="w-full h-full bg-gray-900 rounded-xl overflow-hidden">
                 <ReactPlayer
@@ -273,10 +273,10 @@ const Projects = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="text-center"
         >
-          <p className="text-gray-300 mb-6">
+          <p className="text-gray-300 mb-4 sm:mb-6 text-sm sm:text-base">
             Interested in collaborating or learning more about my work?
           </p>
-          <button className="bg-gradient-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+          <button className="bg-gradient-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600 text-white px-6 sm:px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base">
             Let's Work Together
           </button>
         </motion.div>

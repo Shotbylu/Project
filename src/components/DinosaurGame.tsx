@@ -326,14 +326,14 @@ const SpaceInvadersGame = () => {
   };
 
   return (
-    <div className="py-8 bg-white">
+    <div className="py-6 sm:py-8 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-6">
+        <div className="text-center mb-4 sm:mb-6">
           <div className="relative">
-            <h3 className="text-3xl font-bold bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent mb-2">
+            <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent mb-2">
               🚀 Try Getting a High Score 🚀
             </h3>
-            <p className="text-lg text-gray-600 italic font-medium">
+            <p className="text-base sm:text-lg text-gray-600 italic font-medium">
               while I reply to your email ✉️
             </p>
             <div className="absolute -top-2 -left-2 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
@@ -342,18 +342,18 @@ const SpaceInvadersGame = () => {
           </div>
           <button
             onClick={() => setIsVisible(!isVisible)}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300"
+            className="bg-orange-500 hover:bg-orange-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium transition-colors duration-300 text-sm sm:text-base"
           >
             {isVisible ? 'Hide Game' : 'Play Game'}
           </button>
         </div>
 
         {isVisible && (
-          <div className="bg-gray-50 rounded-lg shadow-sm p-4 border border-gray-200 max-w-2xl mx-auto">
-            <div className="flex items-center justify-between mb-4 text-sm">
-              <div className="flex items-center space-x-4">
+          <div className="bg-gray-50 rounded-lg shadow-sm p-3 sm:p-4 border border-gray-200 max-w-2xl mx-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 text-xs sm:text-sm">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2 sm:mb-0">
                 <div className="flex items-center space-x-1">
-                  <Trophy className="text-orange-500" size={16} />
+                  <Trophy className="text-orange-500" size={14} className="sm:w-4 sm:h-4" />
                   <span className="font-medium text-gray-700">High: {highScore}</span>
                 </div>
                 <div className="text-blue-600 font-medium">Score: {score}</div>
@@ -364,45 +364,45 @@ const SpaceInvadersGame = () => {
                 {!isPlaying && !gameOver && !gameWon && (
                   <button
                     onClick={startGame}
-                    className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
+                    className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
                   >
-                    <Play size={14} />
+                    <Play size={12} className="sm:w-3 sm:h-3" />
                     <span>Start</span>
                   </button>
                 )}
                 {gameOver && (
                   <button
                     onClick={startGame}
-                    className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
+                    className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
                   >
-                    <Play size={14} />
+                    <Play size={12} className="sm:w-3 sm:h-3" />
                     <span>Play Again</span>
                   </button>
                 )}
                 {gameWon && (
                   <button
                     onClick={nextLevel}
-                    className="flex items-center space-x-1 bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
+                    className="flex items-center space-x-1 bg-orange-500 hover:bg-orange-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
                   >
-                    <Play size={14} />
+                    <Play size={12} className="sm:w-3 sm:h-3" />
                     <span>Next Level</span>
                   </button>
                 )}
                 <button
                   onClick={resetGame}
-                  className="flex items-center space-x-1 bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
+                  className="flex items-center space-x-1 bg-gray-500 hover:bg-gray-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
                 >
-                  <RotateCcw size={14} />
+                  <RotateCcw size={12} className="sm:w-3 sm:h-3" />
                   <span>Reset</span>
                 </button>
               </div>
             </div>
 
-            <div className="bg-gray-800 rounded-lg p-3 border border-gray-300">
+            <div className="bg-gray-800 rounded-lg p-2 sm:p-3 border border-gray-300">
               <canvas
                 ref={canvasRef}
                 className="w-full max-w-none border border-gray-600 rounded bg-gray-900"
-                style={{ imageRendering: 'pixelated', maxHeight: '400px' }}
+                style={{ imageRendering: 'pixelated', maxHeight: '300px', height: '300px' }}
               />
               <div className="text-center mt-2 text-gray-400 text-xs">
                 Arrow Keys: Move • SPACE: Shoot • Destroy all aliens!
@@ -410,21 +410,21 @@ const SpaceInvadersGame = () => {
             </div>
 
             {gameOver && (
-              <div className="text-center mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                <h4 className="text-lg font-semibold text-red-700 mb-1">Game Over!</h4>
-                <p className="text-red-600 text-sm">Final Score: {score} | Level: {level}</p>
+              <div className="text-center mt-3 sm:mt-4 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-lg">
+                <h4 className="text-base sm:text-lg font-semibold text-red-700 mb-1">Game Over!</h4>
+                <p className="text-red-600 text-xs sm:text-sm">Final Score: {score} | Level: {level}</p>
                 {score > highScore && (
-                  <p className="text-orange-500 font-medium text-sm mt-1">🎉 New High Score!</p>
+                  <p className="text-orange-500 font-medium text-xs sm:text-sm mt-1">🎉 New High Score!</p>
                 )}
               </div>
             )}
 
             {gameWon && (
-              <div className="text-center mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                <h4 className="text-lg font-semibold text-green-700 mb-1">Level Complete! 🚀</h4>
-                <p className="text-green-600 text-sm">Score: {score} | Ready for Level {level + 1}?</p>
+              <div className="text-center mt-3 sm:mt-4 p-2 sm:p-3 bg-green-50 border border-green-200 rounded-lg">
+                <h4 className="text-base sm:text-lg font-semibold text-green-700 mb-1">Level Complete! 🚀</h4>
+                <p className="text-green-600 text-xs sm:text-sm">Score: {score} | Ready for Level {level + 1}?</p>
                 {score > highScore && (
-                  <p className="text-orange-500 font-medium text-sm mt-1">🎉 New High Score!</p>
+                  <p className="text-orange-500 font-medium text-xs sm:text-sm mt-1">🎉 New High Score!</p>
                 )}
               </div>
             )}

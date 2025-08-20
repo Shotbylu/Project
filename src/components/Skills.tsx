@@ -52,20 +52,20 @@ const Skills = () => {
   };
 
   return (
-    <section id="skills" className="py-20 bg-white">
+    <section id="skills" className="py-12 sm:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
-          <h2 className="text-4xl font-bold text-[#0f1a2b] mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#0f1a2b] mb-4">
             My Skills
-            <div className="w-20 h-1 bg-[#FF6B00] mx-auto mt-2"></div>
+            <div className="w-16 sm:w-20 h-1 bg-[#FF6B00] mx-auto mt-2"></div>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
             With a unique blend of marketing insight, development skills, and design thinking, I contribute end-to-end across digital projects, from strategy and UX to execution and optimisation.
           </p>
         </motion.div>
@@ -76,14 +76,14 @@ const Skills = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex justify-center mb-12"
+          className="flex justify-center mb-8 sm:mb-12"
         >
-          <div className="flex space-x-3 bg-gray-100 rounded-2xl p-2">
+          <div className="flex flex-wrap sm:flex-nowrap gap-2 sm:gap-3 bg-gray-100 rounded-2xl p-2">
             {['Marketing Management', 'Design', 'Development'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
+                className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-200 text-sm sm:text-base whitespace-nowrap ${
                   activeTab === tab
                     ? 'bg-[#FF6B00] text-white shadow-lg'
                     : 'text-gray-600 hover:text-[#FF6B00]'
@@ -101,28 +101,28 @@ const Skills = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12 sm:mb-16"
         >
           {skillsData[activeTab as keyof typeof skillsData].map((skill, index) => (
             <div
               key={skill.name}
-              className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-200"
+              className="bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-200"
             >
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#0f1a2b]">{skill.name}</h3>
-                <span className="text-sm text-gray-500 font-medium">
+              <div className="flex justify-between items-center mb-3 sm:mb-4">
+                <h3 className="font-semibold text-[#0f1a2b] text-sm sm:text-base">{skill.name}</h3>
+                <span className="text-xs sm:text-sm text-gray-500 font-medium">
                   {getSkillLevel(skill.level)}
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div className="w-full bg-gray-200 rounded-full h-2 sm:h-2.5">
                 <motion.div
-                  className="bg-indigo-600 h-2.5 rounded-full"
+                  className="bg-indigo-600 h-2 sm:h-2.5 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${skill.level}%` }}
                   transition={{ duration: 1, delay: index * 0.1 }}
                 />
               </div>
-              <div className="mt-2 text-right text-sm text-gray-500">
+              <div className="mt-2 text-right text-xs sm:text-sm text-gray-500">
                 {skill.level}%
               </div>
             </div>
@@ -135,20 +135,20 @@ const Skills = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8"
+          className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 sm:p-8"
         >
-          <div className="flex items-center justify-center mb-6">
-            <Award className="text-[#1f3bff] mr-3" size={32} />
-            <h3 className="text-2xl font-bold text-[#0f1a2b]">Certifications & Training</h3>
+          <div className="flex items-center justify-center mb-4 sm:mb-6">
+            <Award className="text-[#1f3bff] mr-3" size={24} className="sm:w-8 sm:h-8" />
+            <h3 className="text-xl sm:text-2xl font-bold text-[#0f1a2b]">Certifications & Training</h3>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {certifications.map((cert, index) => (
               <div
                 key={index}
-                className="bg-white p-4 rounded-xl shadow-md flex items-center space-x-3"
+                className="bg-white p-3 sm:p-4 rounded-xl shadow-md flex items-center space-x-2 sm:space-x-3"
               >
-                <Award className="text-[#1f3bff] flex-shrink-0" size={20} />
-                <span className="text-sm font-medium text-gray-700">{cert}</span>
+                <Award className="text-[#1f3bff] flex-shrink-0" size={16} className="sm:w-5 sm:h-5" />
+                <span className="text-xs sm:text-sm font-medium text-gray-700">{cert}</span>
               </div>
             ))}
           </div>
