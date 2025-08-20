@@ -10,10 +10,13 @@ const SpaceInvadersGame = () => {
   const [level, setLevel] = useState(1);
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
+  const [touchControls, setTouchControls] = useState({ left: false, right: false, shoot: false });
   const canvasRef = useRef(null);
   const gameRef = useRef(null);
   const animationRef = useRef();
   const keysRef = useRef({});
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
 
   // Game initialization
   const initializeGame = useCallback(() => {
@@ -78,6 +81,61 @@ const SpaceInvadersGame = () => {
     return game;
   }, [level]);
 
+  // Touch controls
+  const handleTouchStart = (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    touchStartX.current = x;
+    touchStartY.current = y;
+
+    // Determine touch area
+    const canvasWidth = rect.width;
+    const canvasHeight = rect.height;
+
+    // Left side of screen - move left
+    if (x < canvasWidth * 0.3) {
+      setTouchControls(prev => ({ ...prev, left: true }));
+    }
+    // Right side of screen - move right
+    else if (x > canvasWidth * 0.7) {
+      setTouchControls(prev => ({ ...prev, right: true }));
+    }
+    // Middle area - shoot
+    else {
+      setTouchControls(prev => ({ ...prev, shoot: true }));
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const canvasWidth = rect.width;
+
+    // Update touch controls based on current position
+    setTouchControls({
+      left: x < canvasWidth * 0.3,
+      right: x > canvasWidth * 0.7,
+      shoot: x >= canvasWidth * 0.3 && x <= canvasWidth * 0.7
+    });
+  };
+
+  const handleTouchEnd = (e) => {
+    e.preventDefault();
+    setTouchControls({ left: false, right: false, shoot: false });
+  };
+
   // Key handling
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -97,6 +155,22 @@ const SpaceInvadersGame = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+
+  // Touch event listeners
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+    canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+    return () => {
+      canvas.removeEventListener('touchstart', handleTouchStart);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
     };
   }, []);
 
@@ -130,14 +204,18 @@ const SpaceInvadersGame = () => {
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Handle player input
-      if (keysRef.current['ArrowLeft'] && game.player.x > 0) {
+      // Handle player input (keyboard + touch)
+      const moveLeft = keysRef.current['ArrowLeft'] || touchControls.left;
+      const moveRight = keysRef.current['ArrowRight'] || touchControls.right;
+      const shoot = keysRef.current['Space'] || touchControls.shoot;
+
+      if (moveLeft && game.player.x > 0) {
         game.player.x -= game.player.speed;
       }
-      if (keysRef.current['ArrowRight'] && game.player.x < canvas.width - game.player.width) {
+      if (moveRight && game.player.x < canvas.width - game.player.width) {
         game.player.x += game.player.speed;
       }
-      if (keysRef.current['Space'] && currentTime - lastBulletTime > bulletDelay) {
+      if (shoot && currentTime - lastBulletTime > bulletDelay) {
         game.bullets.push({
           x: game.player.x + game.player.width / 2 - 2,
           y: game.player.y,
@@ -296,7 +374,7 @@ const SpaceInvadersGame = () => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isPlaying, level, highScore, lives]);
+  }, [isPlaying, level, highScore, lives, touchControls]);
 
   const startGame = () => {
     setScore(0);
@@ -305,12 +383,14 @@ const SpaceInvadersGame = () => {
     setGameOver(false);
     setGameWon(false);
     setIsPlaying(true);
+    setTouchControls({ left: false, right: false, shoot: false });
   };
 
   const nextLevel = () => {
     setLevel(prev => prev + 1);
     setGameWon(false);
     setIsPlaying(true);
+    setTouchControls({ left: false, right: false, shoot: false });
   };
 
   const resetGame = () => {
@@ -320,6 +400,7 @@ const SpaceInvadersGame = () => {
     setGameOver(false);
     setGameWon(false);
     setIsPlaying(false);
+    setTouchControls({ left: false, right: false, shoot: false });
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
     }
@@ -398,14 +479,27 @@ const SpaceInvadersGame = () => {
               </div>
             </div>
 
-            <div className="bg-gray-800 rounded-lg p-2 sm:p-3 border border-gray-300">
+            <div className="bg-gray-800 rounded-lg p-2 sm:p-3 border border-gray-300 relative">
               <canvas
                 ref={canvasRef}
-                className="w-full max-w-none border border-gray-600 rounded bg-gray-900"
+                className="w-full max-w-none border border-gray-600 rounded bg-gray-900 touch-none"
                 style={{ imageRendering: 'pixelated', maxHeight: '300px', height: '300px' }}
               />
+              
+              {/* Touch Control Overlay for Mobile */}
+              <div className="absolute inset-0 pointer-events-none md:hidden">
+                {/* Left Touch Area */}
+                <div className="absolute left-0 top-0 w-1/3 h-full bg-blue-500 opacity-10"></div>
+                {/* Right Touch Area */}
+                <div className="absolute right-0 top-0 w-1/3 h-full bg-green-500 opacity-10"></div>
+                {/* Center Touch Area */}
+                <div className="absolute left-1/3 top-0 w-1/3 h-full bg-red-500 opacity-10"></div>
+              </div>
+              
               <div className="text-center mt-2 text-gray-400 text-xs">
-                Arrow Keys: Move • SPACE: Shoot • Destroy all aliens!
+                <span className="hidden md:inline">Arrow Keys: Move • SPACE: Shoot • </span>
+                <span className="md:hidden">Touch Left/Right: Move • Touch Center: Shoot • </span>
+                Destroy all aliens!
               </div>
             </div>
 
