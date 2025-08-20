@@ -27,7 +27,7 @@ const Background = () => {
       location: 'Durban',
       description: 'Started career in sales, developing customer relationship and communication skills.',
       icon: Briefcase,
-      color: 'Charcoal'
+      color: 'navy'
     },
     {
       year: '2022',
@@ -67,7 +67,7 @@ const Background = () => {
       location: 'Empangeni',
       description: 'Gained experience in Media, Marketing and Branding.',
       icon: Briefcase,
-      color: 'Charcoal'
+      color: 'navy'
     },
     {
       year: '2023',
@@ -77,7 +77,7 @@ const Background = () => {
       location: 'Richards Bay',
       description: 'Gained experience in data analysis and business intelligence.',
       icon: Briefcase,
-      color: 'Charcoal'
+      color: 'navy'
     },
     {
       year: '2024',
@@ -87,7 +87,7 @@ const Background = () => {
       location: 'Sandton',
       description: 'Developed corporate communication strategies and content.',
       icon: Briefcase,
-      color: 'Charcoal'
+      color: 'navy'
     },
     {
       year: '2025',
@@ -97,7 +97,7 @@ const Background = () => {
       location: 'Kempton Park',
       description: 'Current role focused on marketing and communications for Initium Venture Solutions..',
       icon: Briefcase,
-      color: 'Charcoal'
+      color: 'navy'
     }
   ];
 
@@ -111,8 +111,8 @@ const Background = () => {
     switch (color) {
       case 'indigo':
         return 'border-l-indigo-500 bg-indigo-50';
-      case 'Charcoal':
-        return 'border-l-teal-500 bg-Charcoal-50';
+      case 'navy':
+        return 'border-l-blue-900 bg-blue-50';
       case 'orange':
         return 'border-l-orange-500 bg-orange-50';
       default:
@@ -200,7 +200,7 @@ const Background = () => {
               <div className="flex items-start space-x-4">
                 <div className={`p-3 rounded-xl ${
                   item.color === 'indigo' ? 'bg-indigo-100 text-indigo-600' :
-                  item.color === 'teal' ? 'bg-teal-100 text-teal-600' :
+                  item.color === 'navy' ? 'bg-blue-100 text-blue-900' :
                   'bg-orange-100 text-orange-600'
                 }`}>
                   <item.icon size={24} />
