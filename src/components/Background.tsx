@@ -216,7 +216,6 @@ const Background = () => {
                   <p className="text-blue-600 font-semibold mb-2 text-sm sm:text-base">{item.institution}</p>
                   <p className="text-gray-600 mb-4 text-sm sm:text-base">{item.description}</p>
                   <button className="text-orange-600 font-semibold hover:text-orange-700 transition-colors text-sm">
-                    View Details →
                   </button>
                 </div>
               </div>
