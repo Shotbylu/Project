@@ -328,7 +328,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900 text-sm sm:text-base">Location</p>
-                    <p className="text-gray-600 text-sm sm:text-base">Sandton, South Africa</p>
+                    <p className="text-gray-600 text-sm sm:text-base">Johannesburg, South Africa</p>
                   </div>
                 </div>
               </div>
@@ -357,14 +357,6 @@ const Contact = () => {
                 >
                   <Github size={18} className="text-gray-600 sm:w-5 sm:h-5" />
                   <span className="font-medium text-gray-700 text-sm sm:text-base">GitHub</span>
-                </a>
-                
-                <a
-                  href="#"
-                  className="flex items-center gap-2 sm:gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all duration-200 hover:scale-105"
-                >
-                  <FileText size={18} className="text-gray-600 sm:w-5 sm:h-5" />
-                  <span className="font-medium text-gray-700 text-sm sm:text-base">CV</span>
                 </a>
               </div>
             </div>
