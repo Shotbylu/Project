@@ -233,6 +233,66 @@ const downloadPortfolio = async () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Profile Image Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="flex justify-center mt-12 sm:mt-16 lg:mt-20"
+        >
+          <div className="relative">
+            {/* Background Circle */}
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-blue-500/20 rounded-full blur-xl scale-110"></div>
+            
+            {/* Profile Image Container */}
+            <div className="relative bg-gradient-to-br from-orange-500 to-blue-500 p-1 rounded-full shadow-2xl">
+              <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                                 <img
+                   src="/assets/Lungelo_DP.png"
+                   alt="Lungelo Sibisi - Marketing Analytics & Communications Specialist"
+                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Fallback to a gradient background if image fails to load
+                    e.currentTarget.style.background = 'linear-gradient(135deg, #FF6B00, #0f1a2b)';
+                    e.currentTarget.style.display = 'flex';
+                    e.currentTarget.style.alignItems = 'center';
+                    e.currentTarget.style.justifyContent = 'center';
+                    e.currentTarget.style.color = 'white';
+                    e.currentTarget.style.fontSize = '2rem';
+                    e.currentTarget.style.fontWeight = 'bold';
+                    e.currentTarget.textContent = 'LS';
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Floating Elements */}
+            <div className="absolute -top-4 -left-4 w-8 h-8 bg-orange-500/20 rounded-full blur-sm animate-pulse"></div>
+            <div className="absolute -bottom-4 -right-4 w-6 h-6 bg-blue-500/20 rounded-full blur-sm animate-pulse delay-1000"></div>
+            <div className="absolute top-1/2 -right-8 w-4 h-4 bg-orange-500/30 rounded-full blur-sm animate-pulse delay-500"></div>
+            <div className="absolute top-1/2 -left-8 w-5 h-5 bg-blue-500/30 rounded-full blur-sm animate-pulse delay-1500"></div>
+          </div>
+        </motion.div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.2 }}
+          className="flex justify-center mt-8 sm:mt-12"
+        >
+          <div className="flex flex-col items-center space-y-2">
+            <div className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center">
+              <motion.div
+                animate={{ y: [0, 12, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                className="w-1 h-3 bg-gray-400 rounded-full mt-2"
+              ></motion.div>
+            </div>
+            <span className="text-xs text-gray-500 font-medium">Scroll to explore</span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
