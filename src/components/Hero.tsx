@@ -17,19 +17,49 @@ const Hero = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Download handlers
-  const downloadCV = () => {
-    const link = document.createElement('a');
-    link.href = '/assets/documents/Lungelo_Sibisi_CV.pdf'; // Path to your CV file
-    link.download = 'Lungelo_Sibisi_CV.pdf';
-    link.click();
+  // Updated download handlers with correct paths and error handling
+  const downloadCV = async () => {
+    try {
+      const response = await fetch('/Assets/documents/Lungelo_Sibisi_CV.pdf');
+      if (!response.ok) {
+        throw new Error('CV file not found');
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'Lungelo_Sibisi_CV.pdf';
+      link.setAttribute('type', 'application/pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading CV:', error);
+      alert('Sorry, the CV file could not be downloaded. Please try again later.');
+    }
   };
 
-  const downloadPortfolio = () => {
-    const link = document.createElement('a');
-    link.href = '/assets/documents/Lungelo_Sibisi_Portfolio.pdf'; // Path to your portfolio file
-    link.download = 'Lungelo_Sibisi_Portfolio.pdf';
-    link.click();
+  const downloadPortfolio = async () => {
+    try {
+      const response = await fetch('/Assets/documents/Lungelo_Sibisi_Portfolio.pdf');
+      if (!response.ok) {
+        throw new Error('Portfolio file not found');
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'Lungelo_Sibisi_Portfolio.pdf';
+      link.setAttribute('type', 'application/pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading Portfolio:', error);
+      alert('Sorry, the Portfolio file could not be downloaded. Please try again later.');
+    }
   };
   
   return (
