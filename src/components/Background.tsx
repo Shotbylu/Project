@@ -27,7 +27,7 @@ const Background = () => {
       location: 'Durban',
       description: 'Started career in sales, developing customer relationship and communication skills.',
       icon: Briefcase,
-      color: 'teal'
+      color: 'Charcoal'
     },
     {
       year: '2022',
@@ -67,7 +67,7 @@ const Background = () => {
       location: 'Empangeni',
       description: 'Gained experience in Media, Marketing and Branding.',
       icon: Briefcase,
-      color: 'teal'
+      color: 'Charcoal'
     },
     {
       year: '2023',
@@ -77,7 +77,7 @@ const Background = () => {
       location: 'Richards Bay',
       description: 'Gained experience in data analysis and business intelligence.',
       icon: Briefcase,
-      color: 'teal'
+      color: 'Charcoal'
     },
     {
       year: '2024',
@@ -87,7 +87,7 @@ const Background = () => {
       location: 'Sandton',
       description: 'Developed corporate communication strategies and content.',
       icon: Briefcase,
-      color: 'teal'
+      color: 'Charcoal'
     },
     {
       year: '2025',
@@ -97,7 +97,7 @@ const Background = () => {
       location: 'Kempton Park',
       description: 'Current role focused on marketing and communications for Initium Venture Solutions..',
       icon: Briefcase,
-      color: 'teal'
+      color: 'Charcoal'
     }
   ];
 
