@@ -464,15 +464,6 @@ const Contact = () => {
                     </>
                   )}
                 </button>
-                
-                <button
-                  type="button"
-                  disabled={isSubmitting}
-                  className="flex-1 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base"
-                >
-                  <Eye size={16} className="sm:w-4 sm:h-4" />
-                  View Portfolio
-                </button>
               </div>
 
               {!emailJSLoaded && (
