@@ -153,6 +153,200 @@ const Skills = () => {
             ))}
           </div>
         </motion.div>
+
+        {/* Tools and Languages Stack */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="mt-12 sm:mt-16"
+        >
+          <div className="text-center mb-8 sm:mb-12">
+            <h3 className="text-2xl sm:text-3xl font-bold text-[#0f1a2b] mb-4">
+              Languages and Tools
+            </h3>
+            <div className="w-16 sm:w-20 h-1 bg-[#FF6B00] mx-auto mb-4"></div>
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+              My technical toolkit for building innovative solutions
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 border border-gray-100">
+            <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-4 sm:gap-6">
+              {/* Row 1 */}
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=azure" alt="Azure" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">Azure</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=aws" alt="AWS" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">AWS</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=gcp" alt="GCP" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">GCP</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=py" alt="Python" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">Python</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=pytorch" alt="PyTorch" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">PyTorch</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=kubernetes" alt="Kubernetes" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">Kubernetes</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=docker" alt="Docker" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">Docker</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=ts" alt="TypeScript" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">TypeScript</span>
+              </div>
+
+              {/* Row 2 */}
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=ps" alt="Photoshop" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">Photoshop</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=wordpress" alt="WordPress" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">WordPress</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=anaconda" alt="Anaconda" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">Anaconda</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=pr" alt="Premiere Pro" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">Premiere Pro</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=visualstudio" alt="Visual Studio" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">Visual Studio</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=mongodb" alt="MongoDB" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">MongoDB</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=mysql" alt="MySQL" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">MySQL</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=js" alt="JavaScript" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">JavaScript</span>
+              </div>
+
+              {/* Row 3 */}
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=firebase" alt="Firebase" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">Firebase</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://user-images.githubusercontent.com/25181517/192108372-f71d70ac-7ae6-4c0d-8395-51d8870c2ef0.png" alt="Git" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">Git</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=github" alt="GitHub" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">GitHub</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=vite" alt="Vite" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">Vite</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=vscode" alt="VS Code" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">VS Code</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=tensorflow" alt="TensorFlow" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">TensorFlow</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=cpp" alt="C++" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">C++</span>
+              </div>
+
+              <div className="flex flex-col items-center group">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-orange-50 transition-all duration-300 group-hover:scale-110 mb-2">
+                  <img src="https://skillicons.dev/icons?i=rust" alt="Rust" className="w-8 h-8 sm:w-10 sm:h-10" />
+                </div>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">Rust</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
