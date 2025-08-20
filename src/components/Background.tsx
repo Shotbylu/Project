@@ -24,7 +24,7 @@ const Background = () => {
       category: 'Work Experience',
       title: 'Sales Consultant',
       institution: 'CCI Global',
-      location: 'South Africa',
+      location: 'Durban',
       description: 'Started career in sales, developing customer relationship and communication skills.',
       icon: Briefcase,
       color: 'teal'
@@ -34,7 +34,7 @@ const Background = () => {
       category: 'Education',
       title: 'Diploma Marketing Management',
       institution: 'Boston City Campus',
-      location: 'South Africa',
+      location: 'Durban',
       description: 'NQF 6 - Specialized in marketing strategies, consumer behavior, and digital marketing.',
       icon: GraduationCap,
       color: 'indigo'
@@ -44,7 +44,7 @@ const Background = () => {
       category: 'Education',
       title: 'Higher Certificate Data Science',
       institution: 'MICTSETA',
-      location: 'South Africa',
+      location: 'Johannesburg',
       description: 'NQF 5 - Advanced training in data science methodologies and tools.',
       icon: GraduationCap,
       color: 'indigo'
@@ -54,7 +54,7 @@ const Background = () => {
       category: 'Education',
       title: 'BCom Degree, Marketing Management',
       institution: 'University Of South Africa (UNISA)',
-      location: 'South Africa',
+      location: 'Johannesburg',
       description: 'NQF 7 - Bachelor of Commerce degree specializing in Marketing Management.',
       icon: GraduationCap,
       color: 'indigo'
@@ -64,7 +64,7 @@ const Background = () => {
       category: 'Work Experience',
       title: 'Media, Marketing & Brand Officer',
       institution: 'Empangeni High School',
-      location: 'South Africa',
+      location: 'Empangeni',
       description: 'Gained experience in Media, Marketing and Branding.',
       icon: Briefcase,
       color: 'teal'
@@ -74,7 +74,7 @@ const Background = () => {
       category: 'Work Experience',
       title: 'Data Analyst Intern',
       institution: 'South32',
-      location: 'South Africa',
+      location: 'Richards Bay',
       description: 'Gained experience in data analysis and business intelligence.',
       icon: Briefcase,
       color: 'teal'
@@ -84,7 +84,7 @@ const Background = () => {
       category: 'Work Experience',
       title: 'Corporate Communications Intern',
       institution: 'Sasol ESD',
-      location: 'South Africa',
+      location: 'Sandton',
       description: 'Developed corporate communication strategies and content.',
       icon: Briefcase,
       color: 'teal'
@@ -94,7 +94,7 @@ const Background = () => {
       category: 'Work Experience',
       title: 'Junior Marketing Coordinator',
       institution: 'Initium Venture Solutions',
-      location: 'South Africa',
+      location: 'Kempton Park',
       description: 'Current role focused on marketing and communications for Initium Venture Solutions..',
       icon: Briefcase,
       color: 'teal'
