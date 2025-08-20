@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, GraduationCap, Briefcase, Folder } from 'lucide-react';
 
 const Background = () => {
-  const [activeFilter, setActiveFilter] = useState('All');
+  const [activeFilter, setActiveFilter] = useState('Work Experience');
   const [activeYear, setActiveYear] = useState('All');
 
-  const filters = ['All', 'Education', 'Work Experience'];
+  const filters = ['Education', 'Work Experience'];
   const years = ['2018', '2019', '2022', '2023', '2024', '2025', '2025-2027'];
 
   const timelineData = [
@@ -103,12 +102,12 @@ const Background = () => {
   ];
 
   const filteredData = timelineData.filter(item => {
-    const filterMatch = activeFilter === 'All' || item.category === activeFilter;
+    const filterMatch = item.category === activeFilter;
     const yearMatch = activeYear === 'All' || item.year === activeYear;
     return filterMatch && yearMatch;
   });
 
-  const getColorClasses = (color: string) => {
+  const getColorClasses = (color) => {
     switch (color) {
       case 'indigo':
         return 'border-l-indigo-500 bg-indigo-50';
@@ -130,27 +129,15 @@ const Background = () => {
   return (
     <section id="background" className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl font-bold text-[#0f1a2b] mb-4">My Background</h2>
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-slate-800 mb-4">My Background</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             From education to on the job experience, discover my evolution in the digital world
           </p>
-        </motion.div>
+        </div>
 
         {/* Filters */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex justify-center mb-8"
-        >
+        <div className="flex justify-center mb-8">
           <div className="flex flex-wrap gap-2 bg-white rounded-2xl p-2 shadow-lg">
             {filters.map((filter) => (
               <button
@@ -158,25 +145,19 @@ const Background = () => {
                 onClick={() => setActiveFilter(filter)}
                 className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
                   activeFilter === filter
-                    ? 'bg-[#FF6B00] text-white shadow-md'
-                    : 'text-gray-600 hover:text-[#FF6B00] hover:bg-orange-50'
+                    ? 'bg-orange-500 text-white shadow-md'
+                    : 'text-gray-600 hover:text-orange-500 hover:bg-orange-50'
                 }`}
               >
                 {filter}
               </button>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Year Navigation */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex items-center justify-center mb-12"
-        >
-          <button className="p-2 text-gray-400 hover:text-[#FF6B00] transition-colors">
+        <div className="flex items-center justify-center mb-12">
+          <button className="p-2 text-gray-400 hover:text-orange-500 transition-colors">
             <ChevronLeft size={20} />
           </button>
           <div className="flex space-x-2 mx-4 overflow-x-auto">
@@ -184,8 +165,8 @@ const Background = () => {
               onClick={() => setActiveYear('All')}
               className={`px-4 py-2 rounded-full whitespace-nowrap font-medium transition-all duration-200 ${
                 activeYear === 'All'
-                  ? 'bg-[#1f3bff] text-white shadow-md'
-                  : 'bg-white text-gray-600 hover:bg-blue-50 hover:text-[#1f3bff]'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'bg-white text-gray-600 hover:bg-blue-50 hover:text-blue-600'
               }`}
             >
               All
@@ -196,28 +177,24 @@ const Background = () => {
                 onClick={() => setActiveYear(year)}
                 className={`px-4 py-2 rounded-full whitespace-nowrap font-medium transition-all duration-200 ${
                   activeYear === year
-                    ? 'bg-[#1f3bff] text-white shadow-md'
-                    : 'bg-white text-gray-600 hover:bg-blue-50 hover:text-[#1f3bff]'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-white text-gray-600 hover:bg-blue-50 hover:text-blue-600'
                 }`}
               >
                 {year}
               </button>
             ))}
           </div>
-          <button className="p-2 text-gray-400 hover:text-[#FF6B00] transition-colors">
+          <button className="p-2 text-gray-400 hover:text-orange-500 transition-colors">
             <ChevronRight size={20} />
           </button>
-        </motion.div>
+        </div>
 
         {/* Timeline Cards */}
         <div className="grid gap-6 mb-16">
           {filteredData.map((item, index) => (
-            <motion.div
+            <div
               key={`${item.year}-${item.title}`}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
               className={`bg-white rounded-2xl shadow-lg border-l-4 ${getColorClasses(item.color)} p-6 hover:shadow-xl transition-shadow duration-200`}
             >
               <div className="flex items-start space-x-4">
@@ -230,35 +207,29 @@ const Background = () => {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-[#FF6B00] bg-orange-100 px-3 py-1 rounded-full">
+                    <span className="text-sm font-semibold text-orange-600 bg-orange-100 px-3 py-1 rounded-full">
                       {item.year}
                     </span>
                     <span className="text-sm text-gray-500">{item.location}</span>
                   </div>
-                  <h3 className="text-xl font-bold text-[#0f1a2b] mb-1">{item.title}</h3>
-                  <p className="text-[#1f3bff] font-semibold mb-2">{item.institution}</p>
+                  <h3 className="text-xl font-bold text-slate-800 mb-1">{item.title}</h3>
+                  <p className="text-blue-600 font-semibold mb-2">{item.institution}</p>
                   <p className="text-gray-600 mb-4">{item.description}</p>
-                  <button className="text-[#FF6B00] font-semibold hover:text-orange-600 transition-colors">
+                  <button className="text-orange-600 font-semibold hover:text-orange-700 transition-colors">
                     View Details →
                   </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="bg-white rounded-2xl shadow-lg p-8"
-        >
+        <div className="bg-white rounded-2xl shadow-lg p-8">
           <div className="grid md:grid-cols-3 gap-8 text-center">
             {stats.map((stat, index) => (
               <div key={stat.label} className="space-y-2">
-                <h3 className="text-2xl font-bold text-[#0f1a2b]">{stat.value}</h3>
+                <h3 className="text-2xl font-bold text-slate-800">{stat.value}</h3>
                 <p className="text-gray-600 font-medium">{stat.label}</p>
               </div>
             ))}
@@ -266,7 +237,7 @@ const Background = () => {
           <p className="text-center text-gray-500 mt-6">
             A steady progression since 2018 with a total of 37 skills acquired.
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
