@@ -158,7 +158,7 @@ const Projects = () => {
                      <img 
                        src="/assets/documents/ping-pong-thumbnail.png" 
                        alt="Motion-Controlled Ping Pong Game" 
-                       className="absolute inset-0 w-full h-full object-contain"
+                       className="absolute inset-0 w-full h-full object-cover"
                        onError={(e) => {
                          // Fallback to gray background if image fails to load
                          e.currentTarget.style.display = 'none';
