@@ -15,7 +15,7 @@ const Background = () => {
       title: 'Matric Senior Certificate',
       institution: 'Richards Bay Secondary',
       location: 'Richards Bay',
-      description: 'NQF4 - Completed high school education with focus on mathematics and science.',
+      description: 'NQF4 - Completed high school education with a focus on Physical Science.',
       icon: GraduationCap,
       color: 'indigo'
     },
@@ -73,7 +73,7 @@ const Background = () => {
       year: '2023',
       category: 'Work Experience',
       title: 'Data Analyst Intern',
-      institution: 'South32',
+      institution: 'South32, Hillside',
       location: 'Richards Bay',
       description: 'Gained experience in data analysis and business intelligence.',
       icon: Briefcase,
@@ -82,20 +82,20 @@ const Background = () => {
     {
       year: '2024',
       category: 'Work Experience',
-      title: 'Corporate Communications Intern',
-      institution: 'Sasol ESD',
+      title: 'Communications Officer',
+      institution: 'Sasol',
       location: 'Sandton',
-      description: 'Developed corporate communication strategies and content.',
+      description: 'Crafted and executed corporate communication strategies.',
       icon: Briefcase,
       color: 'navy'
     },
     {
       year: '2025',
       category: 'Work Experience',
-      title: 'Junior Marketing Coordinator',
+      title: 'Marketing Coordinator',
       institution: 'Initium Venture Solutions',
       location: 'Kempton Park',
-      description: 'Current role focused on marketing and communications for Initium Venture Solutions..',
+      description: 'Current freelance role focused on marketing for Initium Venture Solutions.',
       icon: Briefcase,
       color: 'navy'
     }
@@ -122,7 +122,7 @@ const Background = () => {
 
   const stats = [
     { label: 'Education', value: '3 qualifications + 1 pending' },
-    { label: 'Experience', value: '6+ years' },
+    { label: 'Experience', value: '4+ years' },
     { label: 'Campaigns', value: '3+ & projects' }
   ];
 
