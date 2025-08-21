@@ -32,8 +32,8 @@ const Projects = () => {
       category: 'Software Development',
       techStack: ['OpenCV', 'Python', 'Anaconda', 'NumPy'],
       videoUrl: '/assets/documents/Ping-pong video.mp4',
-      githubUrl: '#',
-      liveUrl: '#',
+      githubUrl: '',
+      liveUrl: '/assets/documents/Ping-pong video.mp4',
       year: '2025',
       status: 'Completed',
       highlights: ['motion detection algorithms', 'computer vision', 'Webcam integration', 'image processing']
