@@ -18,7 +18,7 @@ const Projects = () => {
       description: 'A comprehensive Data Science SaaS platform that empowers data scientists with intuitive tools for dataset exploration, real-time analysis, and machine learning model training, all without the complexity. The platform simplifies end-to-end workflows by leveraging powerful algorithms and automation to turn raw data into actionable insights.',
       category: 'Data Science Platform',
       techStack: ['Python', 'React', 'Machine Learning', 'API Integration', 'Cloud Services'],
-      videoUrl: '#', // Placeholder
+      videoUrl: 'https://www.linkedin.com/posts/lungelo-sibisi-6745aa21b_my-latest-project-a-ping-pong-game-that-activity-7300142208844730369-9p9E?utm_source=share&utm_medium=member_desktop&rcm=ACoAADdwXTgBHE8qq_054W6KCh8JNRX-M8NBYKE', // Placeholder
       githubUrl: '#',
       liveUrl: '#',
       year: '2024',
@@ -31,7 +31,7 @@ const Projects = () => {
       description: 'A fully interactive game using only raw computer vision logic. No machine learning shortcuts, just OpenCV, creative problem-solving, and a webcam. It’s fast, fun, and a great testbed for real-time CV applications. Designed from scratch to explore computer vision & image processing.',
       category: 'Software Development',
       techStack: ['OpenCV', 'Python', 'Anaconda', 'NumPy'],
-      videoUrl: '/videos/solar-dashboard-demo.mp4', // Placeholder
+      videoUrl: '/assets/documents/Ping-pong video.mp4',
       githubUrl: '#',
       liveUrl: '#',
       year: '2025',
@@ -40,9 +40,9 @@ const Projects = () => {
     },
     {
       id: 3,
-      title: 'Data Analysis MCP Powered Agent',
-      description: 'A data analysis Agent that lets you simply drag and drop your CSV file to unlock insights. Instantly generate detailed reports on data quality, structure, and patterns, and interact with your dataset through natural language questions for clear, actionable answers.',
-      category: 'AI & Machine Learning',
+      title: 'SEMO Growth Marketing',
+      description: 'Strategic digital marketing campaign focused on boosting SME online presence through data-driven approaches and modern digital marketing tools.',
+      category: 'Digital Marketing',
       techStack: ['HubSpot', 'Google Analytics', 'Social Media APIs', 'SEO Tools', 'Content Management'],
       videoUrl: '/videos/semo-campaign-demo.mp4', // Placeholder
       githubUrl: '#',
