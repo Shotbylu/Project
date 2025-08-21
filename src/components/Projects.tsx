@@ -32,8 +32,8 @@ const Projects = () => {
       category: 'Software Development',
       techStack: ['OpenCV', 'Python', 'Anaconda', 'NumPy'],
       videoUrl: '/assets/documents/Ping-pong video.mp4',
-      githubUrl: '',
-      liveUrl: '/assets/documents/Ping-pong video.mp4',
+      githubUrl: '#',
+      liveUrl: '#',
       year: '2025',
       status: 'Completed',
       highlights: ['motion detection algorithms', 'computer vision', 'Webcam integration', 'image processing']
@@ -153,6 +153,18 @@ const Projects = () => {
 
                 {/* Video Thumbnail */}
                 <div className="relative mb-4 rounded-xl overflow-hidden bg-gray-100 aspect-video">
+                  {/* Thumbnail Image for Motion-Controlled Ping Pong Game */}
+                  {project.id === 2 && (
+                    <img 
+                      src="/assets/documents/ping-pong-thumbnail.jpg" 
+                      alt="Motion-Controlled Ping Pong Game" 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to gray background if image fails to load
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  )}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <button
                       onClick={() => setSelectedVideo(project.videoUrl)}
