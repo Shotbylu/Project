@@ -97,16 +97,16 @@ const Projects = () => {
     },
     {
       id: 3,
-      title: 'SEMO Growth Marketing',
-      description: 'Strategic digital marketing campaign focused on boosting SME online presence through data-driven approaches.',
-      category: 'Digital Marketing',
-      techStack: ['HubSpot', 'Google Analytics', 'Social Media APIs', 'SEO Tools', 'Content Management'],
+      title: 'AutoML Studio MCP Server',
+      description: 'Automates machine learning workflow with MCP: CSV upload, training, deployment, seamless integration, rapid experimentation.',
+      category: 'Machine Learning Infrastructure',
+      techStack: ['Python', 'scikit-learn', 'FastAPI', 'Plotly'],
       videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_640x360_1mb.mp4', // Test video
       githubUrl: '#',
       liveUrl: '#',
       year: '2024',
       status: 'Completed',
-      highlights: ['Lead Generation', 'Brand Awareness', 'Digital Strategy', 'Performance Metrics']
+      highlights: ['CSV data upload & validation', 'AutoML model training & comparison', 'automated data profiling & EDA', 'FastAPI deployment for serving models']
     }
   ];
 
@@ -218,7 +218,7 @@ const Projects = () => {
                     <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
                       <div className="text-white text-center">
                         <BarChart3 size={48} className="mx-auto mb-2" />
-                        <p className="text-sm font-medium">Visual Lab Demo</p>
+                        <p className="text-sm font-medium">"/assets/documents/Visual-lab-thumbnail.png"</p>
                       </div>
                     </div>
                   )}
@@ -229,7 +229,7 @@ const Projects = () => {
                         <div className="w-12 h-12 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
                           <div className="w-6 h-6 bg-white rounded-full"></div>
                         </div>
-                        <p className="text-sm font-medium">Ping Pong Game</p>
+                        <p className="text-sm font-medium">"/assets/documents/ping-pong-thumbnail.png"</p>
                       </div>
                     </div>
                   )}
