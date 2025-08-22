@@ -127,7 +127,7 @@ export default function SpaceInvadersGame() {
       if (!alien.alive) return;
       
       ctx.fillStyle = alien.type === 'small' ? '#ff0000' : 
-                     alien.type === 'medium' ? '#ff8800' : '#ffaa00';
+                      alien.type === 'medium' ? '#ff8800' : '#ffaa00';
       ctx.fillRect(alien.x, alien.y, alien.width, alien.height);
       
       // Add eyes
@@ -199,10 +199,12 @@ export default function SpaceInvadersGame() {
     }
 
     // Check if aliens reached player
-    const lowestAlienY = Math.max(...liveAliens.map(a => a.y + a.height));
-    if (lowestAlienY > game.player.y) {
-      setLives(0);
-      return;
+    if (liveAliens.length > 0) {
+      const lowestAlienY = Math.max(...liveAliens.map(a => a.y + a.height));
+      if (lowestAlienY > game.player.y) {
+        setLives(0);
+        return;
+      }
     }
 
     // Alien shooting
@@ -270,8 +272,11 @@ export default function SpaceInvadersGame() {
     // Update score
     setScore(game.currentScore);
 
-    // Check win condition
-    if (liveAliens.length === 0) {
+    // Check win condition. We must check the current state of all aliens
+    // AFTER collision detection has run in this frame.
+    const allAliensDefeated = game.aliens.length > 0 && game.aliens.every(a => !a.alive);
+
+    if (allAliensDefeated) {
       setGameWon(true);
       setIsPlaying(false);
       if (game.currentScore > highScore) {
