@@ -5,43 +5,41 @@ import { Award } from 'lucide-react';
 const Skills = () => {
   const [activeTab, setActiveTab] = useState('Development');
 
-  const tabs = ['Marketing Management', 'Design', 'Development'];
+  const tabs = ['Marketing Management', 'Graphic Design', 'Development'];
 
   const skillsData = {
     'Marketing Management': [
-      { name: 'Campaign Management', level: 95 },
-      { name: 'Digital Marketing', level: 90 },
-      { name: 'CRM tools (HubSpot, Salesforce, Zoho)', level: 88 },
-      { name: 'Client Acquisition', level: 85 },
-      { name: 'Communications', level: 85 },
-      { name: 'B2B Marketing', level: 90 },
+      { name: 'Marketing Automation & CRM (Microsoft Dynamics 365)', level: 95 },
+      { name: 'Digital Marketing Strategy & Campaign Execution', level: 90 },
+      { name: 'Paid Media (Google Ads, Meta, LinkedIn, Programmatic)', level: 88 },
+      { name: 'E-commerce & Conversion Rate Optimisation(CRO)', level: 85 },
+      { name: 'Sustainability & ESD Communication Strategy', level: 85 },
+      { name: 'Social Media Management (Content Creation)', level: 90 },
     ],
-    'Design': [
-      { name: 'Adobe Creative Suite', level: 92 },
-      { name: 'Canva', level: 88 },
-      { name: 'Graphic Design', level: 85 },
-      { name: 'Lightroom', level: 80 },
-      { name: 'InDesign', level: 80 },
-      { name: 'Figma (UX/UI Design)', level: 80 },
+    'Graphic Design': [
+      { name: 'Adobe Creative Suite (Photoshop, Illustrator, InDesign, After Effects, Premiere Pro)', level: 93 },
+      { name: 'Branding & Visual Identity (Logos, Typography, Color Theory, Style Guides)', level: 90 },
+      { name: 'UX/UI & Digital Design (Figma, Wireframing, Prototyping)', level: 88 },
+      { name: 'Photo Editing & Retouching (Lightroom, Photoshop)', level: 82 },
+      { name: 'Infographics & Data Visualization', level: 80 },
+      { name: 'Canva & Social Media Design', level: 80 }
     ],
     'Development': [
-      { name: 'Python', level: 65 },
-      { name: 'SQL', level: 75 },
-      { name: 'Power BI', level: 85 },
-      { name: 'Excel', level: 90 },
-      { name: 'Power Automate', level: 80 },
-      { name: 'Azure', level: 70 },
-      { name: 'AWS', level: 65 },
-      { name: 'Data Analysis', level: 85 },
-      { name: 'WordPress', level: 70 },
+      { name: 'Excel & Advanced Spreadsheets (Formulas, Pivot Tables, Macros)', level: 90 },
+      { name: 'Power BI (Dashboards, Data Visualization, Reporting)', level: 85 },
+      { name: 'Data Analysis & Analytics (SQL, Python, ETL/ELT)', level: 80 },
+      { name: 'Power Automate (Workflow Automation, Process Optimization)', level: 80 },
+      { name: 'Azure Cloud Services (Data Storage, Analytics, BI Integration)', level: 70 },
+      { name: 'WordPress (Website Development & CMS Management)', level: 70 }
     ],
   };
 
   const certifications = [
-    'Microsoft Azure Data Fundamentals (DP-900)',
-    'Adobe Photoshop Essential Skills',
-    'Google Digital Marketing Certification',
-    'Advanced Statistics for Data Science - Johns Hopkins',
+    'Microsoft-Azure Data Fundamentals (DP-900)',
+    'Adobe-Photoshop Essential Skills',
+    'Microsoft-Career Essentials in Data Analysis',
+    'Google-Digital Marketing Certification',
+    'Johns Hopkins University-Advanced Statistics for Data Science',
   ];
 
   const getSkillLevel = (level: number) => {
