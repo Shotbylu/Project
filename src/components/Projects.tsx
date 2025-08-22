@@ -156,7 +156,7 @@ const Projects = () => {
                    {/* Thumbnail Image for Visual Lab */}
                    {project.id === 1 && (
                      <img 
-                       src="/assets/documents/visual-lab-thumbnail.png" 
+                       src="/assets/documents/Visual-lab-thumbnail.png" 
                        alt="Visual Lab" 
                        className="absolute inset-0 w-full h-full object-cover"
                        onError={(e) => {
