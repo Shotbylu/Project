@@ -152,7 +152,10 @@ const Projects = () => {
                 </div>
 
                 {/* Video Thumbnail */}
-                <div className="relative mb-4 rounded-xl overflow-hidden bg-gray-100 aspect-video">
+                <div 
+                  className="relative mb-4 rounded-xl overflow-hidden bg-gray-100 aspect-video cursor-pointer hover:opacity-90 transition-opacity"
+                  onClick={() => setSelectedVideo(project.videoUrl)}
+                >
                   {/* Thumbnail Image for Visual Lab */}
                   {project.id === 1 && (
                     <img 
@@ -179,6 +182,14 @@ const Projects = () => {
                   )}
                   {/* Subtle gradient overlay for better text readability if needed */}
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 to-transparent"></div>
+                  {/* Play indicator on hover */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-500/80 rounded-full flex items-center justify-center backdrop-blur-sm">
+                      <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Content */}
