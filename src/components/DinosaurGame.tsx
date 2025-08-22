@@ -1,22 +1,18 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, RotateCcw, Trophy, Zap } from 'lucide-react';
+import { Play, RotateCcw, Trophy } from 'lucide-react';
 
-const SpaceInvadersGame = () => {
+const DinosaurGame = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
-  const [lives, setLives] = useState(3);
-  const [level, setLevel] = useState(1);
   const [gameOver, setGameOver] = useState(false);
-  const [gameWon, setGameWon] = useState(false);
-  const [touchControls, setTouchControls] = useState({ left: false, right: false, shoot: false });
+  const [isJumping, setIsJumping] = useState(false);
+  const [isDucking, setIsDucking] = useState(false);
   const canvasRef = useRef(null);
   const gameRef = useRef(null);
   const animationRef = useRef();
   const keysRef = useRef({});
-  const touchStartX = useRef(0);
-  const touchStartY = useRef(0);
 
   // Game initialization
   const initializeGame = useCallback(() => {
@@ -27,59 +23,52 @@ const SpaceInvadersGame = () => {
     if (!ctx) return null;
 
     canvas.width = 600;
-    canvas.height = 400;
+    canvas.height = 200;
 
     const game = {
-      player: {
-        x: canvas.width / 2 - 15,
-        y: canvas.height - 40,
-        width: 30,
-        height: 20,
-        speed: 5,
+      dino: {
+        x: 50,
+        y: canvas.height - 50,
+        width: 24,
+        height: 26,
+        velocityY: 0,
+        jumpPower: -12,
+        gravity: 0.8,
+        grounded: true,
+        ducking: false,
+        duckHeight: 18,
+        normalHeight: 26
       },
-      bullets: [],
-      aliens: [],
-      alienBullets: [],
-      alienDirection: 1,
-      alienSpeed: 1,
-      alienDropDistance: 15,
-      lastAlienShot: 0,
-      alienShootDelay: 60,
-      gameOver: false,
-      gameWon: false,
+      obstacles: [],
+      clouds: [],
+      ground: {
+        x: 0,
+        y: canvas.height - 20,
+        width: canvas.width,
+        height: 20
+      },
+      gameSpeed: 3,
+      spawnTimer: 0,
+      spawnDelay: 120, // frames between obstacles
       score: 0,
-      level: level,
+      gameOver: false,
+      lastObstacleX: canvas.width
     };
 
-    // Create alien grid
-    const createAliens = () => {
-      game.aliens = [];
-      const rows = 4;
-      const cols = 8;
-      const alienWidth = 25;
-      const alienHeight = 20;
-      const spacing = 8;
-      const startX = 80;
-      const startY = 40;
+    // Initialize clouds
+    for (let i = 0; i < 5; i++) {
+      game.clouds.push({
+        x: Math.random() * canvas.width * 2,
+        y: 20 + Math.random() * 40,
+        width: 30,
+        height: 15,
+        speed: 0.5
+      });
+    }
 
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          game.aliens.push({
-            x: startX + col * (alienWidth + spacing),
-            y: startY + row * (alienHeight + spacing),
-            width: alienWidth,
-            height: alienHeight,
-            type: row < 1 ? 'small' : row < 3 ? 'medium' : 'large',
-            points: row < 1 ? 30 : row < 3 ? 20 : 10,
-          });
-        }
-      }
-    };
-
-    createAliens();
     gameRef.current = game;
     return game;
-  }, [level]);
+  }, []);
 
   // Touch controls
   const handleTouchStart = (e) => {
@@ -89,64 +78,70 @@ const SpaceInvadersGame = () => {
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
     const y = touch.clientY - rect.top;
-
-    touchStartX.current = x;
-    touchStartY.current = y;
-
-    // Determine touch area
-    const canvasWidth = rect.width;
     const canvasHeight = rect.height;
 
-    // Left side of screen - move left
-    if (x < canvasWidth * 0.3) {
-      setTouchControls(prev => ({ ...prev, left: true }));
+    // Upper half - jump, lower half - duck
+    if (y < canvasHeight * 0.6) {
+      // Jump
+      if (gameRef.current && gameRef.current.dino.grounded) {
+        gameRef.current.dino.velocityY = gameRef.current.dino.jumpPower;
+        gameRef.current.dino.grounded = false;
+        setIsJumping(true);
+      }
+    } else {
+      // Duck
+      if (gameRef.current && gameRef.current.dino.grounded) {
+        gameRef.current.dino.ducking = true;
+        gameRef.current.dino.height = gameRef.current.dino.duckHeight;
+        setIsDucking(true);
+      }
     }
-    // Right side of screen - move right
-    else if (x > canvasWidth * 0.7) {
-      setTouchControls(prev => ({ ...prev, right: true }));
-    }
-    // Middle area - shoot
-    else {
-      setTouchControls(prev => ({ ...prev, shoot: true }));
-    }
-  };
-
-  const handleTouchMove = (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
-    const canvasWidth = rect.width;
-
-    // Update touch controls based on current position
-    setTouchControls({
-      left: x < canvasWidth * 0.3,
-      right: x > canvasWidth * 0.7,
-      shoot: x >= canvasWidth * 0.3 && x <= canvasWidth * 0.7
-    });
   };
 
   const handleTouchEnd = (e) => {
     e.preventDefault();
-    setTouchControls({ left: false, right: false, shoot: false });
+    if (gameRef.current) {
+      gameRef.current.dino.ducking = false;
+      gameRef.current.dino.height = gameRef.current.dino.normalHeight;
+      setIsDucking(false);
+    }
   };
 
   // Key handling
   useEffect(() => {
     const handleKeyDown = (e) => {
       keysRef.current[e.code] = true;
-      if (e.code === 'Space') {
+      
+      if (e.code === 'Space' || e.code === 'ArrowUp') {
         e.preventDefault();
+        if (gameRef.current && gameRef.current.dino.grounded && !gameRef.current.gameOver) {
+          gameRef.current.dino.velocityY = gameRef.current.dino.jumpPower;
+          gameRef.current.dino.grounded = false;
+          setIsJumping(true);
+        }
+      }
+      
+      if (e.code === 'ArrowDown') {
+        e.preventDefault();
+        if (gameRef.current && gameRef.current.dino.grounded && !gameRef.current.gameOver) {
+          gameRef.current.dino.ducking = true;
+          gameRef.current.dino.height = gameRef.current.dino.duckHeight;
+          setIsDucking(true);
+        }
       }
     };
 
     const handleKeyUp = (e) => {
       keysRef.current[e.code] = false;
+      
+      if (e.code === 'ArrowDown') {
+        if (gameRef.current) {
+          gameRef.current.dino.ducking = false;
+          gameRef.current.dino.height = gameRef.current.dino.normalHeight;
+          setIsDucking(false);
+        }
+      }
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -164,12 +159,10 @@ const SpaceInvadersGame = () => {
     if (!canvas) return;
 
     canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
     canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
 
     return () => {
       canvas.removeEventListener('touchstart', handleTouchStart);
-      canvas.removeEventListener('touchmove', handleTouchMove);
       canvas.removeEventListener('touchend', handleTouchEnd);
     };
   }, []);
@@ -184,16 +177,9 @@ const SpaceInvadersGame = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
 
-    let lastBulletTime = 0;
-    const bulletDelay = 200;
-
-    const gameLoop = (currentTime) => {
-      if (game.gameOver || game.gameWon) {
-        if (game.gameOver) {
-          setGameOver(true);
-        } else {
-          setGameWon(true);
-        }
+    const gameLoop = () => {
+      if (game.gameOver) {
+        setGameOver(true);
         setIsPlaying(false);
         if (game.score > highScore) {
           setHighScore(game.score);
@@ -204,166 +190,163 @@ const SpaceInvadersGame = () => {
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Handle player input (keyboard + touch)
-      const moveLeft = keysRef.current['ArrowLeft'] || touchControls.left;
-      const moveRight = keysRef.current['ArrowRight'] || touchControls.right;
-      const shoot = keysRef.current['Space'] || touchControls.shoot;
+      // Update score
+      game.score += 0.1;
+      
+      // Increase speed over time
+      game.gameSpeed = Math.min(3 + game.score * 0.005, 8);
 
-      if (moveLeft && game.player.x > 0) {
-        game.player.x -= game.player.speed;
-      }
-      if (moveRight && game.player.x < canvas.width - game.player.width) {
-        game.player.x += game.player.speed;
-      }
-      if (shoot && currentTime - lastBulletTime > bulletDelay) {
-        game.bullets.push({
-          x: game.player.x + game.player.width / 2 - 2,
-          y: game.player.y,
-          width: 4,
-          height: 10,
-          speed: 8,
-        });
-        lastBulletTime = currentTime;
+      // Update dinosaur physics
+      if (!game.dino.grounded) {
+        game.dino.velocityY += game.dino.gravity;
+        game.dino.y += game.dino.velocityY;
       }
 
-      // Update player bullets
-      game.bullets.forEach((bullet, index) => {
-        bullet.y -= bullet.speed;
-        if (bullet.y < 0) {
-          game.bullets.splice(index, 1);
+      // Ground collision
+      const groundY = canvas.height - 20 - game.dino.height;
+      if (game.dino.y >= groundY) {
+        game.dino.y = groundY;
+        game.dino.velocityY = 0;
+        game.dino.grounded = true;
+        setIsJumping(false);
+      }
+
+      // Spawn obstacles
+      game.spawnTimer++;
+      if (game.spawnTimer >= game.spawnDelay && game.lastObstacleX < canvas.width - 200) {
+        const obstacleType = Math.random() < 0.7 ? 'cactus' : 'bird';
+        const obstacle = {
+          x: canvas.width,
+          y: obstacleType === 'cactus' ? canvas.height - 35 : canvas.height - 70,
+          width: obstacleType === 'cactus' ? 12 : 20,
+          height: obstacleType === 'cactus' ? 25 : 15,
+          type: obstacleType
+        };
+        game.obstacles.push(obstacle);
+        game.spawnTimer = 0;
+        game.spawnDelay = Math.max(60, 120 - game.score * 0.5); // Decrease spawn delay over time
+        game.lastObstacleX = obstacle.x;
+      }
+
+      // Update obstacles
+      game.obstacles.forEach((obstacle, index) => {
+        obstacle.x -= game.gameSpeed;
+        if (obstacle.x + obstacle.width < 0) {
+          game.obstacles.splice(index, 1);
         }
       });
 
-      // Update aliens
-      let changeDirection = false;
-      let lowestAlien = 0;
-
-      game.aliens.forEach((alien) => {
-        alien.x += game.alienDirection * game.alienSpeed;
-        if (alien.x <= 0 || alien.x >= canvas.width - alien.width) {
-          changeDirection = true;
-        }
-        lowestAlien = Math.max(lowestAlien, alien.y);
-      });
-
-      if (changeDirection) {
-        game.alienDirection *= -1;
-        game.aliens.forEach((alien) => {
-          alien.y += game.alienDropDistance;
-        });
+      // Update last obstacle position
+      if (game.obstacles.length > 0) {
+        game.lastObstacleX = Math.max(...game.obstacles.map(o => o.x));
+      } else {
+        game.lastObstacleX = 0;
       }
 
-      // Check if aliens reached bottom
-      if (lowestAlien > canvas.height - 80) {
-        game.gameOver = true;
-      }
-
-      // Alien shooting
-      if (game.aliens.length > 0 && Math.random() < 0.02) {
-        const shootingAlien = game.aliens[Math.floor(Math.random() * game.aliens.length)];
-        game.alienBullets.push({
-          x: shootingAlien.x + shootingAlien.width / 2 - 2,
-          y: shootingAlien.y + shootingAlien.height,
-          width: 4,
-          height: 8,
-          speed: 3,
-        });
-      }
-
-      // Update alien bullets
-      game.alienBullets.forEach((bullet, index) => {
-        bullet.y += bullet.speed;
-        if (bullet.y > canvas.height) {
-          game.alienBullets.splice(index, 1);
+      // Update clouds
+      game.clouds.forEach(cloud => {
+        cloud.x -= cloud.speed;
+        if (cloud.x + cloud.width < 0) {
+          cloud.x = canvas.width + Math.random() * 100;
+          cloud.y = 20 + Math.random() * 40;
         }
       });
 
-      // Collision detection - player bullets vs aliens
-      game.bullets.forEach((bullet, bulletIndex) => {
-        game.aliens.forEach((alien, alienIndex) => {
-          if (
-            bullet.x < alien.x + alien.width &&
-            bullet.x + bullet.width > alien.x &&
-            bullet.y < alien.y + alien.height &&
-            bullet.y + bullet.height > alien.y
-          ) {
-            game.bullets.splice(bulletIndex, 1);
-            game.score += alien.points;
-            game.aliens.splice(alienIndex, 1);
-          }
-        });
-      });
+      // Collision detection
+      const dinoRect = {
+        x: game.dino.x + 2,
+        y: game.dino.y + 2,
+        width: game.dino.width - 4,
+        height: game.dino.height - 4
+      };
 
-      // Collision detection - alien bullets vs player
-      game.alienBullets.forEach((bullet, index) => {
+      game.obstacles.forEach(obstacle => {
         if (
-          bullet.x < game.player.x + game.player.width &&
-          bullet.x + bullet.width > game.player.x &&
-          bullet.y < game.player.y + game.player.height &&
-          bullet.y + bullet.height > game.player.y
+          dinoRect.x < obstacle.x + obstacle.width &&
+          dinoRect.x + dinoRect.width > obstacle.x &&
+          dinoRect.y < obstacle.y + obstacle.height &&
+          dinoRect.y + dinoRect.height > obstacle.y
         ) {
-          game.alienBullets.splice(index, 1);
-          setLives(prev => prev - 1);
-          if (lives <= 1) {
-            game.gameOver = true;
-          }
+          game.gameOver = true;
         }
       });
 
-      // Check win condition
-      if (game.aliens.length === 0) {
-        game.gameWon = true;
-      }
-
-      // Draw everything
-      ctx.fillStyle = '#1a1a2e';
+      // Draw sky gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#87CEEB');
+      gradient.addColorStop(1, '#E0F6FF');
+      ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw stars background
-      ctx.fillStyle = '#4a90e2';
-      for (let i = 0; i < 30; i++) {
-        const x = (i * 123) % canvas.width;
-        const y = (i * 456) % canvas.height;
-        ctx.fillRect(x, y, 1, 1);
+      // Draw clouds
+      ctx.fillStyle = '#FFFFFF';
+      game.clouds.forEach(cloud => {
+        ctx.fillRect(cloud.x, cloud.y, cloud.width, cloud.height);
+        ctx.fillRect(cloud.x + 5, cloud.y - 3, cloud.width - 10, cloud.height + 6);
+        ctx.fillRect(cloud.x + 8, cloud.y - 5, cloud.width - 16, cloud.height + 10);
+      });
+
+      // Draw ground
+      ctx.fillStyle = '#654321';
+      ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+      
+      // Ground pattern
+      ctx.fillStyle = '#8B4513';
+      for (let i = 0; i < canvas.width; i += 20) {
+        ctx.fillRect(i - (game.score * game.gameSpeed) % 20, canvas.height - 20, 10, 2);
       }
 
-      // Draw player
-      ctx.fillStyle = '#4a90e2';
-      ctx.fillRect(game.player.x, game.player.y, game.player.width, game.player.height);
-      ctx.fillRect(game.player.x + 13, game.player.y - 5, 4, 8);
+      // Draw dinosaur
+      const dinoColor = game.dino.ducking ? '#228B22' : '#32CD32';
+      ctx.fillStyle = dinoColor;
+      
+      if (game.dino.ducking) {
+        // Ducking dino (more horizontal)
+        ctx.fillRect(game.dino.x, game.dino.y + 8, game.dino.width, game.dino.height);
+        ctx.fillRect(game.dino.x + game.dino.width, game.dino.y + 12, 8, 10);
+      } else {
+        // Standing/jumping dino
+        ctx.fillRect(game.dino.x, game.dino.y, game.dino.width, game.dino.height);
+        ctx.fillRect(game.dino.x + game.dino.width, game.dino.y + 8, 6, 12);
+      }
+      
+      // Dino eyes
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(game.dino.x + 18, game.dino.y + 4, 2, 2);
+      
+      // Dino legs (simple animation)
+      if (game.dino.grounded && Math.floor(game.score * 10) % 20 < 10) {
+        ctx.fillStyle = dinoColor;
+        ctx.fillRect(game.dino.x + 4, game.dino.y + game.dino.height, 4, 6);
+        ctx.fillRect(game.dino.x + 16, game.dino.y + game.dino.height + 2, 4, 4);
+      } else if (game.dino.grounded) {
+        ctx.fillStyle = dinoColor;
+        ctx.fillRect(game.dino.x + 4, game.dino.y + game.dino.height + 2, 4, 4);
+        ctx.fillRect(game.dino.x + 16, game.dino.y + game.dino.height, 4, 6);
+      }
 
-      // Draw player bullets
-      ctx.fillStyle = '#ff6b35';
-      game.bullets.forEach((bullet) => {
-        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-      });
-
-      // Draw aliens
-      game.aliens.forEach((alien) => {
-        switch (alien.type) {
-          case 'small':
-            ctx.fillStyle = '#ff6b35';
-            break;
-          case 'medium':
-            ctx.fillStyle = '#ff8c42';
-            break;
-          case 'large':
-            ctx.fillStyle = '#ffad42';
-            break;
+      // Draw obstacles
+      game.obstacles.forEach(obstacle => {
+        if (obstacle.type === 'cactus') {
+          ctx.fillStyle = '#228B22';
+          ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+          ctx.fillRect(obstacle.x + 4, obstacle.y - 8, 4, 12);
+        } else { // bird
+          ctx.fillStyle = '#4B4B4D';
+          ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+          ctx.fillRect(obstacle.x + 5, obstacle.y - 2, 10, 4);
+          // Wing animation
+          if (Math.floor(game.score * 20) % 10 < 5) {
+            ctx.fillRect(obstacle.x - 2, obstacle.y + 2, 8, 3);
+            ctx.fillRect(obstacle.x + 14, obstacle.y + 2, 8, 3);
+          } else {
+            ctx.fillRect(obstacle.x - 2, obstacle.y + 8, 8, 3);
+            ctx.fillRect(obstacle.x + 14, obstacle.y + 8, 8, 3);
+          }
         }
-        ctx.fillRect(alien.x, alien.y, alien.width, alien.height);
-        ctx.fillStyle = '#1a1a2e';
-        ctx.fillRect(alien.x + 4, alien.y + 4, 3, 3);
-        ctx.fillRect(alien.x + 18, alien.y + 4, 3, 3);
       });
 
-      // Draw alien bullets
-      ctx.fillStyle = '#ff6b35';
-      game.alienBullets.forEach((bullet) => {
-        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-      });
-
-      setScore(game.score);
+      setScore(Math.floor(game.score));
       animationRef.current = requestAnimationFrame(gameLoop);
     };
 
@@ -374,33 +357,22 @@ const SpaceInvadersGame = () => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isPlaying, level, highScore, lives, touchControls]);
+  }, [isPlaying, highScore]);
 
   const startGame = () => {
     setScore(0);
-    setLives(3);
-    setLevel(1);
     setGameOver(false);
-    setGameWon(false);
     setIsPlaying(true);
-    setTouchControls({ left: false, right: false, shoot: false });
-  };
-
-  const nextLevel = () => {
-    setLevel(prev => prev + 1);
-    setGameWon(false);
-    setIsPlaying(true);
-    setTouchControls({ left: false, right: false, shoot: false });
+    setIsJumping(false);
+    setIsDucking(false);
   };
 
   const resetGame = () => {
     setScore(0);
-    setLives(3);
-    setLevel(1);
     setGameOver(false);
-    setGameWon(false);
     setIsPlaying(false);
-    setTouchControls({ left: false, right: false, shoot: false });
+    setIsJumping(false);
+    setIsDucking(false);
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
     }
@@ -411,11 +383,11 @@ const SpaceInvadersGame = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-4 sm:mb-6">
           <div className="relative">
-            <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent mb-2">
-              🚀 Try Getting a High Score 🚀
+            <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 bg-clip-text text-transparent mb-2">
+               Try Getting a High Score 
             </h3>
             <p className="text-base sm:text-lg text-gray-600 italic font-medium">
-              while I reply to your email ✉️
+              While i reply to your email 
             </p>
             <div className="absolute -top-2 -left-2 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
             <div className="absolute -top-1 -right-3 w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
@@ -423,7 +395,7 @@ const SpaceInvadersGame = () => {
           </div>
           <button
             onClick={() => setIsVisible(!isVisible)}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium transition-colors duration-300 text-sm sm:text-base"
+            className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium transition-colors duration-300 text-sm sm:text-base"
           >
             {isVisible ? 'Hide Game' : 'Play Game'}
           </button>
@@ -434,20 +406,18 @@ const SpaceInvadersGame = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 text-xs sm:text-sm">
               <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2 sm:mb-0">
                 <div className="flex items-center space-x-1">
-                  <Trophy className="text-orange-500" size={14} className="sm:w-4 sm:h-4" />
+                  <Trophy className="text-green-500" size={14} />
                   <span className="font-medium text-gray-700">High: {highScore}</span>
                 </div>
                 <div className="text-blue-600 font-medium">Score: {score}</div>
-                <div className="text-gray-600">Level: {level}</div>
-                <div className="text-red-500">Lives: {lives}</div>
               </div>
               <div className="flex space-x-2">
-                {!isPlaying && !gameOver && !gameWon && (
+                {!isPlaying && !gameOver && (
                   <button
                     onClick={startGame}
                     className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
                   >
-                    <Play size={12} className="sm:w-3 sm:h-3" />
+                    <Play size={12} />
                     <span>Start</span>
                   </button>
                 )}
@@ -456,24 +426,15 @@ const SpaceInvadersGame = () => {
                     onClick={startGame}
                     className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
                   >
-                    <Play size={12} className="sm:w-3 sm:h-3" />
+                    <Play size={12} />
                     <span>Play Again</span>
-                  </button>
-                )}
-                {gameWon && (
-                  <button
-                    onClick={nextLevel}
-                    className="flex items-center space-x-1 bg-orange-500 hover:bg-orange-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
-                  >
-                    <Play size={12} className="sm:w-3 sm:h-3" />
-                    <span>Next Level</span>
                   </button>
                 )}
                 <button
                   onClick={resetGame}
                   className="flex items-center space-x-1 bg-gray-500 hover:bg-gray-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
                 >
-                  <RotateCcw size={12} className="sm:w-3 sm:h-3" />
+                  <RotateCcw size={12} />
                   <span>Reset</span>
                 </button>
               </div>
@@ -482,43 +443,35 @@ const SpaceInvadersGame = () => {
             <div className="bg-gray-800 rounded-lg p-2 sm:p-3 border border-gray-300 relative">
               <canvas
                 ref={canvasRef}
-                className="w-full max-w-none border border-gray-600 rounded bg-gray-900 touch-none"
-                style={{ imageRendering: 'pixelated', maxHeight: '300px', height: '300px' }}
+                className="w-full max-w-none border border-gray-600 rounded touch-none"
+                style={{ imageRendering: 'pixelated', maxHeight: '200px', height: '200px' }}
               />
               
               {/* Touch Control Overlay for Mobile */}
               <div className="absolute inset-0 pointer-events-none md:hidden">
-                {/* Left Touch Area */}
-                <div className="absolute left-0 top-0 w-1/3 h-full bg-blue-500 opacity-10"></div>
-                {/* Right Touch Area */}
-                <div className="absolute right-0 top-0 w-1/3 h-full bg-green-500 opacity-10"></div>
-                {/* Center Touch Area */}
-                <div className="absolute left-1/3 top-0 w-1/3 h-full bg-red-500 opacity-10"></div>
+                {/* Upper half - Jump */}
+                <div className="absolute left-0 top-0 w-full h-3/5 bg-blue-500 opacity-5 flex items-center justify-center">
+                  <span className="text-blue-700 font-semibold text-sm pointer-events-auto">JUMP</span>
+                </div>
+                {/* Lower half - Duck */}
+                <div className="absolute left-0 bottom-0 w-full h-2/5 bg-orange-500 opacity-5 flex items-center justify-center">
+                  <span className="text-orange-700 font-semibold text-sm pointer-events-auto">DUCK</span>
+                </div>
               </div>
               
               <div className="text-center mt-2 text-gray-400 text-xs">
-                <span className="hidden md:inline">Arrow Keys: Move • SPACE: Shoot • </span>
-                <span className="md:hidden">Touch Left/Right: Move • Touch Center: Shoot • </span>
-                Destroy all aliens!
+                <span className="hidden md:inline">SPACE/↑: Jump • ↓: Duck • </span>
+                <span className="md:hidden">Touch Upper: Jump • Touch Lower: Duck • </span>
+                Avoid obstacles!
               </div>
             </div>
 
             {gameOver && (
               <div className="text-center mt-3 sm:mt-4 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-lg">
                 <h4 className="text-base sm:text-lg font-semibold text-red-700 mb-1">Game Over!</h4>
-                <p className="text-red-600 text-xs sm:text-sm">Final Score: {score} | Level: {level}</p>
+                <p className="text-red-600 text-xs sm:text-sm">Final Score: {score}</p>
                 {score > highScore && (
-                  <p className="text-orange-500 font-medium text-xs sm:text-sm mt-1">🎉 New High Score!</p>
-                )}
-              </div>
-            )}
-
-            {gameWon && (
-              <div className="text-center mt-3 sm:mt-4 p-2 sm:p-3 bg-green-50 border border-green-200 rounded-lg">
-                <h4 className="text-base sm:text-lg font-semibold text-green-700 mb-1">Level Complete! 🚀</h4>
-                <p className="text-green-600 text-xs sm:text-sm">Score: {score} | Ready for Level {level + 1}?</p>
-                {score > highScore && (
-                  <p className="text-orange-500 font-medium text-xs sm:text-sm mt-1">🎉 New High Score!</p>
+                  <p className="text-green-500 font-medium text-xs sm:text-sm mt-1">🎉 New High Score!</p>
                 )}
               </div>
             )}
@@ -529,4 +482,4 @@ const SpaceInvadersGame = () => {
   );
 };
 
-export default SpaceInvadersGame;
+export default DinosaurGame;
