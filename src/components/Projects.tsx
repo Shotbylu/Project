@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import ReactPlayer from 'react-player';
-import { ExternalLink, Github, Play, X, Database, BarChart3, Palette, Code, TrendingUp, Users } from 'lucide-react';
+import { ExternalLink, Github, X, Database, BarChart3, Palette, Code, TrendingUp, Users } from 'lucide-react';
 
 const Projects = () => {
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
@@ -28,7 +28,7 @@ const Projects = () => {
     {
       id: 2,
       title: 'Motion-Controlled Ping Pong Game',
-      description: 'A fully interactive game using only raw computer vision logic. No machine learning shortcuts, just OpenCV, creative problem-solving, and a webcam. It’s fast, fun, and a great testbed for real-time CV applications. Designed from scratch to explore computer vision & image processing.',
+      description: 'A fully interactive game using only raw computer vision logic. No machine learning shortcuts, just OpenCV, creative problem-solving, and a webcam. It\'s fast, fun, and a great testbed for real-time CV applications. Designed from scratch to explore computer vision & image processing.',
       category: 'Software Development',
       techStack: ['OpenCV', 'Python', 'Anaconda', 'NumPy'],
       videoUrl: '/assets/documents/Ping-pong video.mp4',
@@ -151,41 +151,34 @@ const Projects = () => {
                   </span>
                 </div>
 
-                                 {/* Video Thumbnail */}
-                 <div className="relative mb-4 rounded-xl overflow-hidden bg-gray-100 aspect-video">
-                   {/* Thumbnail Image for Visual Lab */}
-                   {project.id === 1 && (
-                     <img 
-                       src="/assets/documents/Visual-lab-thumbnail.png" 
-                       alt="Visual Lab" 
-                       className="absolute inset-0 w-full h-full object-cover"
-                       onError={(e) => {
-                         // Fallback to gray background if image fails to load
-                         e.currentTarget.style.display = 'none';
-                       }}
-                     />
-                   )}
-                   {/* Thumbnail Image for Motion-Controlled Ping Pong Game */}
-                   {project.id === 2 && (
-                     <img 
-                       src="/assets/documents/ping-pong-thumbnail.png" 
-                       alt="Motion-Controlled Ping Pong Game" 
-                       className="absolute inset-0 w-full h-full object-cover"
-                       onError={(e) => {
-                         // Fallback to gray background if image fails to load
-                         e.currentTarget.style.display = 'none';
-                       }}
-                     />
-                   )}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <button
-                      onClick={() => setSelectedVideo(project.videoUrl)}
-                      className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-500 rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors group-hover:scale-110 transition-transform duration-300"
-                    >
-                      <Play size={20} className="text-white ml-1 sm:w-6 sm:h-6" />
-                    </button>
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
+                {/* Video Thumbnail */}
+                <div className="relative mb-4 rounded-xl overflow-hidden bg-gray-100 aspect-video">
+                  {/* Thumbnail Image for Visual Lab */}
+                  {project.id === 1 && (
+                    <img 
+                      src="/assets/documents/Visual-lab-thumbnail.png" 
+                      alt="Visual Lab" 
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to gray background if image fails to load
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  )}
+                  {/* Thumbnail Image for Motion-Controlled Ping Pong Game */}
+                  {project.id === 2 && (
+                    <img 
+                      src="/assets/documents/ping-pong-thumbnail.png" 
+                      alt="Motion-Controlled Ping Pong Game" 
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to gray background if image fails to load
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  )}
+                  {/* Subtle gradient overlay for better text readability if needed */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 to-transparent"></div>
                 </div>
 
                 {/* Content */}
