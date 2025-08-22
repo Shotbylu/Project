@@ -27,11 +27,31 @@ const Projects = () => {
     setVideoError(null);
   }, []);
 
-  // Handle video selection
+  // Handle video selection with debugging
   const handleVideoSelect = useCallback((videoUrl: string) => {
+    console.log('Attempting to play video:', videoUrl);
     setIsVideoLoading(true);
     setVideoError(null);
     setSelectedVideo(videoUrl);
+    
+    // Test if the video file exists
+    if (videoUrl.startsWith('/')) {
+      fetch(videoUrl, { method: 'HEAD' })
+        .then(response => {
+          if (!response.ok) {
+            console.error('Video file not found:', videoUrl, 'Status:', response.status);
+            setVideoError(`Video file not found (${response.status}). Please check the file path.`);
+            setIsVideoLoading(false);
+          } else {
+            console.log('Video file found and accessible:', videoUrl);
+          }
+        })
+        .catch(error => {
+          console.error('Error checking video file:', error);
+          setVideoError('Unable to access video file. Please check the file path.');
+          setIsVideoLoading(false);
+        });
+    }
   }, []);
 
   // Handle video ready
@@ -43,8 +63,35 @@ const Projects = () => {
   // Handle video error
   const handleVideoError = useCallback((error: any) => {
     setIsVideoLoading(false);
-    setVideoError('Failed to load video. Please try again later.');
-    console.error('Video error:', error);
+    console.error('Video error details:', error);
+    
+    // More specific error messages based on error type
+    let errorMessage = 'Failed to load video. Please try again later.';
+    
+    if (error && error.target && error.target.error) {
+      const videoError = error.target.error;
+      console.error('Video error code:', videoError.code);
+      console.error('Video error message:', videoError.message);
+      
+      switch (videoError.code) {
+        case 1:
+          errorMessage = 'Video file not found. Please check the file path.';
+          break;
+        case 2:
+          errorMessage = 'Network error. Please check your internet connection.';
+          break;
+        case 3:
+          errorMessage = 'Video format not supported by your browser.';
+          break;
+        case 4:
+          errorMessage = 'Video file is corrupted or invalid.';
+          break;
+        default:
+          errorMessage = `Video error: ${videoError.message || 'Unknown error'}`;
+      }
+    }
+    
+    setVideoError(errorMessage);
   }, []);
 
   // Add/remove escape key listener
@@ -64,6 +111,26 @@ const Projects = () => {
       document.body.style.overflow = 'unset';
     };
   }, [selectedVideo, handleEscapeKey]);
+
+  // Test video file accessibility on component mount
+  useEffect(() => {
+    const testVideoFile = '/assets/documents/ping-pong-video.mp4';
+    console.log('Testing video file accessibility:', testVideoFile);
+    
+    fetch(testVideoFile, { method: 'HEAD' })
+      .then(response => {
+        if (response.ok) {
+          console.log('✅ Video file is accessible:', testVideoFile);
+          console.log('Content-Type:', response.headers.get('content-type'));
+          console.log('Content-Length:', response.headers.get('content-length'));
+        } else {
+          console.error('❌ Video file not accessible:', testVideoFile, 'Status:', response.status);
+        }
+      })
+      .catch(error => {
+        console.error('❌ Error testing video file:', error);
+      });
+  }, []);
 
   const projects = [
     {
@@ -85,7 +152,7 @@ const Projects = () => {
       description: 'A fully interactive game using only raw computer vision logic. No machine learning shortcuts, just OpenCV, creative problem-solving, and a webcam. It\'s fast, fun, and a great testbed for real-time CV applications. Designed from scratch to explore computer vision & image processing.',
       category: 'Software Development',
       techStack: ['OpenCV', 'Python', 'Anaconda', 'NumPy'],
-      videoUrl: '/assets/documents/Ping-pong-video.mp4',
+      videoUrl: '/assets/documents/ping-pong-video.mp4',
       githubUrl: '#',
       liveUrl: '#',
       year: '2025',
@@ -392,12 +459,21 @@ const Projects = () => {
                     playing
                     onReady={handleVideoReady}
                     onError={handleVideoError}
+                    onStart={() => console.log('Video started playing')}
+                    onPlay={() => console.log('Video play event')}
+                    onPause={() => console.log('Video paused')}
+                    onEnded={() => console.log('Video ended')}
+                    onProgress={(state) => console.log('Video progress:', state)}
                     config={{
                       file: {
                         attributes: {
                           controlsList: 'nodownload',
                           disablePictureInPicture: true,
-                        }
+                          crossOrigin: 'anonymous',
+                        },
+                        forceVideo: true,
+                        forceHLS: false,
+                        forceDASH: false,
                       }
                     }}
                     fallback={
