@@ -85,7 +85,7 @@ const Projects = () => {
       description: 'A fully interactive game using only raw computer vision logic. No machine learning shortcuts, just OpenCV, creative problem-solving, and a webcam. It\'s fast, fun, and a great testbed for real-time CV applications. Designed from scratch to explore computer vision & image processing.',
       category: 'Software Development',
       techStack: ['OpenCV', 'Python', 'Anaconda', 'NumPy'],
-      videoUrl: '/assets/documents/Ping-pong video.mp4',
+      videoUrl: '/assets/documents/Ping-pong-video.mp4',
       githubUrl: '#',
       liveUrl: '#',
       year: '2025',
