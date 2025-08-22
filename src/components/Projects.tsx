@@ -74,7 +74,7 @@ const Projects = () => {
       description: 'A comprehensive Data Science SaaS platform that empowers data scientists with intuitive tools for dataset exploration, real-time analysis, and machine learning model training, all without the complexity.',
       category: 'Data Science Platform',
       techStack: ['Python', 'React', 'Machine Learning', 'API Integration', 'Cloud Services'],
-      videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4', // Test video
+      videoUrl: '/assets/documents/Visual-lab-video.mp4',
       githubUrl: '#',
       liveUrl: '#',
       year: '2024',
@@ -97,16 +97,16 @@ const Projects = () => {
     },
     {
       id: 3,
-      title: 'SEMO Growth Marketing',
-      description: 'Strategic digital marketing campaign focused on boosting SME online presence through data-driven approaches.',
-      category: 'Digital Marketing',
-      techStack: ['HubSpot', 'Google Analytics', 'Social Media APIs', 'SEO Tools', 'Content Management'],
+      title: 'AutoML Studio MCP Server',
+      description: 'Automates machine learning workflow with MCP: CSV upload, training, deployment, seamless integration, rapid experimentation.',
+      category: 'Machine Learning Infrastructure (SaaS',
+      techStack: ['Python', 'Scikit-learn', 'FastAPI', 'Plotly', 'MCP'],
       videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_640x360_1mb.mp4', // Test video
       githubUrl: '#',
       liveUrl: '#',
       year: '2024',
-      status: 'Completed',
-      highlights: ['Lead Generation', 'Brand Awareness', 'Digital Strategy', 'Performance Metrics']
+      status: 'Developing',
+      highlights: ['CSV data upload & Analysis', 'AutoML model training & comparison', 'automated data profiling & EDA', 'FastAPI deployment']
     }
   ];
 
