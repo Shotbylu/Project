@@ -71,7 +71,7 @@ const Projects = () => {
     {
       id: 1,
       title: 'Visual Lab',
-      description: 'A comprehensive Data platform that empowers data scientists with intuitive tools for dataset exploration, real-time analysis, and machine learning model training, all without the complexity.',
+      description: 'A comprehensive Data platform that empowers data scientists with intuitive tools for dataset exploration & real-time analysis.',
       category: 'Data Science Platform',
       techStack: ['Python', 'React', 'Machine Learning', 'API Integration', 'Cloud Services'],
       videoUrl: '/assets/documents/Visual-lab-video.mp4',
