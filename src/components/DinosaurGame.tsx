@@ -1,38 +1,48 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react';
 import { Play, RotateCcw, Trophy, Zap } from 'lucide-react';
 
-const SpaceInvadersGame = () => {
+// Mobile-ready Space Invaders
+// Key changes:
+// - Responsive canvas that respects devicePixelRatio for crisp rendering
+// - Pointer-based touch controls (works with mouse too)
+// - On-screen left / right / shoot buttons for easy mobile play
+// - Stable lives handling via ref to avoid stale closures
+// - Clean-up of listeners and resize handling
+
+export default function SpaceInvadersGame() {
   const [isVisible, setIsVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [lives, setLives] = useState(3);
+  const livesRef = useRef(lives);
   const [level, setLevel] = useState(1);
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [touchControls, setTouchControls] = useState({ left: false, right: false, shoot: false });
-  const canvasRef = useRef(null);
-  const gameRef = useRef(null);
-  const animationRef = useRef();
-  const keysRef = useRef({});
-  const touchStartX = useRef(0);
-  const touchStartY = useRef(0);
 
-  // Game initialization
+  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+  const gameRef = useRef(null);
+  const animationRef = useRef(null);
+  const keysRef = useRef({});
+
+  // keep ref in sync with state to avoid stale checks inside game loop
+  useEffect(() => { livesRef.current = lives; }, [lives]);
+
   const initializeGame = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return null;
 
-    canvas.width = 600;
-    canvas.height = 400;
+    const width = canvas.width;
+    const height = canvas.height;
 
     const game = {
       player: {
-        x: canvas.width / 2 - 15,
-        y: canvas.height - 40,
+        x: width / 2 - 15,
+        y: height - 40,
         width: 30,
         height: 20,
         speed: 5,
@@ -41,17 +51,16 @@ const SpaceInvadersGame = () => {
       aliens: [],
       alienBullets: [],
       alienDirection: 1,
-      alienSpeed: 1,
+      alienSpeed: 1 + (level - 1) * 0.2,
       alienDropDistance: 15,
       lastAlienShot: 0,
-      alienShootDelay: 60,
+      alienShootDelay: Math.max(40 - level * 2, 20),
       gameOver: false,
       gameWon: false,
       score: 0,
       level: level,
     };
 
-    // Create alien grid
     const createAliens = () => {
       game.aliens = [];
       const rows = 4;
@@ -59,7 +68,9 @@ const SpaceInvadersGame = () => {
       const alienWidth = 25;
       const alienHeight = 20;
       const spacing = 8;
-      const startX = 80;
+      // center the grid
+      const gridWidth = cols * (alienWidth + spacing) - spacing;
+      const startX = (width - gridWidth) / 2;
       const startY = 40;
 
       for (let row = 0; row < rows; row++) {
@@ -78,307 +89,275 @@ const SpaceInvadersGame = () => {
 
     createAliens();
     gameRef.current = game;
-    return game;
+    return { ctx, canvas, game };
   }, [level]);
 
-  // Touch controls
-  const handleTouchStart = (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
+  // Resize canvas to container size and account for devicePixelRatio
+  const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
 
-    const rect = canvas.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
+    const rect = container.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
 
-    touchStartX.current = x;
-    touchStartY.current = y;
+    // maintain 3:2 aspect ratio, but limit max height to 60vh for mobile friendliness
+    const maxHeight = Math.min(rect.width * 0.66, window.innerHeight * 0.6);
+    const cssWidth = Math.min(rect.width, 900);
+    const cssHeight = Math.max(240, Math.min(maxHeight, 600));
 
-    // Determine touch area
-    const canvasWidth = rect.width;
-    const canvasHeight = rect.height;
+    canvas.style.width = `${cssWidth}px`;
+    canvas.style.height = `${cssHeight}px`;
 
-    // Left side of screen - move left
-    if (x < canvasWidth * 0.3) {
-      setTouchControls(prev => ({ ...prev, left: true }));
-    }
-    // Right side of screen - move right
-    else if (x > canvasWidth * 0.7) {
-      setTouchControls(prev => ({ ...prev, right: true }));
-    }
-    // Middle area - shoot
-    else {
-      setTouchControls(prev => ({ ...prev, shoot: true }));
-    }
-  };
+    canvas.width = Math.floor(cssWidth * dpr);
+    canvas.height = Math.floor(cssHeight * dpr);
 
-  const handleTouchMove = (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }, []);
 
-    const rect = canvas.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
-    const canvasWidth = rect.width;
+  useLayoutEffect(() => {
+    resizeCanvas();
+    const onResize = () => resizeCanvas();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [resizeCanvas]);
 
-    // Update touch controls based on current position
-    setTouchControls({
-      left: x < canvasWidth * 0.3,
-      right: x > canvasWidth * 0.7,
-      shoot: x >= canvasWidth * 0.3 && x <= canvasWidth * 0.7
-    });
-  };
-
-  const handleTouchEnd = (e) => {
-    e.preventDefault();
-    setTouchControls({ left: false, right: false, shoot: false });
-  };
-
-  // Key handling
+  // Keyboard handling
   useEffect(() => {
     const handleKeyDown = (e) => {
       keysRef.current[e.code] = true;
-      if (e.code === 'Space') {
-        e.preventDefault();
-      }
+      if (e.code === 'Space') e.preventDefault();
     };
-
-    const handleKeyUp = (e) => {
-      keysRef.current[e.code] = false;
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keyup', handleKeyUp);
-
+    const handleKeyUp = (e) => { keysRef.current[e.code] = false; };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
     };
   }, []);
 
-  // Touch event listeners
+  // Pointer / touch controls (using pointer events for broad compatibility)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-    canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+    let pointerDownOnCanvas = false;
+
+    const onPointerDown = (e) => {
+      pointerDownOnCanvas = true;
+      // For direct control, if pointer down on the canvas and not on buttons, allow drag-to-move
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left) * (canvas.width / rect.width) / (window.devicePixelRatio || 1);
+      // set player x directly for quick responsiveness
+      if (gameRef.current) {
+        gameRef.current.player.x = Math.max(0, Math.min(gameRef.current.player.x, canvas.width));
+        // Move player towards pointer (we'll snap to exact center)
+        gameRef.current.player.x = x - gameRef.current.player.width / 2;
+      }
+    };
+
+    const onPointerMove = (e) => {
+      if (!pointerDownOnCanvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left) * (canvas.width / rect.width) / (window.devicePixelRatio || 1);
+      if (gameRef.current) {
+        gameRef.current.player.x = Math.max(0, Math.min(x - gameRef.current.player.width / 2, canvas.width - gameRef.current.player.width));
+      }
+    };
+
+    const onPointerUp = () => { pointerDownOnCanvas = false; };
+
+    canvas.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
 
     return () => {
-      canvas.removeEventListener('touchstart', handleTouchStart);
-      canvas.removeEventListener('touchmove', handleTouchMove);
-      canvas.removeEventListener('touchend', handleTouchEnd);
+      canvas.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
     };
+  }, []);
+
+  // Helper to change lives safely and check game over
+  const hitPlayer = useCallback(() => {
+    setLives(prev => {
+      const next = prev - 1;
+      livesRef.current = next;
+      if (next <= 0 && gameRef.current) {
+        gameRef.current.gameOver = true;
+      }
+      return next;
+    });
   }, []);
 
   // Main game loop
   useEffect(() => {
     if (!isPlaying) return;
+    const init = initializeGame();
+    if (!init) return;
+    const { ctx, canvas, game } = init;
 
-    const game = initializeGame();
-    if (!game) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-
+    let lastTime = performance.now();
     let lastBulletTime = 0;
-    const bulletDelay = 200;
+    const bulletDelay = 200; // ms
 
-    const gameLoop = (currentTime) => {
+    const loop = (time) => {
+      const delta = time - lastTime;
+      lastTime = time;
+
       if (game.gameOver || game.gameWon) {
-        if (game.gameOver) {
-          setGameOver(true);
-        } else {
-          setGameWon(true);
-        }
+        if (game.gameOver) setGameOver(true);
+        if (game.gameWon) setGameWon(true);
         setIsPlaying(false);
-        if (game.score > highScore) {
-          setHighScore(game.score);
-        }
-        return;
+        if (game.score > highScore) setHighScore(game.score);
+        setScore(game.score);
+        return; // stop loop
       }
 
-      // Clear canvas
+      // clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // simple background
+      ctx.fillStyle = '#0b1220';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Handle player input (keyboard + touch)
-      const moveLeft = keysRef.current['ArrowLeft'] || touchControls.left;
-      const moveRight = keysRef.current['ArrowRight'] || touchControls.right;
+      // Input
+      const moveLeft = keysRef.current['ArrowLeft'] || keysRef.current['KeyA'] || touchControls.left;
+      const moveRight = keysRef.current['ArrowRight'] || keysRef.current['KeyD'] || touchControls.right;
       const shoot = keysRef.current['Space'] || touchControls.shoot;
 
-      if (moveLeft && game.player.x > 0) {
-        game.player.x -= game.player.speed;
-      }
-      if (moveRight && game.player.x < canvas.width - game.player.width) {
-        game.player.x += game.player.speed;
-      }
-      if (shoot && currentTime - lastBulletTime > bulletDelay) {
-        game.bullets.push({
-          x: game.player.x + game.player.width / 2 - 2,
-          y: game.player.y,
-          width: 4,
-          height: 10,
-          speed: 8,
-        });
-        lastBulletTime = currentTime;
+      if (moveLeft) game.player.x = Math.max(0, game.player.x - game.player.speed);
+      if (moveRight) game.player.x = Math.min(canvas.width / (window.devicePixelRatio || 1) - game.player.width, game.player.x + game.player.speed);
+
+      if (shoot && time - lastBulletTime > bulletDelay) {
+        game.bullets.push({ x: game.player.x + game.player.width / 2 - 2, y: game.player.y, width: 4, height: 10, speed: 8 });
+        lastBulletTime = time;
       }
 
-      // Update player bullets
-      game.bullets.forEach((bullet, index) => {
-        bullet.y -= bullet.speed;
-        if (bullet.y < 0) {
-          game.bullets.splice(index, 1);
-        }
-      });
+      // Update bullets
+      for (let i = game.bullets.length - 1; i >= 0; i--) {
+        const b = game.bullets[i];
+        b.y -= b.speed;
+        if (b.y + b.height < 0) game.bullets.splice(i, 1);
+      }
 
       // Update aliens
       let changeDirection = false;
       let lowestAlien = 0;
-
-      game.aliens.forEach((alien) => {
+      for (const alien of game.aliens) {
         alien.x += game.alienDirection * game.alienSpeed;
-        if (alien.x <= 0 || alien.x >= canvas.width - alien.width) {
-          changeDirection = true;
-        }
+        if (alien.x <= 0 || alien.x + alien.width >= canvas.width / (window.devicePixelRatio || 1)) changeDirection = true;
         lowestAlien = Math.max(lowestAlien, alien.y);
-      });
-
+      }
       if (changeDirection) {
         game.alienDirection *= -1;
-        game.aliens.forEach((alien) => {
-          alien.y += game.alienDropDistance;
-        });
+        for (const alien of game.aliens) alien.y += game.alienDropDistance;
       }
+      if (lowestAlien > (canvas.height / (window.devicePixelRatio || 1)) - 80) game.gameOver = true;
 
-      // Check if aliens reached bottom
-      if (lowestAlien > canvas.height - 80) {
-        game.gameOver = true;
-      }
-
-      // Alien shooting
-      if (game.aliens.length > 0 && Math.random() < 0.02) {
-        const shootingAlien = game.aliens[Math.floor(Math.random() * game.aliens.length)];
-        game.alienBullets.push({
-          x: shootingAlien.x + shootingAlien.width / 2 - 2,
-          y: shootingAlien.y + shootingAlien.height,
-          width: 4,
-          height: 8,
-          speed: 3,
-        });
+      // Alien shooting (low frequency)
+      if (game.aliens.length > 0 && Math.random() < 0.02 + level * 0.003) {
+        const shooter = game.aliens[Math.floor(Math.random() * game.aliens.length)];
+        game.alienBullets.push({ x: shooter.x + shooter.width / 2 - 2, y: shooter.y + shooter.height, width: 4, height: 8, speed: 3 + level * 0.2 });
       }
 
       // Update alien bullets
-      game.alienBullets.forEach((bullet, index) => {
-        bullet.y += bullet.speed;
-        if (bullet.y > canvas.height) {
-          game.alienBullets.splice(index, 1);
-        }
-      });
-
-      // Collision detection - player bullets vs aliens
-      game.bullets.forEach((bullet, bulletIndex) => {
-        game.aliens.forEach((alien, alienIndex) => {
-          if (
-            bullet.x < alien.x + alien.width &&
-            bullet.x + bullet.width > alien.x &&
-            bullet.y < alien.y + alien.height &&
-            bullet.y + bullet.height > alien.y
-          ) {
-            game.bullets.splice(bulletIndex, 1);
-            game.score += alien.points;
-            game.aliens.splice(alienIndex, 1);
-          }
-        });
-      });
-
-      // Collision detection - alien bullets vs player
-      game.alienBullets.forEach((bullet, index) => {
-        if (
-          bullet.x < game.player.x + game.player.width &&
-          bullet.x + bullet.width > game.player.x &&
-          bullet.y < game.player.y + game.player.height &&
-          bullet.y + bullet.height > game.player.y
-        ) {
-          game.alienBullets.splice(index, 1);
-          setLives(prev => prev - 1);
-          if (lives <= 1) {
-            game.gameOver = true;
-          }
-        }
-      });
-
-      // Check win condition
-      if (game.aliens.length === 0) {
-        game.gameWon = true;
+      for (let i = game.alienBullets.length - 1; i >= 0; i--) {
+        const b = game.alienBullets[i];
+        b.y += b.speed;
+        if (b.y > canvas.height / (window.devicePixelRatio || 1)) game.alienBullets.splice(i, 1);
       }
 
-      // Draw everything
-      ctx.fillStyle = '#1a1a2e';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Collisions: player bullets vs aliens
+      for (let i = game.bullets.length - 1; i >= 0; i--) {
+        const bullet = game.bullets[i];
+        for (let j = game.aliens.length - 1; j >= 0; j--) {
+          const alien = game.aliens[j];
+          if (bullet.x < alien.x + alien.width && bullet.x + bullet.width > alien.x && bullet.y < alien.y + alien.height && bullet.y + bullet.height > alien.y) {
+            game.bullets.splice(i, 1);
+            game.score += alien.points;
+            game.aliens.splice(j, 1);
+            break;
+          }
+        }
+      }
 
-      // Draw stars background
-      ctx.fillStyle = '#4a90e2';
-      for (let i = 0; i < 30; i++) {
-        const x = (i * 123) % canvas.width;
-        const y = (i * 456) % canvas.height;
+      // Collisions: alien bullets vs player
+      for (let i = game.alienBullets.length - 1; i >= 0; i--) {
+        const b = game.alienBullets[i];
+        if (b.x < game.player.x + game.player.width && b.x + b.width > game.player.x && b.y < game.player.y + game.player.height && b.y + b.height > game.player.y) {
+          game.alienBullets.splice(i, 1);
+          hitPlayer();
+          if (livesRef.current <= 0) game.gameOver = true;
+        }
+      }
+
+      if (game.aliens.length === 0) game.gameWon = true;
+
+      // Draw stars
+      ctx.fillStyle = '#1f3a6b';
+      for (let i = 0; i < 40; i++) {
+        const x = (i * 77) % (canvas.width / (window.devicePixelRatio || 1));
+        const y = (i * 131) % (canvas.height / (window.devicePixelRatio || 1));
         ctx.fillRect(x, y, 1, 1);
       }
 
       // Draw player
+      ctx.save();
       ctx.fillStyle = '#4a90e2';
       ctx.fillRect(game.player.x, game.player.y, game.player.width, game.player.height);
-      ctx.fillRect(game.player.x + 13, game.player.y - 5, 4, 8);
+      ctx.fillRect(game.player.x + game.player.width / 2 - 2, game.player.y - 6, 4, 8);
+      ctx.restore();
 
-      // Draw player bullets
+      // Draw bullets
       ctx.fillStyle = '#ff6b35';
-      game.bullets.forEach((bullet) => {
-        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-      });
+      for (const b of game.bullets) ctx.fillRect(b.x, b.y, b.width, b.height);
 
       // Draw aliens
-      game.aliens.forEach((alien) => {
+      for (const alien of game.aliens) {
         switch (alien.type) {
-          case 'small':
-            ctx.fillStyle = '#ff6b35';
-            break;
-          case 'medium':
-            ctx.fillStyle = '#ff8c42';
-            break;
-          case 'large':
-            ctx.fillStyle = '#ffad42';
-            break;
+          case 'small': ctx.fillStyle = '#ff6b35'; break;
+          case 'medium': ctx.fillStyle = '#ff8c42'; break;
+          default: ctx.fillStyle = '#ffad42';
         }
         ctx.fillRect(alien.x, alien.y, alien.width, alien.height);
-        ctx.fillStyle = '#1a1a2e';
+        ctx.fillStyle = '#0b1220';
         ctx.fillRect(alien.x + 4, alien.y + 4, 3, 3);
-        ctx.fillRect(alien.x + 18, alien.y + 4, 3, 3);
-      });
+        ctx.fillRect(alien.x + alien.width - 7, alien.y + 4, 3, 3);
+      }
 
       // Draw alien bullets
       ctx.fillStyle = '#ff6b35';
-      game.alienBullets.forEach((bullet) => {
-        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-      });
+      for (const b of game.alienBullets) ctx.fillRect(b.x, b.y, b.width, b.height);
 
+      // HUD updates
       setScore(game.score);
-      animationRef.current = requestAnimationFrame(gameLoop);
+
+      animationRef.current = requestAnimationFrame(loop);
     };
 
-    animationRef.current = requestAnimationFrame(gameLoop);
+    animationRef.current = requestAnimationFrame(loop);
 
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [isPlaying, level, highScore, lives, touchControls]);
+  }, [isPlaying, initializeGame, touchControls, level, highScore, hitPlayer]);
+
+  // Control helpers for on-screen buttons
+  const handleControlDown = (control) => (e) => {
+    e.preventDefault();
+    setTouchControls(prev => ({ ...prev, [control]: true }));
+  };
+  const handleControlUp = (control) => (e) => {
+    e.preventDefault();
+    setTouchControls(prev => ({ ...prev, [control]: false }));
+  };
 
   const startGame = () => {
     setScore(0);
     setLives(3);
+    livesRef.current = 3;
     setLevel(1);
     setGameOver(false);
     setGameWon(false);
@@ -396,14 +375,13 @@ const SpaceInvadersGame = () => {
   const resetGame = () => {
     setScore(0);
     setLives(3);
+    livesRef.current = 3;
     setLevel(1);
     setGameOver(false);
     setGameWon(false);
     setIsPlaying(false);
     setTouchControls({ left: false, right: false, shoot: false });
-    if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current);
-    }
+    if (animationRef.current) cancelAnimationFrame(animationRef.current);
   };
 
   return (
@@ -411,22 +389,10 @@ const SpaceInvadersGame = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-4 sm:mb-6">
           <div className="relative">
-            <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent mb-2">
-              🚀 Try Getting a High Score 🚀
-            </h3>
-            <p className="text-base sm:text-lg text-gray-600 italic font-medium">
-              while I reply to your email ✉️
-            </p>
-            <div className="absolute -top-2 -left-2 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-            <div className="absolute -top-1 -right-3 w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-            <div className="absolute -bottom-1 left-1/4 w-1 h-1 bg-green-400 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+            <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent mb-2">🚀 Try Getting a High Score 🚀</h3>
+            <p className="text-base sm:text-lg text-gray-600 italic font-medium">while I reply to your email ✉️</p>
           </div>
-          <button
-            onClick={() => setIsVisible(!isVisible)}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium transition-colors duration-300 text-sm sm:text-base"
-          >
-            {isVisible ? 'Hide Game' : 'Play Game'}
-          </button>
+          <button onClick={() => setIsVisible(v => !v)} className="bg-orange-500 hover:bg-orange-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium transition-colors duration-300 text-sm sm:text-base mt-3">{isVisible ? 'Hide Game' : 'Play Game'}</button>
         </div>
 
         {isVisible && (
@@ -434,7 +400,7 @@ const SpaceInvadersGame = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 text-xs sm:text-sm">
               <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2 sm:mb-0">
                 <div className="flex items-center space-x-1">
-                  <Trophy className="text-orange-500" size={14} className="sm:w-4 sm:h-4" />
+                  <Trophy className="text-orange-500" size={14} />
                   <span className="font-medium text-gray-700">High: {highScore}</span>
                 </div>
                 <div className="text-blue-600 font-medium">Score: {score}</div>
@@ -443,63 +409,42 @@ const SpaceInvadersGame = () => {
               </div>
               <div className="flex space-x-2">
                 {!isPlaying && !gameOver && !gameWon && (
-                  <button
-                    onClick={startGame}
-                    className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
-                  >
-                    <Play size={12} className="sm:w-3 sm:h-3" />
-                    <span>Start</span>
-                  </button>
+                  <button onClick={startGame} className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"><Play size={12} /><span>Start</span></button>
                 )}
                 {gameOver && (
-                  <button
-                    onClick={startGame}
-                    className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
-                  >
-                    <Play size={12} className="sm:w-3 sm:h-3" />
-                    <span>Play Again</span>
-                  </button>
+                  <button onClick={startGame} className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"><Play size={12} /><span>Play Again</span></button>
                 )}
                 {gameWon && (
-                  <button
-                    onClick={nextLevel}
-                    className="flex items-center space-x-1 bg-orange-500 hover:bg-orange-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
-                  >
-                    <Play size={12} className="sm:w-3 sm:h-3" />
-                    <span>Next Level</span>
-                  </button>
+                  <button onClick={nextLevel} className="flex items-center space-x-1 bg-orange-500 hover:bg-orange-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"><Play size={12} /><span>Next Level</span></button>
                 )}
-                <button
-                  onClick={resetGame}
-                  className="flex items-center space-x-1 bg-gray-500 hover:bg-gray-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
-                >
-                  <RotateCcw size={12} className="sm:w-3 sm:h-3" />
-                  <span>Reset</span>
-                </button>
+                <button onClick={resetGame} className="flex items-center space-x-1 bg-gray-500 hover:bg-gray-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"><RotateCcw size={12} /><span>Reset</span></button>
               </div>
             </div>
 
-            <div className="bg-gray-800 rounded-lg p-2 sm:p-3 border border-gray-300 relative">
-              <canvas
-                ref={canvasRef}
-                className="w-full max-w-none border border-gray-600 rounded bg-gray-900 touch-none"
-                style={{ imageRendering: 'pixelated', maxHeight: '300px', height: '300px' }}
-              />
-              
-              {/* Touch Control Overlay for Mobile */}
-              <div className="absolute inset-0 pointer-events-none md:hidden">
-                {/* Left Touch Area */}
-                <div className="absolute left-0 top-0 w-1/3 h-full bg-blue-500 opacity-10"></div>
-                {/* Right Touch Area */}
-                <div className="absolute right-0 top-0 w-1/3 h-full bg-green-500 opacity-10"></div>
-                {/* Center Touch Area */}
-                <div className="absolute left-1/3 top-0 w-1/3 h-full bg-red-500 opacity-10"></div>
+            <div className="bg-gray-800 rounded-lg p-2 sm:p-3 border border-gray-300 relative" ref={containerRef}>
+              <canvas ref={canvasRef} className="w-full max-w-none border border-gray-600 rounded bg-gray-900" style={{ imageRendering: 'pixelated' }} />
+
+              {/* On-screen touch buttons (visible on small screens) */}
+              <div className="md:hidden absolute left-0 right-0 bottom-2 flex items-end justify-between px-4 pointer-events-none">
+                <div className="flex items-center gap-3 pointer-events-auto">
+                  <button onPointerDown={handleControlDown('left')} onPointerUp={handleControlUp('left')} onPointerCancel={handleControlUp('left')} onContextMenu={(e)=>e.preventDefault()} className={`w-14 h-14 rounded-lg bg-white/10 backdrop-blur flex items-center justify-center text-white font-semibold touch-action-none`}>
+                    ◀
+                  </button>
+                  <button onPointerDown={handleControlDown('right')} onPointerUp={handleControlUp('right')} onPointerCancel={handleControlUp('right')} onContextMenu={(e)=>e.preventDefault()} className={`w-14 h-14 rounded-lg bg-white/10 backdrop-blur flex items-center justify-center text-white font-semibold touch-action-none`}>
+                    ▶
+                  </button>
+                </div>
+
+                <div className="pointer-events-auto">
+                  <button onPointerDown={handleControlDown('shoot')} onPointerUp={handleControlUp('shoot')} onPointerCancel={handleControlUp('shoot')} onContextMenu={(e)=>e.preventDefault()} className="w-16 h-16 rounded-full bg-red-500/90 text-white flex items-center justify-center font-bold touch-action-none">
+                    FIRE
+                  </button>
+                </div>
               </div>
-              
+
               <div className="text-center mt-2 text-gray-400 text-xs">
-                <span className="hidden md:inline">Arrow Keys: Move • SPACE: Shoot • </span>
-                <span className="md:hidden">Touch Left/Right: Move • Touch Center: Shoot • </span>
-                Destroy all aliens!
+                <span className="hidden md:inline">Arrow Keys: Move • SPACE: Shoot • Drag on canvas to move • </span>
+                <span className="md:hidden">Touch controls visible at bottom • Drag canvas to move • Tap FIRE to shoot</span>
               </div>
             </div>
 
@@ -507,9 +452,7 @@ const SpaceInvadersGame = () => {
               <div className="text-center mt-3 sm:mt-4 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-lg">
                 <h4 className="text-base sm:text-lg font-semibold text-red-700 mb-1">Game Over!</h4>
                 <p className="text-red-600 text-xs sm:text-sm">Final Score: {score} | Level: {level}</p>
-                {score > highScore && (
-                  <p className="text-orange-500 font-medium text-xs sm:text-sm mt-1">🎉 New High Score!</p>
-                )}
+                {score > highScore && <p className="text-orange-500 font-medium text-xs sm:text-sm mt-1">🎉 New High Score!</p>}
               </div>
             )}
 
@@ -517,9 +460,7 @@ const SpaceInvadersGame = () => {
               <div className="text-center mt-3 sm:mt-4 p-2 sm:p-3 bg-green-50 border border-green-200 rounded-lg">
                 <h4 className="text-base sm:text-lg font-semibold text-green-700 mb-1">Level Complete! 🚀</h4>
                 <p className="text-green-600 text-xs sm:text-sm">Score: {score} | Ready for Level {level + 1}?</p>
-                {score > highScore && (
-                  <p className="text-orange-500 font-medium text-xs sm:text-sm mt-1">🎉 New High Score!</p>
-                )}
+                {score > highScore && <p className="text-orange-500 font-medium text-xs sm:text-sm mt-1">🎉 New High Score!</p>}
               </div>
             )}
           </div>
@@ -527,6 +468,4 @@ const SpaceInvadersGame = () => {
       </div>
     </div>
   );
-};
-
-export default SpaceInvadersGame;
+}
