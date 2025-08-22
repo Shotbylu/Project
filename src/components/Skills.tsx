@@ -5,7 +5,7 @@ import { Award } from 'lucide-react';
 const Skills = () => {
   const [activeTab, setActiveTab] = useState('Development');
 
-  const tabs = ['Marketing Management', 'Graphic Design', 'Development'];
+  const tabs = ['Marketing Management', 'Design', 'Development'];
 
   const skillsData = {
     'Marketing Management': [
