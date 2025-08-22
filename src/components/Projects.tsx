@@ -337,13 +337,13 @@ const Projects = () => {
                       <Github size={14} className="sm:w-4 sm:h-4" />
                       Code
                     </a>
-                    <a
-                      href={project.liveUrl}
+                    <button
+                      onClick={() => handleVideoSelect(project.videoUrl)}
                       className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium"
                     >
                       <ExternalLink size={14} className="sm:w-4 sm:h-4" />
                       Live Demo
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
