@@ -155,43 +155,6 @@ const Contact = () => {
               </div>
             ) : (
               <>
-                {/* GitHub Stats */}
-                {githubData && (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
-                    <div className="bg-white rounded-xl p-3 sm:p-4 border border-gray-200 flex items-center gap-2 sm:gap-3">
-                      <div className="p-2 bg-orange-100 rounded-lg">
-                        <Github className="text-orange-600" size={18} className="sm:w-5 sm:h-5" />
-                      </div>
-                      <div>
-                        <p className="text-xs sm:text-sm text-gray-600">Public Repos</p>
-                        <p className="text-lg sm:text-xl font-bold text-gray-900">{githubData.public_repos}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-white rounded-xl p-3 sm:p-4 border border-gray-200 flex items-center gap-2 sm:gap-3">
-                      <div className="p-2 bg-blue-100 rounded-lg">
-                        <Star className="text-blue-600" size={18} className="sm:w-5 sm:h-5" />
-                      </div>
-                      <div>
-                        <p className="text-xs sm:text-sm text-gray-600">Following</p>
-                        <p className="text-lg sm:text-xl font-bold text-gray-900">{githubData.following}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-white rounded-xl p-3 sm:p-4 border border-gray-200 flex items-center gap-2 sm:gap-3">
-                      <div className="p-2 bg-green-100 rounded-lg">
-                        <Calendar className="text-green-600" size={18} className="sm:w-5 sm:h-5" />
-                      </div>
-                      <div>
-                        <p className="text-xs sm:text-sm text-gray-600">Member Since</p>
-                        <p className="text-lg sm:text-xl font-bold text-gray-900">
-                          {new Date(githubData.created_at).getFullYear()}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
                 {/* GitHub Badges Section */}
                 <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 mb-4 sm:mb-6">
                   <div className="text-center mb-4 sm:mb-6">
