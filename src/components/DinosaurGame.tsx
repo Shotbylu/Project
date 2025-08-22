@@ -1,493 +1,532 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { ExternalLink, Github, X, Database, BarChart3, Palette, Code, TrendingUp, Users } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Play, RotateCcw, Trophy, Zap } from 'lucide-react';
 
-const Projects = () => {
-  const [selectedVideo, setSelectedVideo] = useState(null);
-  const [isVideoLoading, setIsVideoLoading] = useState(false);
-  const [videoError, setVideoError] = useState(null);
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+const SpaceInvadersGame = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [level, setLevel] = useState(1);
+  const [gameOver, setGameOver] = useState(false);
+  const [gameWon, setGameWon] = useState(false);
+  const [touchControls, setTouchControls] = useState({ left: false, right: false, shoot: false });
+  const canvasRef = useRef(null);
+  const gameRef = useRef(null);
+  const animationRef = useRef();
+  const keysRef = useRef({});
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
 
-  // Handle escape key to close video modal
-  const handleEscapeKey = useCallback((event) => {
-    if (event.key === 'Escape' && selectedVideo) {
-      closeVideoModal();
+  // Game initialization
+  const initializeGame = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return null;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    canvas.width = 600;
+    canvas.height = 400;
+
+    const game = {
+      player: {
+        x: canvas.width / 2 - 15,
+        y: canvas.height - 40,
+        width: 30,
+        height: 20,
+        speed: 5,
+      },
+      bullets: [],
+      aliens: [],
+      alienBullets: [],
+      alienDirection: 1,
+      alienSpeed: 1,
+      alienDropDistance: 15,
+      lastAlienShot: 0,
+      alienShootDelay: 60,
+      gameOver: false,
+      gameWon: false,
+      score: 0,
+      level: level,
+    };
+
+    // Create alien grid
+    const createAliens = () => {
+      game.aliens = [];
+      const rows = 4;
+      const cols = 8;
+      const alienWidth = 25;
+      const alienHeight = 20;
+      const spacing = 8;
+      const startX = 80;
+      const startY = 40;
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          game.aliens.push({
+            x: startX + col * (alienWidth + spacing),
+            y: startY + row * (alienHeight + spacing),
+            width: alienWidth,
+            height: alienHeight,
+            type: row < 1 ? 'small' : row < 3 ? 'medium' : 'large',
+            points: row < 1 ? 30 : row < 3 ? 20 : 10,
+          });
+        }
+      }
+    };
+
+    createAliens();
+    gameRef.current = game;
+    return game;
+  }, [level]);
+
+  // Touch controls
+  const handleTouchStart = (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    touchStartX.current = x;
+    touchStartY.current = y;
+
+    // Determine touch area
+    const canvasWidth = rect.width;
+    const canvasHeight = rect.height;
+
+    // Left side of screen - move left
+    if (x < canvasWidth * 0.3) {
+      setTouchControls(prev => ({ ...prev, left: true }));
     }
-  }, [selectedVideo]);
+    // Right side of screen - move right
+    else if (x > canvasWidth * 0.7) {
+      setTouchControls(prev => ({ ...prev, right: true }));
+    }
+    // Middle area - shoot
+    else {
+      setTouchControls(prev => ({ ...prev, shoot: true }));
+    }
+  };
 
-  // Close video modal function
-  const closeVideoModal = useCallback(() => {
-    setSelectedVideo(null);
-    setIsVideoLoading(false);
-    setVideoError(null);
-  }, []);
+  const handleTouchMove = (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-  // Simplified video handling - try native HTML5 video first
-  const handleVideoSelect = useCallback((videoUrl) => {
-    console.log('Attempting to play video:', videoUrl);
-    setIsVideoLoading(true);
-    setVideoError(null);
-    setSelectedVideo(videoUrl);
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const canvasWidth = rect.width;
 
-    // Test video accessibility
-    const video = document.createElement('video');
-    video.src = videoUrl;
-    
-    video.addEventListener('loadedmetadata', () => {
-      console.log('✅ Video metadata loaded successfully');
-      setIsVideoLoading(false);
+    // Update touch controls based on current position
+    setTouchControls({
+      left: x < canvasWidth * 0.3,
+      right: x > canvasWidth * 0.7,
+      shoot: x >= canvasWidth * 0.3 && x <= canvasWidth * 0.7
     });
-    
-    video.addEventListener('error', (e) => {
-      console.error('❌ Video error:', e);
-      setVideoError('Unable to load video. Please check the file format and path.');
-      setIsVideoLoading(false);
-    });
-    
-    video.load();
-  }, []);
+  };
 
-  // Add/remove escape key listener
+  const handleTouchEnd = (e) => {
+    e.preventDefault();
+    setTouchControls({ left: false, right: false, shoot: false });
+  };
+
+  // Key handling
   useEffect(() => {
-    if (selectedVideo) {
-      document.addEventListener('keydown', handleEscapeKey);
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.removeEventListener('keydown', handleEscapeKey);
-      document.body.style.overflow = 'unset';
-    }
+    const handleKeyDown = (e) => {
+      keysRef.current[e.code] = true;
+      if (e.code === 'Space') {
+        e.preventDefault();
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      keysRef.current[e.code] = false;
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
 
     return () => {
-      document.removeEventListener('keydown', handleEscapeKey);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
     };
-  }, [selectedVideo, handleEscapeKey]);
+  }, []);
 
-  const projects = [
-    {
-      id: 1,
-      title: 'Visual Lab',
-      description: 'A comprehensive Data Science SaaS platform that empowers data scientists with intuitive tools for dataset exploration, real-time analysis, and machine learning model training, all without the complexity.',
-      category: 'Data Science Platform',
-      techStack: ['Python', 'React', 'Machine Learning', 'API Integration', 'Cloud Services'],
-      videoUrl: '/assets/documents/Visual-lab-video.mp4',
-      githubUrl: '#',
-      liveUrl: '#',
-      year: '2024',
-      status: 'Completed',
-      highlights: ['ML Model Training', 'Dataset Analysis', 'User-Friendly Interface', 'Cloud Integration']
-    },
-    {
-      id: 2,
-      title: 'Motion-Controlled Ping Pong Game',
-      description: 'A fully interactive game using only raw computer vision logic. No machine learning shortcuts, just OpenCV, creative problem-solving, and a webcam.',
-      category: 'Software Development',
-      techStack: ['OpenCV', 'Python', 'Anaconda', 'NumPy'],
-      // Try multiple potential paths for your video
-      videoUrl: '/assets/documents/ping-pong-video.mp4', // Absolute path
-      githubUrl: '#',
-      liveUrl: '#',
-      year: '2025',
-      status: 'Completed',
-      highlights: ['motion detection algorithms', 'computer vision', 'Webcam integration', 'image processing']
-    },
-    {
-      id: 3,
-      title: 'AutoML Studio MCP Server',
-      description: 'Automates machine learning workflow with MCP: CSV upload, training, deployment, seamless integration, rapid experimentation.',
-      category: 'Machine Learning Infrastructure (SaaS',
-      techStack: ['Python', 'Scikit-learn', 'FastAPI', 'Plotly', 'MCP'],
-      videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_640x360_1mb.mp4', // Test video
-      githubUrl: '#',
-      liveUrl: '#',
-      year: '2024',
-      status: 'Developing',
-      highlights: ['CSV data upload & Analysis', 'AutoML model training & comparison', 'automated data profiling & EDA', 'FastAPI deployment']
-    }
-  ];
+  // Touch event listeners
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-  const getTechIcon = (tech) => {
-    const iconMap = {
-      'Python': Code,
-      'React': Code,
-      'Power BI': BarChart3,
-      'SQL': Database,
-      'Machine Learning': TrendingUp,
-      'HubSpot': Users,
-      'Google Analytics': BarChart3,
-      'Azure': Database,
-      'Data Visualization': BarChart3,
-      'API Integration': Code,
-      'Cloud Services': Database,
-      'Excel': BarChart3,
-      'SEO Tools': TrendingUp,
-      'Social Media APIs': Users,
-      'Content Management': Palette
+    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+    canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+    return () => {
+      canvas.removeEventListener('touchstart', handleTouchStart);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
     };
-    
-    const IconComponent = iconMap[tech] || Code;
-    return <IconComponent size={16} />;
+  }, []);
+
+  // Main game loop
+  useEffect(() => {
+    if (!isPlaying) return;
+
+    const game = initializeGame();
+    if (!game) return;
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+
+    let lastBulletTime = 0;
+    const bulletDelay = 200;
+
+    const gameLoop = (currentTime) => {
+      if (game.gameOver || game.gameWon) {
+        if (game.gameOver) {
+          setGameOver(true);
+        } else {
+          setGameWon(true);
+        }
+        setIsPlaying(false);
+        if (game.score > highScore) {
+          setHighScore(game.score);
+        }
+        return;
+      }
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Handle player input (keyboard + touch)
+      const moveLeft = keysRef.current['ArrowLeft'] || touchControls.left;
+      const moveRight = keysRef.current['ArrowRight'] || touchControls.right;
+      const shoot = keysRef.current['Space'] || touchControls.shoot;
+
+      if (moveLeft && game.player.x > 0) {
+        game.player.x -= game.player.speed;
+      }
+      if (moveRight && game.player.x < canvas.width - game.player.width) {
+        game.player.x += game.player.speed;
+      }
+      if (shoot && currentTime - lastBulletTime > bulletDelay) {
+        game.bullets.push({
+          x: game.player.x + game.player.width / 2 - 2,
+          y: game.player.y,
+          width: 4,
+          height: 10,
+          speed: 8,
+        });
+        lastBulletTime = currentTime;
+      }
+
+      // Update player bullets
+      game.bullets.forEach((bullet, index) => {
+        bullet.y -= bullet.speed;
+        if (bullet.y < 0) {
+          game.bullets.splice(index, 1);
+        }
+      });
+
+      // Update aliens
+      let changeDirection = false;
+      let lowestAlien = 0;
+
+      game.aliens.forEach((alien) => {
+        alien.x += game.alienDirection * game.alienSpeed;
+        if (alien.x <= 0 || alien.x >= canvas.width - alien.width) {
+          changeDirection = true;
+        }
+        lowestAlien = Math.max(lowestAlien, alien.y);
+      });
+
+      if (changeDirection) {
+        game.alienDirection *= -1;
+        game.aliens.forEach((alien) => {
+          alien.y += game.alienDropDistance;
+        });
+      }
+
+      // Check if aliens reached bottom
+      if (lowestAlien > canvas.height - 80) {
+        game.gameOver = true;
+      }
+
+      // Alien shooting
+      if (game.aliens.length > 0 && Math.random() < 0.02) {
+        const shootingAlien = game.aliens[Math.floor(Math.random() * game.aliens.length)];
+        game.alienBullets.push({
+          x: shootingAlien.x + shootingAlien.width / 2 - 2,
+          y: shootingAlien.y + shootingAlien.height,
+          width: 4,
+          height: 8,
+          speed: 3,
+        });
+      }
+
+      // Update alien bullets
+      game.alienBullets.forEach((bullet, index) => {
+        bullet.y += bullet.speed;
+        if (bullet.y > canvas.height) {
+          game.alienBullets.splice(index, 1);
+        }
+      });
+
+      // Collision detection - player bullets vs aliens
+      game.bullets.forEach((bullet, bulletIndex) => {
+        game.aliens.forEach((alien, alienIndex) => {
+          if (
+            bullet.x < alien.x + alien.width &&
+            bullet.x + bullet.width > alien.x &&
+            bullet.y < alien.y + alien.height &&
+            bullet.y + bullet.height > alien.y
+          ) {
+            game.bullets.splice(bulletIndex, 1);
+            game.score += alien.points;
+            game.aliens.splice(alienIndex, 1);
+          }
+        });
+      });
+
+      // Collision detection - alien bullets vs player
+      game.alienBullets.forEach((bullet, index) => {
+        if (
+          bullet.x < game.player.x + game.player.width &&
+          bullet.x + bullet.width > game.player.x &&
+          bullet.y < game.player.y + game.player.height &&
+          bullet.y + bullet.height > game.player.y
+        ) {
+          game.alienBullets.splice(index, 1);
+          setLives(prev => prev - 1);
+          if (lives <= 1) {
+            game.gameOver = true;
+          }
+        }
+      });
+
+      // Check win condition
+      if (game.aliens.length === 0) {
+        game.gameWon = true;
+      }
+
+      // Draw everything
+      ctx.fillStyle = '#1a1a2e';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw stars background
+      ctx.fillStyle = '#4a90e2';
+      for (let i = 0; i < 30; i++) {
+        const x = (i * 123) % canvas.width;
+        const y = (i * 456) % canvas.height;
+        ctx.fillRect(x, y, 1, 1);
+      }
+
+      // Draw player
+      ctx.fillStyle = '#4a90e2';
+      ctx.fillRect(game.player.x, game.player.y, game.player.width, game.player.height);
+      ctx.fillRect(game.player.x + 13, game.player.y - 5, 4, 8);
+
+      // Draw player bullets
+      ctx.fillStyle = '#ff6b35';
+      game.bullets.forEach((bullet) => {
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+      });
+
+      // Draw aliens
+      game.aliens.forEach((alien) => {
+        switch (alien.type) {
+          case 'small':
+            ctx.fillStyle = '#ff6b35';
+            break;
+          case 'medium':
+            ctx.fillStyle = '#ff8c42';
+            break;
+          case 'large':
+            ctx.fillStyle = '#ffad42';
+            break;
+        }
+        ctx.fillRect(alien.x, alien.y, alien.width, alien.height);
+        ctx.fillStyle = '#1a1a2e';
+        ctx.fillRect(alien.x + 4, alien.y + 4, 3, 3);
+        ctx.fillRect(alien.x + 18, alien.y + 4, 3, 3);
+      });
+
+      // Draw alien bullets
+      ctx.fillStyle = '#ff6b35';
+      game.alienBullets.forEach((bullet) => {
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+      });
+
+      setScore(game.score);
+      animationRef.current = requestAnimationFrame(gameLoop);
+    };
+
+    animationRef.current = requestAnimationFrame(gameLoop);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [isPlaying, level, highScore, lives, touchControls]);
+
+  const startGame = () => {
+    setScore(0);
+    setLives(3);
+    setLevel(1);
+    setGameOver(false);
+    setGameWon(false);
+    setIsPlaying(true);
+    setTouchControls({ left: false, right: false, shoot: false });
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
+  const nextLevel = () => {
+    setLevel(prev => prev + 1);
+    setGameWon(false);
+    setIsPlaying(true);
+    setTouchControls({ left: false, right: false, shoot: false });
   };
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
+  const resetGame = () => {
+    setScore(0);
+    setLives(3);
+    setLevel(1);
+    setGameOver(false);
+    setGameWon(false);
+    setIsPlaying(false);
+    setTouchControls({ left: false, right: false, shoot: false });
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
     }
   };
 
   return (
-    <section id="projects" className="py-12 sm:py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange-500 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-12 sm:mb-16"
-        >
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-            Featured Projects
-          </h2>
-          <div className="w-20 sm:w-24 h-1 bg-gradient-to-r from-orange-500 to-blue-500 mx-auto mb-4 sm:mb-6 rounded-full"></div>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-            Discover my latest work combining data science, marketing analytics, and creative problem-solving
-          </p>
-        </motion.div>
-
-        {/* Projects Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16"
-        >
-          {projects.map((project) => (
-            <motion.div
-              key={project.id}
-              variants={cardVariants}
-              className="group relative"
-            >
-              {/* Project Card */}
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6 h-full hover:shadow-xl transition-all duration-500 hover:scale-105">
-                {/* Status Badge */}
-                <div className="flex justify-between items-start mb-3">
-                  <span className="text-xs sm:text-sm font-medium text-gray-500">{project.year}</span>
-                  <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
-                    project.status === 'Active' 
-                      ? 'bg-green-100 text-green-700 border border-green-200' 
-                      : 'bg-blue-100 text-blue-700 border border-blue-200'
-                  }`}>
-                    {project.status}
-                  </span>
-                </div>
-
-                {/* Video Thumbnail */}
-                <div 
-                  className="relative mb-4 rounded-xl overflow-hidden bg-gray-100 aspect-video cursor-pointer hover:opacity-90 transition-opacity"
-                  onClick={() => handleVideoSelect(project.videoUrl)}
-                >
-                  {/* Thumbnail Image for Visual Lab */}
-                  {project.id === 1 && (
-                    <img 
-                      src="/assets/documents/Visual-lab-thumbnail.png" 
-                      alt="Visual Lab" 
-                      className="absolute inset-0 w-full h-full object-cover"
-                      onError={(e) => {
-                        // Fallback to gradient background if image fails to load
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.nextElementSibling.style.display = 'flex';
-                      }}
-                    />
-                  )}
-                  {/* Thumbnail Image for Motion-Controlled Ping Pong Game */}
-                  {project.id === 2 && (
-                    <img 
-                      src="/assets/documents/ping-pong-thumbnail.png" 
-                      alt="Motion-Controlled Ping Pong Game" 
-                      className="absolute inset-0 w-full h-full object-cover"
-                      onError={(e) => {
-                        // Fallback to gradient background if image fails to load
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.nextElementSibling.style.display = 'flex';
-                      }}
-                    />
-                  )}
-                  {/* Thumbnail for SEMO */}
-                  {project.id === 3 && (
-                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
-                      <div className="text-white text-center">
-                        <TrendingUp size={48} className="mx-auto mb-2" />
-                        <p className="text-sm font-medium">SEMO Campaign</p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Fallback gradient backgrounds (hidden by default) */}
-                  {project.id === 1 && (
-                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center" style={{ display: 'none' }}>
-                      <div className="text-white text-center">
-                        <BarChart3 size={48} className="mx-auto mb-2" />
-                        <p className="text-sm font-medium">Visual Lab Demo</p>
-                      </div>
-                    </div>
-                  )}
-                  {project.id === 2 && (
-                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center" style={{ display: 'none' }}>
-                      <div className="text-white text-center">
-                        <div className="w-12 h-12 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
-                          <div className="w-6 h-6 bg-white rounded-full"></div>
-                        </div>
-                        <p className="text-sm font-medium">Ping Pong Game</p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Play indicator on hover */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/80 rounded-full flex items-center justify-center backdrop-blur-sm">
-                      <svg className="w-6 h-6 text-gray-800 ml-1" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="space-y-3">
-                  <div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">{project.title}</h3>
-                    <p className="text-sm text-orange-600 font-medium mb-2">{project.category}</p>
-                    <p className="text-gray-600 leading-relaxed text-sm line-clamp-3">{project.description}</p>
-                  </div>
-
-                  {/* Highlights */}
-                  <div className="space-y-2">
-                    <h4 className="text-xs sm:text-sm font-semibold text-gray-800">Key Features:</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {project.highlights.slice(0, 3).map((highlight, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2 py-1 bg-orange-50 text-orange-700 text-xs rounded-lg border border-orange-200"
-                        >
-                          {highlight}
-                        </span>
-                      ))}
-                      {project.highlights.length > 3 && (
-                        <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded-lg border border-gray-200">
-                          +{project.highlights.length - 3} more
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Tech Stack */}
-                  <div className="space-y-2">
-                    <h4 className="text-xs sm:text-sm font-semibold text-gray-800">Tech Stack:</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {project.techStack.slice(0, 4).map((tech, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full border border-blue-200"
-                        >
-                          {getTechIcon(tech)}
-                          <span>{tech}</span>
-                        </div>
-                      ))}
-                      {project.techStack.length > 4 && (
-                        <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded-full border border-gray-200">
-                          +{project.techStack.length - 4}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-2 pt-3">
-                    <a
-                      href={project.githubUrl}
-                      className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors text-xs sm:text-sm font-medium"
-                    >
-                      <Github size={14} className="sm:w-4 sm:h-4" />
-                      Code
-                    </a>
-                    <a
-                      href={project.liveUrl}
-                      className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium"
-                    >
-                      <ExternalLink size={14} className="sm:w-4 sm:h-4" />
-                      Live Demo
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Video Modal - Using Native HTML5 Video */}
-        {selectedVideo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4"
-            onClick={closeVideoModal}
+    <div className="py-6 sm:py-8 bg-white">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-4 sm:mb-6">
+          <div className="relative">
+            <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent mb-2">
+              🚀 Try Getting a High Score 🚀
+            </h3>
+            <p className="text-base sm:text-lg text-gray-600 italic font-medium">
+              while I reply to your email ✉️
+            </p>
+            <div className="absolute -top-2 -left-2 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+            <div className="absolute -top-1 -right-3 w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+            <div className="absolute -bottom-1 left-1/4 w-1 h-1 bg-green-400 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+          </div>
+          <button
+            onClick={() => setIsVisible(!isVisible)}
+            className="bg-orange-500 hover:bg-orange-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium transition-colors duration-300 text-sm sm:text-base"
           >
-            <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.8 }}
-              className="relative max-w-4xl w-full aspect-video"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Close Button */}
-              <button
-                onClick={closeVideoModal}
-                className="absolute -top-8 sm:-top-12 right-0 text-white hover:text-gray-300 transition-colors z-10"
-                aria-label="Close video"
-              >
-                <X size={24} className="sm:w-8 sm:h-8" />
-              </button>
-
-              {/* Escape Key Hint */}
-              <div className="absolute -top-8 sm:-top-12 left-0 text-white/70 text-sm">
-                Press ESC to close
-              </div>
-
-              <div className="w-full h-full bg-gray-900 rounded-xl overflow-hidden relative">
-                {/* Loading State */}
-                {isVideoLoading && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
-                    <div className="flex flex-col items-center space-y-4">
-                      <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-                      <p className="text-white text-sm">Loading video...</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Error State */}
-                {videoError && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
-                    <div className="text-center space-y-4">
-                      <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto">
-                        <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-white font-medium mb-2">Video Unavailable</p>
-                        <p className="text-gray-400 text-sm mb-4">{videoError}</p>
-                        <button
-                          onClick={closeVideoModal}
-                          className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
-                        >
-                          Close
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Native HTML5 Video Player */}
-                {!videoError && (
-                  <video
-                    className="w-full h-full object-contain"
-                    controls
-                    autoPlay
-                    onLoadStart={() => {
-                      console.log('Video load started');
-                      setIsVideoLoading(true);
-                    }}
-                    onLoadedMetadata={() => {
-                      console.log('Video metadata loaded');
-                      setIsVideoLoading(false);
-                    }}
-                    onCanPlay={() => {
-                      console.log('Video can play');
-                      setIsVideoLoading(false);
-                    }}
-                    onError={(e) => {
-                      console.error('Video error:', e);
-                      const video = e.target;
-                      const error = video.error;
-                      
-                      let errorMessage = 'Failed to load video.';
-                      if (error) {
-                        switch (error.code) {
-                          case 1:
-                            errorMessage = 'Video loading was aborted.';
-                            break;
-                          case 2:
-                            errorMessage = 'Network error occurred.';
-                            break;
-                          case 3:
-                            errorMessage = 'Video format not supported.';
-                            break;
-                          case 4:
-                            errorMessage = 'Video source not found or invalid.';
-                            break;
-                          default:
-                            errorMessage = error.message || 'Unknown video error.';
-                        }
-                      }
-                      
-                      setVideoError(errorMessage);
-                      setIsVideoLoading(false);
-                    }}
-                  >
-                    <source src={selectedVideo} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                )}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-center"
-        >
-          <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
-            Interested in collaborating or learning more about my work?
-          </p>
-          <button className="bg-gradient-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600 text-white px-6 sm:px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base">
-            Let's Work Together
+            {isVisible ? 'Hide Game' : 'Play Game'}
           </button>
-        </motion.div>
+        </div>
+
+        {isVisible && (
+          <div className="bg-gray-50 rounded-lg shadow-sm p-3 sm:p-4 border border-gray-200 max-w-2xl mx-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 text-xs sm:text-sm">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2 sm:mb-0">
+                <div className="flex items-center space-x-1">
+                  <Trophy className="text-orange-500" size={14} className="sm:w-4 sm:h-4" />
+                  <span className="font-medium text-gray-700">High: {highScore}</span>
+                </div>
+                <div className="text-blue-600 font-medium">Score: {score}</div>
+                <div className="text-gray-600">Level: {level}</div>
+                <div className="text-red-500">Lives: {lives}</div>
+              </div>
+              <div className="flex space-x-2">
+                {!isPlaying && !gameOver && !gameWon && (
+                  <button
+                    onClick={startGame}
+                    className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
+                  >
+                    <Play size={12} className="sm:w-3 sm:h-3" />
+                    <span>Start</span>
+                  </button>
+                )}
+                {gameOver && (
+                  <button
+                    onClick={startGame}
+                    className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
+                  >
+                    <Play size={12} className="sm:w-3 sm:h-3" />
+                    <span>Play Again</span>
+                  </button>
+                )}
+                {gameWon && (
+                  <button
+                    onClick={nextLevel}
+                    className="flex items-center space-x-1 bg-orange-500 hover:bg-orange-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
+                  >
+                    <Play size={12} className="sm:w-3 sm:h-3" />
+                    <span>Next Level</span>
+                  </button>
+                )}
+                <button
+                  onClick={resetGame}
+                  className="flex items-center space-x-1 bg-gray-500 hover:bg-gray-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
+                >
+                  <RotateCcw size={12} className="sm:w-3 sm:h-3" />
+                  <span>Reset</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="bg-gray-800 rounded-lg p-2 sm:p-3 border border-gray-300 relative">
+              <canvas
+                ref={canvasRef}
+                className="w-full max-w-none border border-gray-600 rounded bg-gray-900 touch-none"
+                style={{ imageRendering: 'pixelated', maxHeight: '300px', height: '300px' }}
+              />
+              
+              {/* Touch Control Overlay for Mobile */}
+              <div className="absolute inset-0 pointer-events-none md:hidden">
+                {/* Left Touch Area */}
+                <div className="absolute left-0 top-0 w-1/3 h-full bg-blue-500 opacity-10"></div>
+                {/* Right Touch Area */}
+                <div className="absolute right-0 top-0 w-1/3 h-full bg-green-500 opacity-10"></div>
+                {/* Center Touch Area */}
+                <div className="absolute left-1/3 top-0 w-1/3 h-full bg-red-500 opacity-10"></div>
+              </div>
+              
+              <div className="text-center mt-2 text-gray-400 text-xs">
+                <span className="hidden md:inline">Arrow Keys: Move • SPACE: Shoot • </span>
+                <span className="md:hidden">Touch Left/Right: Move • Touch Center: Shoot • </span>
+                Destroy all aliens!
+              </div>
+            </div>
+
+            {gameOver && (
+              <div className="text-center mt-3 sm:mt-4 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-lg">
+                <h4 className="text-base sm:text-lg font-semibold text-red-700 mb-1">Game Over!</h4>
+                <p className="text-red-600 text-xs sm:text-sm">Final Score: {score} | Level: {level}</p>
+                {score > highScore && (
+                  <p className="text-orange-500 font-medium text-xs sm:text-sm mt-1">🎉 New High Score!</p>
+                )}
+              </div>
+            )}
+
+            {gameWon && (
+              <div className="text-center mt-3 sm:mt-4 p-2 sm:p-3 bg-green-50 border border-green-200 rounded-lg">
+                <h4 className="text-base sm:text-lg font-semibold text-green-700 mb-1">Level Complete! 🚀</h4>
+                <p className="text-green-600 text-xs sm:text-sm">Score: {score} | Ready for Level {level + 1}?</p>
+                {score > highScore && (
+                  <p className="text-orange-500 font-medium text-xs sm:text-sm mt-1">🎉 New High Score!</p>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
-    </section>
+    </div>
   );
 };
 
-export default Projects;
+export default SpaceInvadersGame;
