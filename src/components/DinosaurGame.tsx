@@ -1,485 +1,507 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, RotateCcw, Trophy } from 'lucide-react';
-
-const DinosaurGame = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
-  const [gameOver, setGameOver] = useState(false);
-  const [isJumping, setIsJumping] = useState(false);
-  const [isDucking, setIsDucking] = useState(false);
-  const canvasRef = useRef(null);
-  const gameRef = useRef(null);
-  const animationRef = useRef();
-  const keysRef = useRef({});
-
-  // Game initialization
-  const initializeGame = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return null;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return null;
-
-    canvas.width = 600;
-    canvas.height = 200;
-
-    const game = {
-      dino: {
-        x: 50,
-        y: canvas.height - 50,
-        width: 24,
-        height: 26,
-        velocityY: 0,
-        jumpPower: -12,
-        gravity: 0.8,
-        grounded: true,
-        ducking: false,
-        duckHeight: 18,
-        normalHeight: 26
-      },
-      obstacles: [],
-      clouds: [],
-      ground: {
-        x: 0,
-        y: canvas.height - 20,
-        width: canvas.width,
-        height: 20
-      },
-      gameSpeed: 3,
-      spawnTimer: 0,
-      spawnDelay: 120, // frames between obstacles
-      score: 0,
-      gameOver: false,
-      lastObstacleX: canvas.width
-    };
-
-    // Initialize clouds
-    for (let i = 0; i < 5; i++) {
-      game.clouds.push({
-        x: Math.random() * canvas.width * 2,
-        y: 20 + Math.random() * 40,
-        width: 30,
-        height: 15,
-        speed: 0.5
-      });
-    }
-
-    gameRef.current = game;
-    return game;
-  }, []);
-
-  // Touch controls
-  const handleTouchStart = (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const y = touch.clientY - rect.top;
-    const canvasHeight = rect.height;
-
-    // Upper half - jump, lower half - duck
-    if (y < canvasHeight * 0.6) {
-      // Jump
-      if (gameRef.current && gameRef.current.dino.grounded) {
-        gameRef.current.dino.velocityY = gameRef.current.dino.jumpPower;
-        gameRef.current.dino.grounded = false;
-        setIsJumping(true);
-      }
-    } else {
-      // Duck
-      if (gameRef.current && gameRef.current.dino.grounded) {
-        gameRef.current.dino.ducking = true;
-        gameRef.current.dino.height = gameRef.current.dino.duckHeight;
-        setIsDucking(true);
-      }
-    }
-  };
-
-  const handleTouchEnd = (e) => {
-    e.preventDefault();
-    if (gameRef.current) {
-      gameRef.current.dino.ducking = false;
-      gameRef.current.dino.height = gameRef.current.dino.normalHeight;
-      setIsDucking(false);
-    }
-  };
-
-  // Key handling
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      keysRef.current[e.code] = true;
-      
-      if (e.code === 'Space' || e.code === 'ArrowUp') {
-        e.preventDefault();
-        if (gameRef.current && gameRef.current.dino.grounded && !gameRef.current.gameOver) {
-          gameRef.current.dino.velocityY = gameRef.current.dino.jumpPower;
-          gameRef.current.dino.grounded = false;
-          setIsJumping(true);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dino Game - Website Theme</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-      }
-      
-      if (e.code === 'ArrowDown') {
-        e.preventDefault();
-        if (gameRef.current && gameRef.current.dino.grounded && !gameRef.current.gameOver) {
-          gameRef.current.dino.ducking = true;
-          gameRef.current.dino.height = gameRef.current.dino.duckHeight;
-          setIsDucking(true);
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
         }
-      }
-    };
 
-    const handleKeyUp = (e) => {
-      keysRef.current[e.code] = false;
-      
-      if (e.code === 'ArrowDown') {
-        if (gameRef.current) {
-          gameRef.current.dino.ducking = false;
-          gameRef.current.dino.height = gameRef.current.dino.normalHeight;
-          setIsDucking(false);
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #f97316, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-      }
-    };
 
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keyup', handleKeyUp);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('keyup', handleKeyUp);
-    };
-  }, []);
-
-  // Touch event listeners
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-    canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
-
-    return () => {
-      canvas.removeEventListener('touchstart', handleTouchStart);
-      canvas.removeEventListener('touchend', handleTouchEnd);
-    };
-  }, []);
-
-  // Main game loop
-  useEffect(() => {
-    if (!isPlaying) return;
-
-    const game = initializeGame();
-    if (!game) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-
-    const gameLoop = () => {
-      if (game.gameOver) {
-        setGameOver(true);
-        setIsPlaying(false);
-        if (game.score > highScore) {
-          setHighScore(game.score);
+        .header p {
+            color: #6b7280;
+            font-style: italic;
+            margin-bottom: 20px;
         }
-        return;
-      }
 
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Update score
-      game.score += 0.1;
-      
-      // Increase speed over time
-      game.gameSpeed = Math.min(3 + game.score * 0.005, 8);
-
-      // Update dinosaur physics
-      if (!game.dino.grounded) {
-        game.dino.velocityY += game.dino.gravity;
-        game.dino.y += game.dino.velocityY;
-      }
-
-      // Ground collision
-      const groundY = canvas.height - 20 - game.dino.height;
-      if (game.dino.y >= groundY) {
-        game.dino.y = groundY;
-        game.dino.velocityY = 0;
-        game.dino.grounded = true;
-        setIsJumping(false);
-      }
-
-      // Spawn obstacles
-      game.spawnTimer++;
-      if (game.spawnTimer >= game.spawnDelay && game.lastObstacleX < canvas.width - 200) {
-        const obstacleType = Math.random() < 0.7 ? 'cactus' : 'bird';
-        const obstacle = {
-          x: canvas.width,
-          y: obstacleType === 'cactus' ? canvas.height - 35 : canvas.height - 70,
-          width: obstacleType === 'cactus' ? 12 : 20,
-          height: obstacleType === 'cactus' ? 25 : 15,
-          type: obstacleType
-        };
-        game.obstacles.push(obstacle);
-        game.spawnTimer = 0;
-        game.spawnDelay = Math.max(60, 120 - game.score * 0.5); // Decrease spawn delay over time
-        game.lastObstacleX = obstacle.x;
-      }
-
-      // Update obstacles
-      game.obstacles.forEach((obstacle, index) => {
-        obstacle.x -= game.gameSpeed;
-        if (obstacle.x + obstacle.width < 0) {
-          game.obstacles.splice(index, 1);
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
         }
-      });
 
-      // Update last obstacle position
-      if (game.obstacles.length > 0) {
-        game.lastObstacleX = Math.max(...game.obstacles.map(o => o.x));
-      } else {
-        game.lastObstacleX = 0;
-      }
-
-      // Update clouds
-      game.clouds.forEach(cloud => {
-        cloud.x -= cloud.speed;
-        if (cloud.x + cloud.width < 0) {
-          cloud.x = canvas.width + Math.random() * 100;
-          cloud.y = 20 + Math.random() * 40;
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
         }
-      });
 
-      // Collision detection
-      const dinoRect = {
-        x: game.dino.x + 2,
-        y: game.dino.y + 2,
-        width: game.dino.width - 4,
-        height: game.dino.height - 4
-      };
-
-      game.obstacles.forEach(obstacle => {
-        if (
-          dinoRect.x < obstacle.x + obstacle.width &&
-          dinoRect.x + dinoRect.width > obstacle.x &&
-          dinoRect.y < obstacle.y + obstacle.height &&
-          dinoRect.y + dinoRect.height > obstacle.y
-        ) {
-          game.gameOver = true;
+        .btn-primary {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
         }
-      });
 
-      // Draw sky gradient
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, '#87CEEB');
-      gradient.addColorStop(1, '#E0F6FF');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Draw clouds
-      ctx.fillStyle = '#FFFFFF';
-      game.clouds.forEach(cloud => {
-        ctx.fillRect(cloud.x, cloud.y, cloud.width, cloud.height);
-        ctx.fillRect(cloud.x + 5, cloud.y - 3, cloud.width - 10, cloud.height + 6);
-        ctx.fillRect(cloud.x + 8, cloud.y - 5, cloud.width - 16, cloud.height + 10);
-      });
-
-      // Draw ground
-      ctx.fillStyle = '#654321';
-      ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
-      
-      // Ground pattern
-      ctx.fillStyle = '#8B4513';
-      for (let i = 0; i < canvas.width; i += 20) {
-        ctx.fillRect(i - (game.score * game.gameSpeed) % 20, canvas.height - 20, 10, 2);
-      }
-
-      // Draw dinosaur
-      const dinoColor = game.dino.ducking ? '#228B22' : '#32CD32';
-      ctx.fillStyle = dinoColor;
-      
-      if (game.dino.ducking) {
-        // Ducking dino (more horizontal)
-        ctx.fillRect(game.dino.x, game.dino.y + 8, game.dino.width, game.dino.height);
-        ctx.fillRect(game.dino.x + game.dino.width, game.dino.y + 12, 8, 10);
-      } else {
-        // Standing/jumping dino
-        ctx.fillRect(game.dino.x, game.dino.y, game.dino.width, game.dino.height);
-        ctx.fillRect(game.dino.x + game.dino.width, game.dino.y + 8, 6, 12);
-      }
-      
-      // Dino eyes
-      ctx.fillStyle = '#000000';
-      ctx.fillRect(game.dino.x + 18, game.dino.y + 4, 2, 2);
-      
-      // Dino legs (simple animation)
-      if (game.dino.grounded && Math.floor(game.score * 10) % 20 < 10) {
-        ctx.fillStyle = dinoColor;
-        ctx.fillRect(game.dino.x + 4, game.dino.y + game.dino.height, 4, 6);
-        ctx.fillRect(game.dino.x + 16, game.dino.y + game.dino.height + 2, 4, 4);
-      } else if (game.dino.grounded) {
-        ctx.fillStyle = dinoColor;
-        ctx.fillRect(game.dino.x + 4, game.dino.y + game.dino.height + 2, 4, 4);
-        ctx.fillRect(game.dino.x + 16, game.dino.y + game.dino.height, 4, 6);
-      }
-
-      // Draw obstacles
-      game.obstacles.forEach(obstacle => {
-        if (obstacle.type === 'cactus') {
-          ctx.fillStyle = '#228B22';
-          ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-          ctx.fillRect(obstacle.x + 4, obstacle.y - 8, 4, 12);
-        } else { // bird
-          ctx.fillStyle = '#4B4B4D';
-          ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-          ctx.fillRect(obstacle.x + 5, obstacle.y - 2, 10, 4);
-          // Wing animation
-          if (Math.floor(game.score * 20) % 10 < 5) {
-            ctx.fillRect(obstacle.x - 2, obstacle.y + 2, 8, 3);
-            ctx.fillRect(obstacle.x + 14, obstacle.y + 2, 8, 3);
-          } else {
-            ctx.fillRect(obstacle.x - 2, obstacle.y + 8, 8, 3);
-            ctx.fillRect(obstacle.x + 14, obstacle.y + 8, 8, 3);
-          }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3);
         }
-      });
 
-      setScore(Math.floor(game.score));
-      animationRef.current = requestAnimationFrame(gameLoop);
-    };
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
 
-    animationRef.current = requestAnimationFrame(gameLoop);
+        .btn-secondary:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+        }
 
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [isPlaying, highScore]);
+        .score-section {
+            display: none;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
 
-  const startGame = () => {
-    setScore(0);
-    setGameOver(false);
-    setIsPlaying(true);
-    setIsJumping(false);
-    setIsDucking(false);
-  };
+        .high-score {
+            color: #22c55e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-  const resetGame = () => {
-    setScore(0);
-    setGameOver(false);
-    setIsPlaying(false);
-    setIsJumping(false);
-    setIsDucking(false);
-    if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current);
-    }
-  };
+        .current-score {
+            color: #3b82f6;
+        }
 
-  return (
-    <div className="py-6 sm:py-8 bg-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-4 sm:mb-6">
-          <div className="relative">
-            <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 bg-clip-text text-transparent mb-2">
-               Try Getting a High Score 
-            </h3>
-            <p className="text-base sm:text-lg text-gray-600 italic font-medium">
-              While i reply to your email 
-            </p>
-            <div className="absolute -top-2 -left-2 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-            <div className="absolute -top-1 -right-3 w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-            <div className="absolute -bottom-1 left-1/4 w-1 h-1 bg-green-400 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-          </div>
-          <button
-            onClick={() => setIsVisible(!isVisible)}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium transition-colors duration-300 text-sm sm:text-base"
-          >
-            {isVisible ? 'Hide Game' : 'Play Game'}
-          </button>
-        </div>
+        .game-container {
+            border: 3px solid #e5e7eb;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: #1f2937;
+            position: relative;
+            display: none;
+        }
 
-        {isVisible && (
-          <div className="bg-gray-50 rounded-lg shadow-sm p-3 sm:p-4 border border-gray-200 max-w-2xl mx-auto">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 text-xs sm:text-sm">
-              <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2 sm:mb-0">
-                <div className="flex items-center space-x-1">
-                  <Trophy className="text-green-500" size={14} />
-                  <span className="font-medium text-gray-700">High: {highScore}</span>
-                </div>
-                <div className="text-blue-600 font-medium">Score: {score}</div>
-              </div>
-              <div className="flex space-x-2">
-                {!isPlaying && !gameOver && (
-                  <button
-                    onClick={startGame}
-                    className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
-                  >
-                    <Play size={12} />
-                    <span>Start</span>
-                  </button>
-                )}
-                {gameOver && (
-                  <button
-                    onClick={startGame}
-                    className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
-                  >
-                    <Play size={12} />
-                    <span>Play Again</span>
-                  </button>
-                )}
-                <button
-                  onClick={resetGame}
-                  className="flex items-center space-x-1 bg-gray-500 hover:bg-gray-600 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors"
-                >
-                  <RotateCcw size={12} />
-                  <span>Reset</span>
-                </button>
-              </div>
-            </div>
+        #gameCanvas {
+            display: block;
+            background: linear-gradient(to bottom, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%);
+        }
 
-            <div className="bg-gray-800 rounded-lg p-2 sm:p-3 border border-gray-300 relative">
-              <canvas
-                ref={canvasRef}
-                className="w-full max-w-none border border-gray-600 rounded touch-none"
-                style={{ imageRendering: 'pixelated', maxHeight: '200px', height: '200px' }}
-              />
-              
-              {/* Touch Control Overlay for Mobile */}
-              <div className="absolute inset-0 pointer-events-none md:hidden">
-                {/* Upper half - Jump */}
-                <div className="absolute left-0 top-0 w-full h-3/5 bg-blue-500 opacity-5 flex items-center justify-center">
-                  <span className="text-blue-700 font-semibold text-sm pointer-events-auto">JUMP</span>
-                </div>
-                {/* Lower half - Duck */}
-                <div className="absolute left-0 bottom-0 w-full h-2/5 bg-orange-500 opacity-5 flex items-center justify-center">
-                  <span className="text-orange-700 font-semibold text-sm pointer-events-auto">DUCK</span>
-                </div>
-              </div>
-              
-              <div className="text-center mt-2 text-gray-400 text-xs">
-                <span className="hidden md:inline">SPACE/↑: Jump • ↓: Duck • </span>
-                <span className="md:hidden">Touch Upper: Jump • Touch Lower: Duck • </span>
-                Avoid obstacles!
-              </div>
-            </div>
+        .instructions {
+            margin-top: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
 
-            {gameOver && (
-              <div className="text-center mt-3 sm:mt-4 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-lg">
-                <h4 className="text-base sm:text-lg font-semibold text-red-700 mb-1">Game Over!</h4>
-                <p className="text-red-600 text-xs sm:text-sm">Final Score: {score}</p>
-                {score > highScore && (
-                  <p className="text-green-500 font-medium text-xs sm:text-sm mt-1">🎉 New High Score!</p>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+        .trophy {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #22c55e;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .trophy::before {
+            content: '🏆';
+            position: absolute;
+            top: -2px;
+            left: -1px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Try Getting a High Score</h1>
+        <p>While I reply to your email</p>
     </div>
-  );
-};
 
-export default DinosaurGame;
+    <div class="controls">
+        <button class="btn btn-primary" onclick="toggleGame()">Show Game</button>
+    </div>
+
+    <div class="score-section">
+        <div class="high-score">
+            <span class="trophy"></span>
+            <span>High: <span id="highScore">553</span></span>
+        </div>
+        <div class="current-score">Score: <span id="currentScore">0</span></div>
+        <button class="btn btn-secondary" onclick="resetGame()">🔄 Reset</button>
+    </div>
+
+    <div class="game-container">
+        <canvas id="gameCanvas" width="800" height="200"></canvas>
+    </div>
+
+    <div class="instructions">
+        SPACE/↑: Jump • ↓: Duck • Avoid obstacles!
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Website color palette
+        const colors = {
+            // Sky gradient - matching website's blue tones
+            skyTop: '#dbeafe',    // light blue-100
+            skyMiddle: '#bfdbfe', // blue-200
+            skyBottom: '#93c5fd', // blue-300
+            
+            // Ground - using website's gray tones
+            ground: '#6b7280',    // gray-500
+            groundDark: '#4b5563', // gray-600
+            
+            // Dino - website's orange accent
+            dino: '#f97316',      // orange-500
+            dinoAccent: '#ea580c', // orange-600
+            
+            // Obstacles - website's darker grays
+            cactus: '#374151',    // gray-700
+            cactusAccent: '#1f2937', // gray-800
+            
+            // Clouds - light website tones
+            cloud: '#f3f4f6',     // gray-100
+            cloudBorder: '#e5e7eb', // gray-200
+            
+            // Text
+            text: '#111827',      // gray-900
+            scoreText: '#3b82f6'  // blue-500
+        };
+
+        let gameRunning = false;
+        let gameSpeed = 5;
+        let score = 0;
+        let highScore = localStorage.getItem('dinoHighScore') || 553;
+        
+        // Game objects
+        let dino = {
+            x: 80,
+            y: 120,
+            width: 40,
+            height: 40,
+            isJumping: false,
+            isDucking: false,
+            jumpPower: 0,
+            onGround: true
+        };
+        
+        let obstacles = [];
+        let clouds = [];
+        let groundOffset = 0;
+
+        // Update high score display
+        document.getElementById('highScore').textContent = highScore;
+
+        function startGame() {
+            if (!gameRunning) {
+                gameRunning = true;
+                gameLoop();
+            }
+        }
+
+        function resetGame() {
+            gameRunning = false;
+            score = 0;
+            gameSpeed = 5;
+            obstacles = [];
+            clouds = [];
+            dino.y = 120;
+            dino.isJumping = false;
+            dino.isDucking = false;
+            dino.jumpPower = 0;
+            dino.onGround = true;
+            updateScore();
+        }
+
+        function toggleGame() {
+            const container = document.querySelector('.game-container');
+            const scoreSection = document.querySelector('.score-section');
+            const instructions = document.querySelector('.instructions');
+            const btn = document.querySelector('.btn-primary');
+            
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                scoreSection.style.display = 'flex';
+                instructions.style.display = 'block';
+                btn.textContent = 'Hide Game';
+                btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+                btn.style.boxShadow = '0 10px 20px rgba(34, 197, 94, 0.3)';
+            } else {
+                container.style.display = 'none';
+                scoreSection.style.display = 'none';
+                instructions.style.display = 'none';
+                btn.textContent = 'Show Game';
+                btn.style.background = 'linear-gradient(135deg, #f97316, #ea580c)';
+                btn.style.boxShadow = '0 10px 20px rgba(249, 115, 22, 0.3)';
+                gameRunning = false;
+            }
+        }
+
+        function updateScore() {
+            document.getElementById('currentScore').textContent = score;
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('dinoHighScore', highScore);
+                document.getElementById('highScore').textContent = highScore;
+            }
+        }
+
+        function drawBackground() {
+            // Sky gradient matching website blues
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, colors.skyTop);
+            gradient.addColorStop(0.5, colors.skyMiddle);
+            gradient.addColorStop(1, colors.skyBottom);
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height - 30);
+            
+            // Ground with website gray
+            ctx.fillStyle = colors.ground;
+            ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
+            
+            // Ground pattern
+            ctx.fillStyle = colors.groundDark;
+            for (let i = 0; i < canvas.width; i += 20) {
+                ctx.fillRect(i + groundOffset % 20, canvas.height - 30, 2, 30);
+            }
+        }
+
+        function drawDino() {
+            ctx.fillStyle = colors.dino;
+            
+            if (dino.isDucking) {
+                // Ducking dino - lower and wider
+                ctx.fillRect(dino.x, dino.y + 20, 50, 20);
+                // Eye
+                ctx.fillStyle = colors.dinoAccent;
+                ctx.fillRect(dino.x + 35, dino.y + 22, 6, 6);
+            } else {
+                // Standing/jumping dino
+                ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+                
+                // Dino details with accent color
+                ctx.fillStyle = colors.dinoAccent;
+                // Eye
+                ctx.fillRect(dino.x + 25, dino.y + 8, 8, 8);
+                // Legs
+                ctx.fillRect(dino.x + 5, dino.y + 30, 8, 15);
+                ctx.fillRect(dino.x + 25, dino.y + 30, 8, 15);
+                // Arms
+                ctx.fillRect(dino.x + 35, dino.y + 15, 10, 8);
+            }
+        }
+
+        function drawObstacles() {
+            obstacles.forEach(obstacle => {
+                ctx.fillStyle = colors.cactus;
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                
+                // Cactus details
+                ctx.fillStyle = colors.cactusAccent;
+                // Main stem
+                ctx.fillRect(obstacle.x + obstacle.width/2 - 2, obstacle.y, 4, obstacle.height);
+                // Arms
+                if (obstacle.height > 40) {
+                    ctx.fillRect(obstacle.x + 5, obstacle.y + 15, 15, 4);
+                    ctx.fillRect(obstacle.x + obstacle.width - 20, obstacle.y + 25, 15, 4);
+                }
+            });
+        }
+
+        function drawClouds() {
+            clouds.forEach(cloud => {
+                ctx.fillStyle = colors.cloud;
+                ctx.strokeStyle = colors.cloudBorder;
+                ctx.lineWidth = 1;
+                
+                // Cloud shape
+                ctx.beginPath();
+                ctx.arc(cloud.x, cloud.y, 15, 0, Math.PI * 2);
+                ctx.arc(cloud.x + 15, cloud.y, 20, 0, Math.PI * 2);
+                ctx.arc(cloud.x + 30, cloud.y, 15, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+            });
+        }
+
+        function drawScore() {
+            ctx.fillStyle = colors.text;
+            ctx.font = 'bold 18px Arial';
+            ctx.fillText(`Score: ${score}`, canvas.width - 120, 30);
+            
+            if (score > 0 && score == highScore) {
+                ctx.fillStyle = colors.scoreText;
+                ctx.fillText('NEW HIGH!', canvas.width - 120, 50);
+            }
+        }
+
+        function updateGame() {
+            if (!gameRunning) return;
+
+            // Move ground
+            groundOffset += gameSpeed;
+
+            // Dino physics
+            if (dino.isJumping) {
+                dino.y -= dino.jumpPower;
+                dino.jumpPower -= 1.5;
+                if (dino.y >= 120) {
+                    dino.y = 120;
+                    dino.isJumping = false;
+                    dino.onGround = true;
+                    dino.jumpPower = 0;
+                }
+            }
+
+            // Generate obstacles
+            if (Math.random() < 0.005) {
+                obstacles.push({
+                    x: canvas.width,
+                    y: Math.random() < 0.5 ? 120 : 140,
+                    width: 20 + Math.random() * 20,
+                    height: 40 + Math.random() * 20
+                });
+            }
+
+            // Generate clouds
+            if (Math.random() < 0.002) {
+                clouds.push({
+                    x: canvas.width,
+                    y: 30 + Math.random() * 40,
+                    speed: 1 + Math.random()
+                });
+            }
+
+            // Move obstacles
+            obstacles = obstacles.filter(obstacle => {
+                obstacle.x -= gameSpeed;
+                return obstacle.x > -obstacle.width;
+            });
+
+            // Move clouds
+            clouds = clouds.filter(cloud => {
+                cloud.x -= cloud.speed;
+                return cloud.x > -50;
+            });
+
+            // Collision detection
+            obstacles.forEach(obstacle => {
+                let dinoBox = {
+                    x: dino.x,
+                    y: dino.y + (dino.isDucking ? 20 : 0),
+                    width: dino.isDucking ? 50 : dino.width,
+                    height: dino.isDucking ? 20 : dino.height
+                };
+
+                if (dinoBox.x < obstacle.x + obstacle.width &&
+                    dinoBox.x + dinoBox.width > obstacle.x &&
+                    dinoBox.y < obstacle.y + obstacle.height &&
+                    dinoBox.y + dinoBox.height > obstacle.y) {
+                    gameRunning = false;
+                    updateScore();
+                }
+            });
+
+            // Increase score and speed
+            score += 1;
+            if (score % 100 === 0) {
+                gameSpeed += 0.5;
+            }
+
+            updateScore();
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawBackground();
+            drawClouds();
+            drawDino();
+            drawObstacles();
+            drawScore();
+            
+            updateGame();
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Controls
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'ArrowUp') {
+                e.preventDefault();
+                if (!gameRunning) {
+                    startGame();
+                } else if (dino.onGround) {
+                    dino.isJumping = true;
+                    dino.jumpPower = 18;
+                    dino.onGround = false;
+                    dino.isDucking = false;
+                }
+            }
+            
+            if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                if (!dino.isJumping) {
+                    dino.isDucking = true;
+                }
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.code === 'ArrowDown') {
+                dino.isDucking = false;
+            }
+        });
+
+        // Touch/click controls for mobile
+        canvas.addEventListener('click', (e) => {
+            if (!gameRunning) {
+                startGame();
+            } else if (dino.onGround) {
+                dino.isJumping = true;
+                dino.jumpPower = 18;
+                dino.onGround = false;
+                dino.isDucking = false;
+            }
+        });
+
+        // Initial game state
+        drawBackground();
+        drawDino();
+        drawScore();
+    </script>
+</body>
+</html>
