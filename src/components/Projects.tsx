@@ -71,7 +71,7 @@ const Projects = () => {
     {
       id: 1,
       title: 'Visual Lab',
-      description: 'A comprehensive Data Science SaaS platform that empowers data scientists with intuitive tools for dataset exploration, real-time analysis, and machine learning model training, all without the complexity.',
+      description: 'A comprehensive Data platform that empowers data scientists with intuitive tools for dataset exploration, real-time analysis, and machine learning model training, all without the complexity.',
       category: 'Data Science Platform',
       techStack: ['Python', 'React', 'Machine Learning', 'API Integration', 'Cloud Services'],
       videoUrl: '/assets/documents/Visual-lab-video.mp4',
@@ -99,7 +99,7 @@ const Projects = () => {
       id: 3,
       title: 'AutoML Studio MCP Server',
       description: 'Automates machine learning workflow with MCP: CSV upload, training, deployment, seamless integration, rapid experimentation.',
-      category: 'Machine Learning Infrastructure (SaaS',
+      category: 'Machine Learning Infrastructure (SaaS)',
       techStack: ['Python', 'Scikit-learn', 'FastAPI', 'Plotly', 'MCP'],
       videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_640x360_1mb.mp4', // Test video
       githubUrl: '#',
