@@ -97,16 +97,16 @@ const Projects = () => {
     },
     {
       id: 3,
-      title: 'AutoML Studio MCP Server',
-      description: 'Automates machine learning workflow with MCP: CSV upload, training, deployment, seamless integration, rapid experimentation.',
-      category: 'Machine Learning Infrastructure',
-      techStack: ['Python', 'scikit-learn', 'FastAPI', 'Plotly'],
+      title: 'SEMO Growth Marketing',
+      description: 'Strategic digital marketing campaign focused on boosting SME online presence through data-driven approaches.',
+      category: 'Digital Marketing',
+      techStack: ['HubSpot', 'Google Analytics', 'Social Media APIs', 'SEO Tools', 'Content Management'],
       videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_640x360_1mb.mp4', // Test video
       githubUrl: '#',
       liveUrl: '#',
       year: '2024',
       status: 'Completed',
-      highlights: ['CSV data upload & validation', 'AutoML model training & comparison', 'automated data profiling & EDA', 'FastAPI deployment for serving models']
+      highlights: ['Lead Generation', 'Brand Awareness', 'Digital Strategy', 'Performance Metrics']
     }
   ];
 
@@ -215,23 +215,29 @@ const Projects = () => {
                 >
                   {/* Thumbnail Image for Visual Lab */}
                   {project.id === 1 && (
-                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-                      <div className="text-white text-center">
-                        <BarChart3 size={48} className="mx-auto mb-2" />
-                        <p className="text-sm font-medium">"/assets/documents/Visual-lab-thumbnail.png"</p>
-                      </div>
-                    </div>
+                    <img 
+                      src="/assets/documents/Visual-lab-thumbnail.png" 
+                      alt="Visual Lab" 
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to gradient background if image fails to load
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling.style.display = 'flex';
+                      }}
+                    />
                   )}
                   {/* Thumbnail Image for Motion-Controlled Ping Pong Game */}
                   {project.id === 2 && (
-                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center">
-                      <div className="text-white text-center">
-                        <div className="w-12 h-12 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
-                          <div className="w-6 h-6 bg-white rounded-full"></div>
-                        </div>
-                        <p className="text-sm font-medium">"/assets/documents/ping-pong-thumbnail.png"</p>
-                      </div>
-                    </div>
+                    <img 
+                      src="/assets/documents/ping-pong-thumbnail.png" 
+                      alt="Motion-Controlled Ping Pong Game" 
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to gradient background if image fails to load
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling.style.display = 'flex';
+                      }}
+                    />
                   )}
                   {/* Thumbnail for SEMO */}
                   {project.id === 3 && (
@@ -239,6 +245,26 @@ const Projects = () => {
                       <div className="text-white text-center">
                         <TrendingUp size={48} className="mx-auto mb-2" />
                         <p className="text-sm font-medium">SEMO Campaign</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Fallback gradient backgrounds (hidden by default) */}
+                  {project.id === 1 && (
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center" style={{ display: 'none' }}>
+                      <div className="text-white text-center">
+                        <BarChart3 size={48} className="mx-auto mb-2" />
+                        <p className="text-sm font-medium">Visual Lab Demo</p>
+                      </div>
+                    </div>
+                  )}
+                  {project.id === 2 && (
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center" style={{ display: 'none' }}>
+                      <div className="text-white text-center">
+                        <div className="w-12 h-12 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
+                          <div className="w-6 h-6 bg-white rounded-full"></div>
+                        </div>
+                        <p className="text-sm font-medium">Ping Pong Game</p>
                       </div>
                     </div>
                   )}
