@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import ReactPlayer from 'react-player';
@@ -6,10 +6,64 @@ import { ExternalLink, Github, X, Database, BarChart3, Palette, Code, TrendingUp
 
 const Projects = () => {
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [isVideoLoading, setIsVideoLoading] = useState(false);
+  const [videoError, setVideoError] = useState<string | null>(null);
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
+
+  // Handle escape key to close video modal
+  const handleEscapeKey = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Escape' && selectedVideo) {
+      closeVideoModal();
+    }
+  }, [selectedVideo]);
+
+  // Close video modal function
+  const closeVideoModal = useCallback(() => {
+    setSelectedVideo(null);
+    setIsVideoLoading(false);
+    setVideoError(null);
+  }, []);
+
+  // Handle video selection
+  const handleVideoSelect = useCallback((videoUrl: string) => {
+    setIsVideoLoading(true);
+    setVideoError(null);
+    setSelectedVideo(videoUrl);
+  }, []);
+
+  // Handle video ready
+  const handleVideoReady = useCallback(() => {
+    setIsVideoLoading(false);
+    setVideoError(null);
+  }, []);
+
+  // Handle video error
+  const handleVideoError = useCallback((error: any) => {
+    setIsVideoLoading(false);
+    setVideoError('Failed to load video. Please try again later.');
+    console.error('Video error:', error);
+  }, []);
+
+  // Add/remove escape key listener
+  useEffect(() => {
+    if (selectedVideo) {
+      document.addEventListener('keydown', handleEscapeKey);
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.removeEventListener('keydown', handleEscapeKey);
+      // Restore body scroll when modal is closed
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedVideo, handleEscapeKey]);
 
   const projects = [
     {
@@ -154,7 +208,7 @@ const Projects = () => {
                 {/* Video Thumbnail */}
                 <div 
                   className="relative mb-4 rounded-xl overflow-hidden bg-gray-100 aspect-video cursor-pointer hover:opacity-90 transition-opacity"
-                  onClick={() => setSelectedVideo(project.videoUrl)}
+                  onClick={() => handleVideoSelect(project.videoUrl)}
                 >
                   {/* Thumbnail Image for Visual Lab */}
                   {project.id === 1 && (
@@ -271,7 +325,7 @@ const Projects = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4"
-            onClick={() => setSelectedVideo(null)}
+            onClick={closeVideoModal}
           >
             <motion.div
               initial={{ scale: 0.8 }}
@@ -280,25 +334,92 @@ const Projects = () => {
               className="relative max-w-4xl w-full aspect-video"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Close Button */}
               <button
-                onClick={() => setSelectedVideo(null)}
-                className="absolute -top-8 sm:-top-12 right-0 text-white hover:text-gray-300 transition-colors"
+                onClick={closeVideoModal}
+                className="absolute -top-8 sm:-top-12 right-0 text-white hover:text-gray-300 transition-colors z-10"
+                aria-label="Close video"
               >
                 <X size={24} className="sm:w-8 sm:h-8" />
               </button>
-              <div className="w-full h-full bg-gray-900 rounded-xl overflow-hidden">
-                <ReactPlayer
-                  url={selectedVideo}
-                  width="100%"
-                  height="100%"
-                  controls
-                  playing
-                  fallback={
-                    <div className="w-full h-full flex items-center justify-center text-white">
-                      <p>Video demo coming soon...</p>
+
+              {/* Escape Key Hint */}
+              <div className="absolute -top-8 sm:-top-12 left-0 text-white/70 text-sm">
+                Press ESC to close
+              </div>
+
+              <div className="w-full h-full bg-gray-900 rounded-xl overflow-hidden relative">
+                {/* Loading State */}
+                {isVideoLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
+                    <div className="flex flex-col items-center space-y-4">
+                      <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                      <p className="text-white text-sm">Loading video...</p>
                     </div>
-                  }
-                />
+                  </div>
+                )}
+
+                {/* Error State */}
+                {videoError && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
+                    <div className="text-center space-y-4">
+                      <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto">
+                        <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-white font-medium mb-2">Video Unavailable</p>
+                        <p className="text-gray-400 text-sm mb-4">{videoError}</p>
+                        <button
+                          onClick={closeVideoModal}
+                          className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Video Player */}
+                {!videoError && (
+                  <ReactPlayer
+                    url={selectedVideo}
+                    width="100%"
+                    height="100%"
+                    controls
+                    playing
+                    onReady={handleVideoReady}
+                    onError={handleVideoError}
+                    config={{
+                      file: {
+                        attributes: {
+                          controlsList: 'nodownload',
+                          disablePictureInPicture: true,
+                        }
+                      }
+                    }}
+                    fallback={
+                      <div className="w-full h-full flex items-center justify-center text-white">
+                        <div className="text-center space-y-4">
+                          <div className="w-16 h-16 bg-orange-500/20 rounded-full flex items-center justify-center mx-auto">
+                            <svg className="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                          <p className="font-medium">Video demo coming soon...</p>
+                          <button
+                            onClick={closeVideoModal}
+                            className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
+                          >
+                            Close
+                          </button>
+                        </div>
+                      </div>
+                    }
+                  />
+                )}
               </div>
             </motion.div>
           </motion.div>
