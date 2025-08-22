@@ -30,15 +30,14 @@ export default function SpaceInvadersGame() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return null;
 
-    const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
-    const width = rect.width * dpr;
-    const height = rect.height * dpr;
+    const gameWidth = rect.width;
+    const gameHeight = rect.height;
 
     const game = {
       player: {
-        x: (width / dpr) / 2 - 15,
-        y: (height / dpr) - 40,
+        x: gameWidth / 2 - 15,
+        y: gameHeight - 40,
         width: 30,
         height: 20,
         speed: 5,
@@ -68,7 +67,7 @@ export default function SpaceInvadersGame() {
       const alienHeight = 20;
       const spacing = 8;
       const gridWidth = cols * (alienWidth + spacing) - spacing;
-      const startX = ((width / dpr) - gridWidth) / 2;
+      const startX = (gameWidth - gridWidth) / 2;
       const startY = 40;
 
       for (let row = 0; row < rows; row++) {
@@ -87,8 +86,86 @@ export default function SpaceInvadersGame() {
 
     createAliens();
     gameRef.current = game;
-    return { ctx, canvas, game, dpr };
+    return { ctx, canvas, game, gameWidth, gameHeight };
   }, [level]);
+
+  // Draw initial game state (when not playing)
+  const drawInitialState = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const gameWidth = rect.width;
+    const gameHeight = rect.height;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, gameWidth, gameHeight);
+    
+    // Draw background
+    ctx.fillStyle = '#0b1220';
+    ctx.fillRect(0, 0, gameWidth, gameHeight);
+
+    // Draw stars background
+    ctx.fillStyle = '#1f3a6b';
+    for (let i = 0; i < 40; i++) {
+      const x = (i * 77) % gameWidth;
+      const y = (i * 131) % gameHeight;
+      ctx.fillRect(x, y, 1, 1);
+    }
+
+    // Draw aliens in formation
+    const rows = 4;
+    const cols = 8;
+    const alienWidth = 25;
+    const alienHeight = 20;
+    const spacing = 8;
+    const gridWidth = cols * (alienWidth + spacing) - spacing;
+    const startX = (gameWidth - gridWidth) / 2;
+    const startY = 40;
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const x = startX + col * (alienWidth + spacing);
+        const y = startY + row * (alienHeight + spacing);
+        
+        // Draw alien
+        switch (row) {
+          case 0:
+            ctx.fillStyle = '#ff6b35';
+            break;
+          case 1:
+          case 2:
+            ctx.fillStyle = '#ff8c42';
+            break;
+          default:
+            ctx.fillStyle = '#ffad42';
+        }
+        ctx.fillRect(x, y, alienWidth, alienHeight);
+        
+        // Draw alien eyes
+        ctx.fillStyle = '#0b1220';
+        ctx.fillRect(x + 4, y + 4, 3, 3);
+        ctx.fillRect(x + alienWidth - 7, y + 4, 3, 3);
+      }
+    }
+
+    // Draw player ship
+    ctx.fillStyle = '#4a90e2';
+    const playerX = gameWidth / 2 - 15;
+    const playerY = gameHeight - 40;
+    ctx.fillRect(playerX, playerY, 30, 20);
+    ctx.fillRect(playerX + 13, playerY - 6, 4, 8);
+  }, []);
+
+  // Draw initial state when component mounts or canvas resizes
+  useEffect(() => {
+    if (!isPlaying) {
+      drawInitialState();
+    }
+  }, [isPlaying, drawInitialState]);
 
   // Resize canvas properly
   const resizeCanvas = useCallback(() => {
@@ -114,7 +191,12 @@ export default function SpaceInvadersGame() {
     if (ctx) {
       ctx.scale(dpr, dpr);
     }
-  }, []);
+
+    // Redraw initial state after resize
+    if (!isPlaying) {
+      setTimeout(() => drawInitialState(), 0);
+    }
+  }, [isPlaying, drawInitialState]);
 
   // Handle canvas resize
   useEffect(() => {
@@ -207,10 +289,7 @@ export default function SpaceInvadersGame() {
     const init = initializeGame();
     if (!init) return;
     
-    const { ctx, canvas, game, dpr } = init;
-    const rect = canvas.getBoundingClientRect();
-    const gameWidth = rect.width;
-    const gameHeight = rect.height;
+    const { ctx, canvas, game, gameWidth, gameHeight } = init;
 
     let lastTime = performance.now();
 
@@ -431,6 +510,17 @@ export default function SpaceInvadersGame() {
     setGameWon(false);
     setIsPlaying(true);
     setTouchControls({ left: false, right: false, shoot: false });
+    
+    // Force a re-render of the game loop
+    setTimeout(() => {
+      if (gameRef.current) {
+        gameRef.current.gameOver = false;
+        gameRef.current.gameWon = false;
+        gameRef.current.score = 0;
+        gameRef.current.bullets = [];
+        gameRef.current.alienBullets = [];
+      }
+    }, 0);
   };
 
   const nextLevel = () => {
@@ -438,6 +528,16 @@ export default function SpaceInvadersGame() {
     setGameWon(false);
     setIsPlaying(true);
     setTouchControls({ left: false, right: false, shoot: false });
+    
+    // Force a re-render of the game loop
+    setTimeout(() => {
+      if (gameRef.current) {
+        gameRef.current.gameOver = false;
+        gameRef.current.gameWon = false;
+        gameRef.current.bullets = [];
+        gameRef.current.alienBullets = [];
+      }
+    }, 0);
   };
 
   const resetGame = () => {
@@ -449,9 +549,13 @@ export default function SpaceInvadersGame() {
     setGameWon(false);
     setIsPlaying(false);
     setTouchControls({ left: false, right: false, shoot: false });
+    
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
     }
+    
+    // Draw initial state after reset
+    setTimeout(() => drawInitialState(), 0);
   };
 
   return (
