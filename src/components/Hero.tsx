@@ -212,7 +212,7 @@ const downloadPortfolio = async () => {
                 <div className="text-purple-400">const <span className="text-yellow-300">Lungelo Sibisi</span> = {`{`}</div>
                 <div className="ml-4 text-blue-300">Expertise: <span className="text-green-300">[</span></div>
                 <div className="ml-8 text-orange-300">"Marketing & Communications",</div>
-                <div className="ml-8 text-orange-300">"Data Analysis & Cloud (Azure • AWS)",</div>
+                <div className="ml-8 text-orange-300">"Data Analysis & Cloud Services",</div>
                 <div className="ml-8 text-orange-300">"Graphic design & Web Development"</div>
                 <div className="ml-4 text-green-300">],</div>
                 <div className="ml-4">
@@ -220,7 +220,7 @@ const downloadPortfolio = async () => {
                 </div>
                 <div className="ml-4 text-blue-300">technologies: <span className="text-green-300">[</span></div>
                 <div className="ml-8 text-orange-300">"Python", "Power BI", "Adobe Creative Suite",</div>
-                <div className="ml-8 text-orange-300">"CRM Tools", "Azure & AWS Data Services"</div>
+                <div className="ml-8 text-orange-300">"CRM Tools", "Azure, Oracle & AWS"</div>
                 <div className="ml-4 text-green-300">],</div>
                 <div className="ml-4">
                   <span className="text-blue-300">available:</span> <span className="text-green-400">true</span>
@@ -250,7 +250,7 @@ const downloadPortfolio = async () => {
               <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden border-4 border-white shadow-lg">
                                  <img
                    src="/assets/documents/Lungelo_DP.png"
-                   alt="Lungelo Sibisi - Marketing Analytics & Communications Specialist"
+                   alt="Lungelo Sibisi - Marketing, Analytics & Communications Specialist"
                    className="w-full h-full object-cover"
                   onError={(e) => {
                     // Fallback to a gradient background if image fails to load
