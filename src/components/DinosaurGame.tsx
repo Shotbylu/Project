@@ -180,9 +180,9 @@ export default function SpaceInvadersGame() {
 
     // Move aliens
     let hitEdge = false;
-    const liveAliens = game.aliens.filter(a => a.alive);
+    const liveAliensBeforeCollision = game.aliens.filter(a => a.alive);
     
-    liveAliens.forEach(alien => {
+    liveAliensBeforeCollision.forEach(alien => {
       alien.x += game.alienDirection * game.alienSpeed;
       if (alien.x <= 0 || alien.x >= GAME_WIDTH - alien.width) {
         hitEdge = true;
@@ -198,18 +198,9 @@ export default function SpaceInvadersGame() {
       });
     }
 
-    // Check if aliens reached player
-    if (liveAliens.length > 0) {
-      const lowestAlienY = Math.max(...liveAliens.map(a => a.y + a.height));
-      if (lowestAlienY > game.player.y) {
-        setLives(0);
-        return;
-      }
-    }
-
     // Alien shooting
-    if (liveAliens.length > 0 && Date.now() - game.lastAlienBulletTime > game.alienBulletDelay) {
-      const shooter = liveAliens[Math.floor(Math.random() * liveAliens.length)];
+    if (liveAliensBeforeCollision.length > 0 && Date.now() - game.lastAlienBulletTime > game.alienBulletDelay) {
+      const shooter = liveAliensBeforeCollision[Math.floor(Math.random() * liveAliensBeforeCollision.length)];
       game.alienBullets.push({
         x: shooter.x + shooter.width / 2 - 2,
         y: shooter.y + shooter.height,
@@ -266,6 +257,16 @@ export default function SpaceInvadersGame() {
         game.alienBullets.splice(i, 1);
         setLives(prev => prev - 1);
         break;
+      }
+    }
+
+    // Check if aliens reached player (after collisions)
+    const liveAliens = game.aliens.filter(a => a.alive);
+    if (liveAliens.length > 0) {
+      const lowestAlienY = Math.max(...liveAliens.map(a => a.y + a.height));
+      if (lowestAlienY > game.player.y) {
+        setLives(0);
+        return;
       }
     }
 
