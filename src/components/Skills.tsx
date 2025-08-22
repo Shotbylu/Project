@@ -16,7 +16,7 @@ const Skills = () => {
       { name: 'Sustainability & ESD Communication Strategy', level: 85 },
       { name: 'Social Media Management (Content Creation)', level: 90 },
     ],
-    'Graphic Design': [
+    'Design': [
       { name: 'Adobe Creative Suite (Photoshop, Illustrator, InDesign, After Effects, Premiere Pro)', level: 93 },
       { name: 'Branding & Visual Identity (Logos, Typography, Color Theory, Style Guides)', level: 90 },
       { name: 'UX/UI & Digital Design (Figma, Wireframing, Prototyping)', level: 88 },
