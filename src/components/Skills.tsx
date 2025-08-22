@@ -35,11 +35,11 @@ const Skills = () => {
   };
 
   const certifications = [
-    'Microsoft-Azure Data Fundamentals (DP-900)',
-    'Adobe-Photoshop Essential Skills',
-    'Microsoft-Career Essentials in Data Analysis',
-    'Google-Digital Marketing Certification',
-    'Johns Hopkins University-Advanced Statistics for Data Science',
+    'Microsoft - Azure Data Fundamentals (DP-900)',
+    'Adobe - Photoshop Essential Skills',
+    'Microsoft - Career Essentials in Data Analysis',
+    'Google - Digital Marketing Certification',
+    'Johns Hopkins University - Advanced Statistics for Data Science',
   ];
 
   const getSkillLevel = (level: number) => {
