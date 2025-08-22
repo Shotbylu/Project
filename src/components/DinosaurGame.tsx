@@ -89,8 +89,9 @@ export default function SpaceInvadersGame() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const gameWidth = canvas.width / (window.devicePixelRatio || 1);
-    const gameHeight = canvas.height / (window.devicePixelRatio || 1);
+    const dpr = window.devicePixelRatio || 1;
+    const gameWidth = canvas.width / dpr;
+    const gameHeight = canvas.height / dpr;
 
     ctx.clearRect(0, 0, gameWidth, gameHeight);
     ctx.fillStyle = '#0b1220';
@@ -428,17 +429,39 @@ export default function SpaceInvadersGame() {
             <div className="bg-gray-800 rounded-lg p-2 sm:p-3 border border-gray-300 relative" ref={containerRef}>
               <canvas ref={canvasRef} className="w-full max-w-none block border border-gray-600 rounded bg-gray-900" style={{ imageRendering: 'pixelated' }} />
 
+              {/* Mobile Touch Controls */}
               <div className="md:hidden absolute left-0 right-0 bottom-2 flex items-end justify-between px-4 pointer-events-none">
                 <div className="flex items-center gap-3 pointer-events-auto">
-                  <button onPointerDown={handleControlDown('left')} onPointerUp={handleControlUp('left')} onPointerLeave={handleControlUp('left')} onContextMenu={(e) => e.preventDefault()} className="w-14 h-14 rounded-lg bg-white/10 backdrop-blur flex items-center justify-center text-white font-semibold touch-action-none">
+                  <button 
+                    onPointerDown={handleControlDown('left')} 
+                    onPointerUp={handleControlUp('left')} 
+                    onPointerLeave={handleControlUp('left')}
+                    onPointerCancel={handleControlUp('left')} 
+                    onContextMenu={(e) => e.preventDefault()} 
+                    className="w-14 h-14 rounded-lg bg-white/10 backdrop-blur flex items-center justify-center text-white font-semibold touch-action-none"
+                  >
                     ◀
                   </button>
-                  <button onPointerDown={handleControlDown('right')} onPointerUp={handleControlUp('right')} onPointerLeave={handleControlUp('right')} onContextMenu={(e) => e.preventDefault()} className="w-14 h-14 rounded-lg bg-white/10 backdrop-blur flex items-center justify-center text-white font-semibold touch-action-none">
+                  <button 
+                    onPointerDown={handleControlDown('right')} 
+                    onPointerUp={handleControlUp('right')} 
+                    onPointerLeave={handleControlUp('right')}
+                    onPointerCancel={handleControlUp('right')} 
+                    onContextMenu={(e) => e.preventDefault()} 
+                    className="w-14 h-14 rounded-lg bg-white/10 backdrop-blur flex items-center justify-center text-white font-semibold touch-action-none"
+                  >
                     ▶
                   </button>
                 </div>
                 <div className="pointer-events-auto">
-                  <button onPointerDown={handleControlDown('shoot')} onPointerUp={handleControlUp('shoot')} onPointerLeave={handleControlUp('shoot')} onContextMenu={(e) => e.preventDefault()} className="w-16 h-16 rounded-full bg-red-500/90 text-white flex items-center justify-center font-bold touch-action-none">
+                  <button 
+                    onPointerDown={handleControlDown('shoot')} 
+                    onPointerUp={handleControlUp('shoot')}
+                    onPointerLeave={handleControlUp('shoot')}
+                    onPointerCancel={handleControlUp('shoot')} 
+                    onContextMenu={(e) => e.preventDefault()} 
+                    className="w-16 h-16 rounded-full bg-red-500/90 text-white flex items-center justify-center font-bold touch-action-none"
+                  >
                     FIRE
                   </button>
                 </div>
