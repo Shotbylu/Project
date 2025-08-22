@@ -1,20 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import ReactPlayer from 'react-player';
 import { ExternalLink, Github, X, Database, BarChart3, Palette, Code, TrendingUp, Users } from 'lucide-react';
 
 const Projects = () => {
-  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
   const [isVideoLoading, setIsVideoLoading] = useState(false);
-  const [videoError, setVideoError] = useState<string | null>(null);
+  const [videoError, setVideoError] = useState(null);
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
 
   // Handle escape key to close video modal
-  const handleEscapeKey = useCallback((event: KeyboardEvent) => {
+  const handleEscapeKey = useCallback((event) => {
     if (event.key === 'Escape' && selectedVideo) {
       closeVideoModal();
     }
@@ -27,82 +26,38 @@ const Projects = () => {
     setVideoError(null);
   }, []);
 
-  // Handle video selection with debugging
-  const handleVideoSelect = useCallback((videoUrl: string) => {
+  // Simplified video handling - try native HTML5 video first
+  const handleVideoSelect = useCallback((videoUrl) => {
     console.log('Attempting to play video:', videoUrl);
     setIsVideoLoading(true);
     setVideoError(null);
     setSelectedVideo(videoUrl);
-    
-    // Test if the video file exists
-    if (videoUrl.startsWith('/')) {
-      fetch(videoUrl, { method: 'HEAD' })
-        .then(response => {
-          if (!response.ok) {
-            console.error('Video file not found:', videoUrl, 'Status:', response.status);
-            setVideoError(`Video file not found (${response.status}). Please check the file path.`);
-            setIsVideoLoading(false);
-          } else {
-            console.log('Video file found and accessible:', videoUrl);
-          }
-        })
-        .catch(error => {
-          console.error('Error checking video file:', error);
-          setVideoError('Unable to access video file. Please check the file path.');
-          setIsVideoLoading(false);
-        });
-    }
-  }, []);
 
-  // Handle video ready
-  const handleVideoReady = useCallback(() => {
-    setIsVideoLoading(false);
-    setVideoError(null);
-  }, []);
-
-  // Handle video error
-  const handleVideoError = useCallback((error: any) => {
-    setIsVideoLoading(false);
-    console.error('Video error details:', error);
+    // Test video accessibility
+    const video = document.createElement('video');
+    video.src = videoUrl;
     
-    // More specific error messages based on error type
-    let errorMessage = 'Failed to load video. Please try again later.';
+    video.addEventListener('loadedmetadata', () => {
+      console.log('✅ Video metadata loaded successfully');
+      setIsVideoLoading(false);
+    });
     
-    if (error && error.target && error.target.error) {
-      const videoError = error.target.error;
-      console.error('Video error code:', videoError.code);
-      console.error('Video error message:', videoError.message);
-      
-      switch (videoError.code) {
-        case 1:
-          errorMessage = 'Video file not found. Please check the file path.';
-          break;
-        case 2:
-          errorMessage = 'Network error. Please check your internet connection.';
-          break;
-        case 3:
-          errorMessage = 'Video format not supported by your browser.';
-          break;
-        case 4:
-          errorMessage = 'Video file is corrupted or invalid.';
-          break;
-        default:
-          errorMessage = `Video error: ${videoError.message || 'Unknown error'}`;
-      }
-    }
+    video.addEventListener('error', (e) => {
+      console.error('❌ Video error:', e);
+      setVideoError('Unable to load video. Please check the file format and path.');
+      setIsVideoLoading(false);
+    });
     
-    setVideoError(errorMessage);
+    video.load();
   }, []);
 
   // Add/remove escape key listener
   useEffect(() => {
     if (selectedVideo) {
       document.addEventListener('keydown', handleEscapeKey);
-      // Prevent body scroll when modal is open
       document.body.style.overflow = 'hidden';
     } else {
       document.removeEventListener('keydown', handleEscapeKey);
-      // Restore body scroll when modal is closed
       document.body.style.overflow = 'unset';
     }
 
@@ -112,34 +67,14 @@ const Projects = () => {
     };
   }, [selectedVideo, handleEscapeKey]);
 
-  // Test video file accessibility on component mount
-  useEffect(() => {
-    const testVideoFile = '/assets/documents/ping-pong-video.mp4';
-    console.log('Testing video file accessibility:', testVideoFile);
-    
-    fetch(testVideoFile, { method: 'HEAD' })
-      .then(response => {
-        if (response.ok) {
-          console.log('✅ Video file is accessible:', testVideoFile);
-          console.log('Content-Type:', response.headers.get('content-type'));
-          console.log('Content-Length:', response.headers.get('content-length'));
-        } else {
-          console.error('❌ Video file not accessible:', testVideoFile, 'Status:', response.status);
-        }
-      })
-      .catch(error => {
-        console.error('❌ Error testing video file:', error);
-      });
-  }, []);
-
   const projects = [
     {
       id: 1,
       title: 'Visual Lab',
-      description: 'A comprehensive Data Science SaaS platform that empowers data scientists with intuitive tools for dataset exploration, real-time analysis, and machine learning model training, all without the complexity. The platform simplifies end-to-end workflows by leveraging powerful algorithms and automation to turn raw data into actionable insights.',
+      description: 'A comprehensive Data Science SaaS platform that empowers data scientists with intuitive tools for dataset exploration, real-time analysis, and machine learning model training, all without the complexity.',
       category: 'Data Science Platform',
       techStack: ['Python', 'React', 'Machine Learning', 'API Integration', 'Cloud Services'],
-      videoUrl: 'https://www.linkedin.com/posts/lungelo-sibisi-6745aa21b_my-latest-project-a-ping-pong-game-that-activity-7300142208844730369-9p9E?utm_source=share&utm_medium=member_desktop&rcm=ACoAADdwXTgBHE8qq_054W6KCh8JNRX-M8NBYKE', // Placeholder
+      videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4', // Test video
       githubUrl: '#',
       liveUrl: '#',
       year: '2024',
@@ -149,10 +84,11 @@ const Projects = () => {
     {
       id: 2,
       title: 'Motion-Controlled Ping Pong Game',
-      description: 'A fully interactive game using only raw computer vision logic. No machine learning shortcuts, just OpenCV, creative problem-solving, and a webcam. It\'s fast, fun, and a great testbed for real-time CV applications. Designed from scratch to explore computer vision & image processing.',
+      description: 'A fully interactive game using only raw computer vision logic. No machine learning shortcuts, just OpenCV, creative problem-solving, and a webcam.',
       category: 'Software Development',
       techStack: ['OpenCV', 'Python', 'Anaconda', 'NumPy'],
-      videoUrl: '/assets/documents/ping-pong-video.mp4',
+      // Try multiple potential paths for your video
+      videoUrl: '/assets/documents/ping-pong-video.mp4', // Absolute path
       githubUrl: '#',
       liveUrl: '#',
       year: '2025',
@@ -162,10 +98,10 @@ const Projects = () => {
     {
       id: 3,
       title: 'SEMO Growth Marketing',
-      description: 'Strategic digital marketing campaign focused on boosting SME online presence through data-driven approaches and modern digital marketing tools.',
+      description: 'Strategic digital marketing campaign focused on boosting SME online presence through data-driven approaches.',
       category: 'Digital Marketing',
       techStack: ['HubSpot', 'Google Analytics', 'Social Media APIs', 'SEO Tools', 'Content Management'],
-      videoUrl: '/videos/semo-campaign-demo.mp4', // Placeholder
+      videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_640x360_1mb.mp4', // Test video
       githubUrl: '#',
       liveUrl: '#',
       year: '2024',
@@ -174,8 +110,8 @@ const Projects = () => {
     }
   ];
 
-  const getTechIcon = (tech: string) => {
-    const iconMap: { [key: string]: any } = {
+  const getTechIcon = (tech) => {
+    const iconMap = {
       'Python': Code,
       'React': Code,
       'Power BI': BarChart3,
@@ -252,7 +188,7 @@ const Projects = () => {
           animate={inView ? "visible" : "hidden"}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16"
         >
-          {projects.map((project, index) => (
+          {projects.map((project) => (
             <motion.div
               key={project.id}
               variants={cardVariants}
@@ -279,34 +215,38 @@ const Projects = () => {
                 >
                   {/* Thumbnail Image for Visual Lab */}
                   {project.id === 1 && (
-                    <img 
-                      src="/assets/documents/Visual-lab-thumbnail.png" 
-                      alt="Visual Lab" 
-                      className="absolute inset-0 w-full h-full object-cover"
-                      onError={(e) => {
-                        // Fallback to gray background if image fails to load
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                      <div className="text-white text-center">
+                        <BarChart3 size={48} className="mx-auto mb-2" />
+                        <p className="text-sm font-medium">Visual Lab Demo</p>
+                      </div>
+                    </div>
                   )}
                   {/* Thumbnail Image for Motion-Controlled Ping Pong Game */}
                   {project.id === 2 && (
-                    <img 
-                      src="/assets/documents/ping-pong-thumbnail.png" 
-                      alt="Motion-Controlled Ping Pong Game" 
-                      className="absolute inset-0 w-full h-full object-cover"
-                      onError={(e) => {
-                        // Fallback to gray background if image fails to load
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center">
+                      <div className="text-white text-center">
+                        <div className="w-12 h-12 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
+                          <div className="w-6 h-6 bg-white rounded-full"></div>
+                        </div>
+                        <p className="text-sm font-medium">Ping Pong Game</p>
+                      </div>
+                    </div>
                   )}
-                  {/* Subtle gradient overlay for better text readability if needed */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 to-transparent"></div>
+                  {/* Thumbnail for SEMO */}
+                  {project.id === 3 && (
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
+                      <div className="text-white text-center">
+                        <TrendingUp size={48} className="mx-auto mb-2" />
+                        <p className="text-sm font-medium">SEMO Campaign</p>
+                      </div>
+                    </div>
+                  )}
+                  
                   {/* Play indicator on hover */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-500/80 rounded-full flex items-center justify-center backdrop-blur-sm">
-                      <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/80 rounded-full flex items-center justify-center backdrop-blur-sm">
+                      <svg className="w-6 h-6 text-gray-800 ml-1" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z"/>
                       </svg>
                     </div>
@@ -385,7 +325,7 @@ const Projects = () => {
           ))}
         </motion.div>
 
-        {/* Video Modal */}
+        {/* Video Modal - Using Native HTML5 Video */}
         {selectedVideo && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -449,52 +389,56 @@ const Projects = () => {
                   </div>
                 )}
 
-                {/* Video Player */}
+                {/* Native HTML5 Video Player */}
                 {!videoError && (
-                  <ReactPlayer
-                    url={selectedVideo}
-                    width="100%"
-                    height="100%"
+                  <video
+                    className="w-full h-full object-contain"
                     controls
-                    playing
-                    onReady={handleVideoReady}
-                    onError={handleVideoError}
-                    onStart={() => console.log('Video started playing')}
-                    onPlay={() => console.log('Video play event')}
-                    onPause={() => console.log('Video paused')}
-                    onEnded={() => console.log('Video ended')}
-                    onProgress={(state) => console.log('Video progress:', state)}
-                    config={{
-                      file: {
-                        attributes: {
-                          controlsList: 'nodownload',
-                          disablePictureInPicture: true,
-                          crossOrigin: 'anonymous',
-                        },
-                        forceVideo: true,
-                        forceHLS: false,
-                        forceDASH: false,
-                      }
+                    autoPlay
+                    onLoadStart={() => {
+                      console.log('Video load started');
+                      setIsVideoLoading(true);
                     }}
-                    fallback={
-                      <div className="w-full h-full flex items-center justify-center text-white">
-                        <div className="text-center space-y-4">
-                          <div className="w-16 h-16 bg-orange-500/20 rounded-full flex items-center justify-center mx-auto">
-                            <svg className="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                            </svg>
-                          </div>
-                          <p className="font-medium">Video demo coming soon...</p>
-                          <button
-                            onClick={closeVideoModal}
-                            className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
-                          >
-                            Close
-                          </button>
-                        </div>
-                      </div>
-                    }
-                  />
+                    onLoadedMetadata={() => {
+                      console.log('Video metadata loaded');
+                      setIsVideoLoading(false);
+                    }}
+                    onCanPlay={() => {
+                      console.log('Video can play');
+                      setIsVideoLoading(false);
+                    }}
+                    onError={(e) => {
+                      console.error('Video error:', e);
+                      const video = e.target;
+                      const error = video.error;
+                      
+                      let errorMessage = 'Failed to load video.';
+                      if (error) {
+                        switch (error.code) {
+                          case 1:
+                            errorMessage = 'Video loading was aborted.';
+                            break;
+                          case 2:
+                            errorMessage = 'Network error occurred.';
+                            break;
+                          case 3:
+                            errorMessage = 'Video format not supported.';
+                            break;
+                          case 4:
+                            errorMessage = 'Video source not found or invalid.';
+                            break;
+                          default:
+                            errorMessage = error.message || 'Unknown video error.';
+                        }
+                      }
+                      
+                      setVideoError(errorMessage);
+                      setIsVideoLoading(false);
+                    }}
+                  >
+                    <source src={selectedVideo} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 )}
               </div>
             </motion.div>
