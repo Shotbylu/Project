@@ -380,7 +380,7 @@ export default function SpaceInvadersGame() {
             🚀 Space Invaders 🚀
           </h3>
           <p className="text-base sm:text-lg text-gray-600 italic font-medium">
-            Try getting a high score while I reply to your email ✉️
+            Try getting a high score while I reply to your email
           </p>
           <button onClick={() => setIsVisible(v => !v)} className="bg-orange-500 hover:bg-orange-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium transition-colors duration-300 text-sm sm:text-base mt-3">
             {isVisible ? 'Hide Game' : 'Play Game'}
