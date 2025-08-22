@@ -18,7 +18,7 @@ const Projects = () => {
       description: 'A comprehensive Data Science SaaS platform that empowers data scientists with intuitive tools for dataset exploration, real-time analysis, and machine learning model training, all without the complexity. The platform simplifies end-to-end workflows by leveraging powerful algorithms and automation to turn raw data into actionable insights.',
       category: 'Data Science Platform',
       techStack: ['Python', 'React', 'Machine Learning', 'API Integration', 'Cloud Services'],
-      videoUrl: '#',
+      videoUrl: 'https://www.linkedin.com/posts/lungelo-sibisi-6745aa21b_my-latest-project-a-ping-pong-game-that-activity-7300142208844730369-9p9E?utm_source=share&utm_medium=member_desktop&rcm=ACoAADdwXTgBHE8qq_054W6KCh8JNRX-M8NBYKE', // Placeholder
       githubUrl: '#',
       liveUrl: '#',
       year: '2024',
@@ -151,9 +151,21 @@ const Projects = () => {
                   </span>
                 </div>
 
-                {/* Video Thumbnail */}
-                <div className="relative mb-4 rounded-xl overflow-hidden bg-gray-100 aspect-video">
-                                     {/* Thumbnail Image for Motion-Controlled Ping Pong Game */}
+                                 {/* Video Thumbnail */}
+                 <div className="relative mb-4 rounded-xl overflow-hidden bg-gray-100 aspect-video">
+                   {/* Thumbnail Image for Visual Lab */}
+                   {project.id === 1 && (
+                     <img 
+                       src="/assets/documents/visual-lab-thumbnail.png" 
+                       alt="Visual Lab" 
+                       className="absolute inset-0 w-full h-full object-cover"
+                       onError={(e) => {
+                         // Fallback to gray background if image fails to load
+                         e.currentTarget.style.display = 'none';
+                       }}
+                     />
+                   )}
+                   {/* Thumbnail Image for Motion-Controlled Ping Pong Game */}
                    {project.id === 2 && (
                      <img 
                        src="/assets/documents/ping-pong-thumbnail.png" 
