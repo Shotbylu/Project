@@ -18,7 +18,7 @@ const Projects = () => {
       description: 'A comprehensive Data Science SaaS platform that empowers data scientists with intuitive tools for dataset exploration, real-time analysis, and machine learning model training, all without the complexity. The platform simplifies end-to-end workflows by leveraging powerful algorithms and automation to turn raw data into actionable insights.',
       category: 'Data Science Platform',
       techStack: ['Python', 'React', 'Machine Learning', 'API Integration', 'Cloud Services'],
-      videoUrl: '/assets/documents/Visual-lab-thumbnail.png',
+      videoUrl: '#',
       githubUrl: '#',
       liveUrl: '#',
       year: '2024',
