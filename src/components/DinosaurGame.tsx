@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, RotateCcw, Trophy, Zap } from 'lucide-react';
+import { Play, RotateCcw, Trophy } from 'lucide-react';
 
 export default function SpaceInvadersGame() {
   const [isVisible, setIsVisible] = useState(false);
@@ -591,7 +591,6 @@ export default function SpaceInvadersGame() {
 
         {isVisible && (
           <div className="bg-gray-50 rounded-lg shadow-sm p-3 sm:p-4 border border-gray-200 max-w-2xl mx-auto">
-            {/* Game Stats */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 text-xs sm:text-sm">
               <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2 sm:mb-0">
                 <div className="flex items-center space-x-1">
@@ -603,7 +602,6 @@ export default function SpaceInvadersGame() {
                 <div className="text-red-500">Lives: {lives}</div>
               </div>
               
-              {/* Game Controls */}
               <div className="flex space-x-2">
                 {!isPlaying && !gameOver && !gameWon && (
                   <button 
@@ -651,7 +649,6 @@ export default function SpaceInvadersGame() {
               </div>
             </div>
 
-            {/* Game Canvas */}
             <div className="bg-gray-800 rounded-lg p-2 sm:p-3 border border-gray-300 relative" ref={containerRef}>
               <canvas 
                 ref={canvasRef} 
@@ -659,40 +656,6 @@ export default function SpaceInvadersGame() {
                 style={{ imageRendering: 'pixelated' }} 
               />
 
-              {/* Mobile Touch Controls */}
-              <div className="md:hidden absolute left-0 right-0 bottom-2 flex items-end justify-between px-4 pointer-events-none z-10">
-                <div className="flex items-center gap-3 pointer-events-auto">
-                  <button 
-                    onTouchStart={createTouchHandler('left', true)}
-                    onTouchEnd={createTouchHandler('left', false)}
-                    onTouchCancel={createTouchHandler('left', false)}
-                    className="w-14 h-14 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white text-xl font-bold shadow-lg active:scale-95 transition-transform touch-manipulation"
-                  >
-                    ◀
-                  </button>
-                  <button 
-                    onTouchStart={createTouchHandler('right', true)}
-                    onTouchEnd={createTouchHandler('right', false)}
-                    onTouchCancel={createTouchHandler('right', false)}
-                    className="w-14 h-14 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white text-xl font-bold shadow-lg active:scale-95 transition-transform touch-manipulation"
-                  >
-                    ▶
-                  </button>
-                </div>
-
-                <div className="pointer-events-auto">
-                  <button 
-                    onTouchStart={createTouchHandler('shoot', true)}
-                    onTouchEnd={createTouchHandler('shoot', false)}
-                    onTouchCancel={createTouchHandler('shoot', false)}
-                    className="w-16 h-16 rounded-full bg-red-500/90 backdrop-blur-sm border-2 border-red-400 text-white flex items-center justify-center font-bold shadow-lg active:scale-95 transition-transform text-xs touch-manipulation"
-                  >
-                    FIRE
-                  </button>
-                </div>
-              </div>
-
-              {/* Pause Overlay */}
               {isPaused && (
                 <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center rounded z-20">
                   <div className="text-white text-center">
@@ -702,18 +665,48 @@ export default function SpaceInvadersGame() {
                 </div>
               )}
 
-              {/* Controls Instructions */}
               <div className="text-center mt-2 text-gray-400 text-xs">
                 <span className="hidden md:inline">
                   Arrow Keys / WASD: Move • SPACE: Shoot • P: Pause • Drag canvas to move player
                 </span>
                 <span className="md:hidden">
-                  Drag canvas to move • Use touch controls at bottom • Tap FIRE to shoot
+                  Drag canvas to move • Use touch controls below • Tap FIRE to shoot
                 </span>
               </div>
             </div>
 
-            {/* Game Over Message */}
+            <div className="md:hidden mt-3 flex items-center justify-between px-4">
+              <div className="flex items-center gap-3">
+                <button 
+                  onTouchStart={createTouchHandler('left', true)}
+                  onTouchEnd={createTouchHandler('left', false)}
+                  onTouchCancel={createTouchHandler('left', false)}
+                  className="w-14 h-14 rounded-lg bg-blue-500/90 backdrop-blur-sm border border-blue-400 flex items-center justify-center text-white text-xl font-bold shadow-lg active:scale-95 transition-transform touch-manipulation"
+                >
+                  ◀
+                </button>
+                <button 
+                  onTouchStart={createTouchHandler('right', true)}
+                  onTouchEnd={createTouchHandler('right', false)}
+                  onTouchCancel={createTouchHandler('right', false)}
+                  className="w-14 h-14 rounded-lg bg-blue-500/90 backdrop-blur-sm border border-blue-400 flex items-center justify-center text-white text-xl font-bold shadow-lg active:scale-95 transition-transform touch-manipulation"
+                >
+                  ▶
+                </button>
+              </div>
+
+              <div>
+                <button 
+                  onTouchStart={createTouchHandler('shoot', true)}
+                  onTouchEnd={createTouchHandler('shoot', false)}
+                  onTouchCancel={createTouchHandler('shoot', false)}
+                  className="w-16 h-16 rounded-full bg-red-500/90 backdrop-blur-sm border-2 border-red-400 text-white flex items-center justify-center font-bold shadow-lg active:scale-95 transition-transform text-xs touch-manipulation"
+                >
+                  FIRE
+                </button>
+              </div>
+            </div>
+
             {gameOver && (
               <div className="text-center mt-3 sm:mt-4 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-lg">
                 <h4 className="text-base sm:text-lg font-semibold text-red-700 mb-1">Game Over!</h4>
@@ -724,7 +717,6 @@ export default function SpaceInvadersGame() {
               </div>
             )}
 
-            {/* Level Complete Message */}
             {gameWon && (
               <div className="text-center mt-3 sm:mt-4 p-2 sm:p-3 bg-green-50 border border-green-200 rounded-lg">
                 <h4 className="text-base sm:text-lg font-semibold text-green-700 mb-1">Level Complete! 🚀</h4>
