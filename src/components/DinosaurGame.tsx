@@ -5,7 +5,10 @@ export default function SpaceInvadersGame() {
   const [isVisible, setIsVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    // Initialize from memory instead of localStorage
+    return 0;
+  });
   const [lives, setLives] = useState(3);
   const [level, setLevel] = useState(1);
   const [gameOver, setGameOver] = useState(false);
@@ -17,37 +20,41 @@ export default function SpaceInvadersGame() {
   const gameLoopRef = useRef(null);
   const gameStateRef = useRef(null);
   const keysRef = useRef(new Set());
+  const lastFrameTimeRef = useRef(0);
+  const highScoreMemoryRef = useRef(0);
+  
+  // Separate touch state for better control
   const touchStateRef = useRef({
     left: false,
     right: false,
     shoot: false,
-    moving: false,
-    lastMoveX: 0
+    dragging: false,
+    lastX: 0
   });
 
   // Game constants
   const GAME_CONFIG = {
-    PLAYER_SPEED: 6,
-    BULLET_SPEED: 10,
-    ALIEN_BULLET_SPEED: 4,
-    BULLET_COOLDOWN: 150,
-    ALIEN_SHOOT_CHANCE: 0.008,
-    STARS_COUNT: 50,
-    CANVAS_ASPECT_RATIO: 1.5,
-    MIN_HEIGHT: 300,
+    PLAYER_SPEED: 5,
+    BULLET_SPEED: 8,
+    ALIEN_BULLET_SPEED: 3,
+    BULLET_COOLDOWN: 200,
+    ALIEN_SHOOT_CHANCE: 0.005,
+    STARS_COUNT: 40,
+    CANVAS_ASPECT_RATIO: 1.4,
+    MIN_HEIGHT: 320,
     MAX_HEIGHT: 600
   };
 
   // Initialize game state
   const createGameState = useCallback((canvasWidth, canvasHeight) => {
-    const playerWidth = 30;
-    const playerHeight = 20;
+    const playerWidth = Math.max(25, Math.min(35, canvasWidth / 20));
+    const playerHeight = playerWidth * 0.7;
     
     const gameState = {
       canvas: { width: canvasWidth, height: canvasHeight },
       player: {
         x: canvasWidth / 2 - playerWidth / 2,
-        y: canvasHeight - 50,
+        y: canvasHeight - 60,
         width: playerWidth,
         height: playerHeight,
         speed: GAME_CONFIG.PLAYER_SPEED
@@ -56,47 +63,55 @@ export default function SpaceInvadersGame() {
       aliens: [],
       alienBullets: [],
       alienDirection: 1,
-      alienSpeed: 0.5 + (level - 1) * 0.15,
-      alienDropDistance: 20,
+      alienSpeed: 0.8 + (level - 1) * 0.2,
+      alienDropDistance: 15,
       lastBulletTime: 0,
       lastAlienShoot: 0,
-      score: 0,
-      level: level,
-      gameOver: false,
-      gameWon: false,
+      animationFrame: 0,
       stars: []
     };
 
-    // Generate stars
+    // Generate stars with better distribution
     for (let i = 0; i < GAME_CONFIG.STARS_COUNT; i++) {
       gameState.stars.push({
         x: Math.random() * canvasWidth,
         y: Math.random() * canvasHeight,
-        size: Math.random() * 2 + 1,
-        brightness: Math.random() * 0.5 + 0.3
+        size: Math.random() * 1.5 + 0.5,
+        brightness: Math.random() * 0.6 + 0.4,
+        twinkle: Math.random() * 0.02 + 0.01
       });
     }
 
-    // Create alien formation
+    // Create alien formation with better scaling
     const createAliens = () => {
       const rows = 5;
       const cols = 10;
-      const alienWidth = Math.max(20, Math.min(25, canvasWidth / (cols + 2)));
+      const alienWidth = Math.max(18, Math.min(28, canvasWidth / (cols + 3)));
       const alienHeight = alienWidth * 0.8;
-      const spacing = Math.max(6, alienWidth * 0.3);
+      const spacingX = Math.max(4, alienWidth * 0.25);
+      const spacingY = Math.max(4, alienHeight * 0.3);
       
-      const gridWidth = cols * (alienWidth + spacing) - spacing;
+      const gridWidth = cols * (alienWidth + spacingX) - spacingX;
       const startX = (canvasWidth - gridWidth) / 2;
-      const startY = 60;
+      const startY = 50;
 
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
-          const alienType = row === 0 ? 'boss' : row < 2 ? 'medium' : 'small';
-          const points = alienType === 'boss' ? 50 : alienType === 'medium' ? 25 : 10;
+          let alienType, points;
+          if (row === 0) {
+            alienType = 'boss';
+            points = 50;
+          } else if (row < 3) {
+            alienType = 'medium';
+            points = 25;
+          } else {
+            alienType = 'small';
+            points = 10;
+          }
           
           gameState.aliens.push({
-            x: startX + col * (alienWidth + spacing),
-            y: startY + row * (alienHeight + spacing),
+            x: startX + col * (alienWidth + spacingX),
+            y: startY + row * (alienHeight + spacingY),
             width: alienWidth,
             height: alienHeight,
             type: alienType,
@@ -111,24 +126,26 @@ export default function SpaceInvadersGame() {
     return gameState;
   }, [level]);
 
-  // Canvas setup and resize handling
+  // Canvas setup with better responsiveness
   const setupCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return null;
 
     const containerRect = container.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2); // Limit DPR for performance
     
     // Calculate responsive dimensions
-    const maxWidth = Math.min(containerRect.width - 32, 800);
+    const maxWidth = Math.min(containerRect.width - 20, 700);
     const calculatedHeight = maxWidth / GAME_CONFIG.CANVAS_ASPECT_RATIO;
     const finalHeight = Math.max(GAME_CONFIG.MIN_HEIGHT, Math.min(calculatedHeight, GAME_CONFIG.MAX_HEIGHT));
     const finalWidth = finalHeight * GAME_CONFIG.CANVAS_ASPECT_RATIO;
 
-    // Set canvas size
+    // Set canvas display size
     canvas.style.width = `${finalWidth}px`;
     canvas.style.height = `${finalHeight}px`;
+    
+    // Set canvas actual size
     canvas.width = finalWidth * dpr;
     canvas.height = finalHeight * dpr;
 
@@ -139,10 +156,11 @@ export default function SpaceInvadersGame() {
     return { ctx, width: finalWidth, height: finalHeight };
   }, []);
 
-  // Input handling
+  // Improved input handling
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (['ArrowLeft', 'ArrowRight', 'KeyA', 'KeyD', 'Space'].includes(e.code)) {
+      const validKeys = ['ArrowLeft', 'ArrowRight', 'KeyA', 'KeyD', 'Space', 'KeyP'];
+      if (validKeys.includes(e.code)) {
         e.preventDefault();
         keysRef.current.add(e.code);
       }
@@ -156,7 +174,13 @@ export default function SpaceInvadersGame() {
     };
 
     const handleVisibilityChange = () => {
-      if (document.hidden && isPlaying) {
+      if (document.hidden && isPlaying && !isPaused) {
+        setIsPaused(true);
+      }
+    };
+
+    const handleBlur = () => {
+      if (isPlaying && !isPaused) {
         setIsPaused(true);
       }
     };
@@ -164,180 +188,205 @@ export default function SpaceInvadersGame() {
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('blur', handleBlur);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('blur', handleBlur);
     };
-  }, [isPlaying]);
+  }, [isPlaying, isPaused]);
 
-  // Touch controls
+  // Improved touch controls
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
-    let isDragging = false;
-    let dragStartX = 0;
 
     const handleTouchStart = (e) => {
       e.preventDefault();
       const touch = e.touches[0];
       const rect = canvas.getBoundingClientRect();
-      const x = touch.clientX - rect.left;
+      const x = ((touch.clientX - rect.left) / rect.width) * (gameStateRef.current?.canvas.width || rect.width);
       
-      isDragging = true;
-      dragStartX = x;
-      touchStateRef.current.moving = true;
-      touchStateRef.current.lastMoveX = x;
+      touchStateRef.current.dragging = true;
+      touchStateRef.current.lastX = x;
     };
 
     const handleTouchMove = (e) => {
       e.preventDefault();
-      if (!isDragging || !gameStateRef.current) return;
+      if (!touchStateRef.current.dragging || !gameStateRef.current) return;
       
       const touch = e.touches[0];
       const rect = canvas.getBoundingClientRect();
-      const x = touch.clientX - rect.left;
+      const x = ((touch.clientX - rect.left) / rect.width) * gameStateRef.current.canvas.width;
       
-      // Direct position update for smooth movement
+      // Update player position directly for smooth movement
       const playerHalfWidth = gameStateRef.current.player.width / 2;
-      const newX = Math.max(0, Math.min(x - playerHalfWidth, rect.width - gameStateRef.current.player.width));
+      const newX = Math.max(0, Math.min(x - playerHalfWidth, gameStateRef.current.canvas.width - gameStateRef.current.player.width));
       gameStateRef.current.player.x = newX;
       
-      touchStateRef.current.lastMoveX = x;
+      touchStateRef.current.lastX = x;
     };
 
     const handleTouchEnd = (e) => {
       e.preventDefault();
-      isDragging = false;
-      touchStateRef.current.moving = false;
+      touchStateRef.current.dragging = false;
     };
 
     canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
     canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
     canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+    canvas.addEventListener('touchcancel', handleTouchEnd, { passive: false });
 
     return () => {
       canvas.removeEventListener('touchstart', handleTouchStart);
       canvas.removeEventListener('touchmove', handleTouchMove);
       canvas.removeEventListener('touchend', handleTouchEnd);
+      canvas.removeEventListener('touchcancel', handleTouchEnd);
     };
-  }, []);
+  }, [isPlaying]);
 
-  // Button touch handlers
+  // Touch button handlers
   const createTouchHandler = (action, isDown) => (e) => {
     e.preventDefault();
     e.stopPropagation();
     touchStateRef.current[action] = isDown;
   };
 
-  // Draw functions
-  const drawBackground = (ctx, width, height, stars) => {
-    // Clear and fill background
-    ctx.fillStyle = '#0a0e1a';
+  // Enhanced drawing functions
+  const drawBackground = (ctx, width, height, stars, time) => {
+    // Clear canvas with gradient background
+    const gradient = ctx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, '#0a0e1a');
+    gradient.addColorStop(1, '#1a1a2e');
+    ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
     
     // Draw animated stars
-    ctx.fillStyle = '#ffffff';
     stars.forEach((star, index) => {
-      const flicker = Math.sin(Date.now() * 0.003 + index) * 0.2 + 0.8;
+      const flicker = Math.sin(time * star.twinkle + index) * 0.3 + 0.7;
       ctx.globalAlpha = star.brightness * flicker;
-      ctx.fillRect(star.x, star.y, star.size, star.size);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(Math.floor(star.x), Math.floor(star.y), star.size, star.size);
     });
     ctx.globalAlpha = 1;
   };
 
   const drawPlayer = (ctx, player) => {
-    // Player body
-    ctx.fillStyle = '#4a90e2';
-    ctx.fillRect(player.x, player.y, player.width, player.height);
+    // Player body with gradient
+    const gradient = ctx.createLinearGradient(player.x, player.y, player.x, player.y + player.height);
+    gradient.addColorStop(0, '#4a90e2');
+    gradient.addColorStop(1, '#357abd');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(Math.floor(player.x), Math.floor(player.y), player.width, player.height);
     
     // Player cannon
-    const cannonWidth = 4;
-    const cannonHeight = 8;
+    const cannonWidth = Math.max(3, player.width * 0.12);
+    const cannonHeight = Math.max(6, player.height * 0.4);
+    ctx.fillStyle = '#6bb3ff';
     ctx.fillRect(
-      player.x + player.width / 2 - cannonWidth / 2,
-      player.y - cannonHeight,
+      Math.floor(player.x + player.width / 2 - cannonWidth / 2),
+      Math.floor(player.y - cannonHeight),
       cannonWidth,
       cannonHeight
     );
     
-    // Player details
-    ctx.fillStyle = '#6bb3ff';
-    ctx.fillRect(player.x + 2, player.y + 2, player.width - 4, 4);
+    // Player highlights
+    ctx.fillStyle = '#7dc3ff';
+    ctx.fillRect(Math.floor(player.x + 2), Math.floor(player.y + 2), Math.max(1, player.width - 4), Math.max(1, player.height * 0.2));
   };
 
   const drawAlien = (ctx, alien, animFrame) => {
-    let color;
+    let color, highlightColor;
     switch (alien.type) {
       case 'boss':
         color = '#ff4757';
+        highlightColor = '#ff6b6b';
         break;
       case 'medium':
         color = '#ff6348';
+        highlightColor = '#ff7f66';
         break;
       default:
         color = '#ffa726';
+        highlightColor = '#ffb74d';
     }
     
+    // Main alien body
     ctx.fillStyle = color;
-    ctx.fillRect(alien.x, alien.y, alien.width, alien.height);
+    ctx.fillRect(Math.floor(alien.x), Math.floor(alien.y), alien.width, alien.height);
     
     // Alien eyes with animation
     ctx.fillStyle = '#000000';
     const eyeOffset = animFrame ? 1 : 0;
-    const eyeSize = Math.max(2, alien.width * 0.12);
-    ctx.fillRect(alien.x + 3 + eyeOffset, alien.y + 3, eyeSize, eyeSize);
-    ctx.fillRect(alien.x + alien.width - 3 - eyeSize - eyeOffset, alien.y + 3, eyeSize, eyeSize);
+    const eyeSize = Math.max(2, alien.width * 0.15);
+    const eyeY = alien.y + Math.max(2, alien.height * 0.2);
     
-    // Alien details
-    if (alien.type === 'boss') {
-      ctx.fillStyle = '#ff6b6b';
-      ctx.fillRect(alien.x + 2, alien.y + alien.height - 4, alien.width - 4, 2);
-    }
+    ctx.fillRect(
+      Math.floor(alien.x + Math.max(2, alien.width * 0.15) + eyeOffset), 
+      Math.floor(eyeY), 
+      eyeSize, 
+      eyeSize
+    );
+    ctx.fillRect(
+      Math.floor(alien.x + alien.width - Math.max(2, alien.width * 0.15) - eyeSize - eyeOffset), 
+      Math.floor(eyeY), 
+      eyeSize, 
+      eyeSize
+    );
+    
+    // Alien highlights
+    ctx.fillStyle = highlightColor;
+    ctx.fillRect(Math.floor(alien.x + 1), Math.floor(alien.y + 1), Math.max(1, alien.width - 2), Math.max(1, alien.height * 0.2));
   };
 
-  const drawBullet = (ctx, bullet, color = '#ff6b35') => {
+  const drawBullet = (ctx, bullet, color = '#00ff88') => {
+    // Main bullet
     ctx.fillStyle = color;
-    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    ctx.fillRect(Math.floor(bullet.x), Math.floor(bullet.y), bullet.width, bullet.height);
     
-    // Add glow effect
-    ctx.shadowBlur = 3;
+    // Bullet glow effect
+    ctx.shadowBlur = 4;
     ctx.shadowColor = color;
-    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    ctx.fillRect(Math.floor(bullet.x), Math.floor(bullet.y), bullet.width, bullet.height);
     ctx.shadowBlur = 0;
   };
 
-  // Game logic
-  const updateGame = (gameState, deltaTime) => {
+  // Improved collision detection
+  const checkCollision = (rect1, rect2) => {
+    return rect1.x < rect2.x + rect2.width &&
+           rect1.x + rect1.width > rect2.x &&
+           rect1.y < rect2.y + rect2.height &&
+           rect1.y + rect1.height > rect2.y;
+  };
+
+  // Enhanced game logic
+  const updateGame = useCallback((gameState, deltaTime, currentTime) => {
     if (!gameState || gameState.gameOver || gameState.gameWon) return;
 
     const { player, bullets, aliens, alienBullets, canvas } = gameState;
-    const currentTime = performance.now();
 
-    // Handle input
-    const moveLeft = keysRef.current.has('ArrowLeft') || keysRef.current.has('KeyA') || touchStateRef.current.left;
-    const moveRight = keysRef.current.has('ArrowRight') || keysRef.current.has('KeyD') || touchStateRef.current.right;
+    // Handle input (avoid interference between touch drag and buttons)
+    const moveLeft = (keysRef.current.has('ArrowLeft') || keysRef.current.has('KeyA') || touchStateRef.current.left) && !touchStateRef.current.dragging;
+    const moveRight = (keysRef.current.has('ArrowRight') || keysRef.current.has('KeyD') || touchStateRef.current.right) && !touchStateRef.current.dragging;
     const shoot = keysRef.current.has('Space') || touchStateRef.current.shoot;
 
-    // Update player movement (if not using touch drag)
-    if (!touchStateRef.current.moving) {
-      if (moveLeft) {
-        player.x = Math.max(0, player.x - player.speed);
-      }
-      if (moveRight) {
-        player.x = Math.min(canvas.width - player.width, player.x + player.speed);
-      }
+    // Update player movement
+    if (moveLeft) {
+      player.x = Math.max(0, player.x - player.speed);
+    }
+    if (moveRight) {
+      player.x = Math.min(canvas.width - player.width, player.x + player.speed);
     }
 
-    // Player shooting
+    // Player shooting with cooldown
     if (shoot && currentTime - gameState.lastBulletTime > GAME_CONFIG.BULLET_COOLDOWN) {
       bullets.push({
         x: player.x + player.width / 2 - 2,
-        y: player.y,
+        y: player.y - 5,
         width: 4,
-        height: 10,
+        height: 12,
         speed: GAME_CONFIG.BULLET_SPEED
       });
       gameState.lastBulletTime = currentTime;
@@ -351,13 +400,16 @@ export default function SpaceInvadersGame() {
       }
     }
 
-    // Update aliens
+    // Update aliens with improved movement
     let shouldChangeDirection = false;
     let lowestAlienY = 0;
     
+    // Update animation frame
+    gameState.animationFrame = Math.floor(currentTime / 600) % 2;
+    
     aliens.forEach(alien => {
       alien.x += gameState.alienDirection * gameState.alienSpeed;
-      alien.animFrame = Math.floor(currentTime / 500) % 2;
+      alien.animFrame = gameState.animationFrame;
       
       if (alien.x <= 0 || alien.x + alien.width >= canvas.width) {
         shouldChangeDirection = true;
@@ -370,30 +422,40 @@ export default function SpaceInvadersGame() {
       aliens.forEach(alien => {
         alien.y += gameState.alienDropDistance;
       });
+      // Increase speed slightly each direction change
+      gameState.alienSpeed *= 1.02;
     }
 
     // Check if aliens reached player
-    if (lowestAlienY >= player.y) {
+    if (lowestAlienY >= player.y - 10) {
       gameState.gameOver = true;
       return;
     }
 
-    // Alien shooting
-    if (aliens.length > 0 && Math.random() < GAME_CONFIG.ALIEN_SHOOT_CHANCE + level * 0.001) {
-      const shooter = aliens[Math.floor(Math.random() * aliens.length)];
-      alienBullets.push({
-        x: shooter.x + shooter.width / 2 - 2,
-        y: shooter.y + shooter.height,
-        width: 4,
-        height: 8,
-        speed: GAME_CONFIG.ALIEN_BULLET_SPEED + level * 0.2
+    // Improved alien shooting
+    const shootChance = GAME_CONFIG.ALIEN_SHOOT_CHANCE + (level - 1) * 0.001;
+    if (aliens.length > 0 && Math.random() < shootChance) {
+      // Prefer aliens in front columns
+      const frontAliens = aliens.filter(alien => {
+        return !aliens.some(other => other.x === alien.x && other.y > alien.y);
       });
+      
+      if (frontAliens.length > 0) {
+        const shooter = frontAliens[Math.floor(Math.random() * frontAliens.length)];
+        alienBullets.push({
+          x: shooter.x + shooter.width / 2 - 2,
+          y: shooter.y + shooter.height,
+          width: 4,
+          height: 8,
+          speed: GAME_CONFIG.ALIEN_BULLET_SPEED + (level - 1) * 0.3
+        });
+      }
     }
 
     // Update alien bullets
     for (let i = alienBullets.length - 1; i >= 0; i--) {
       alienBullets[i].y += alienBullets[i].speed;
-      if (alienBullets[i].y > canvas.height) {
+      if (alienBullets[i].y > canvas.height + 10) {
         alienBullets.splice(i, 1);
       }
     }
@@ -403,12 +465,9 @@ export default function SpaceInvadersGame() {
       const bullet = bullets[i];
       for (let j = aliens.length - 1; j >= 0; j--) {
         const alien = aliens[j];
-        if (bullet.x < alien.x + alien.width &&
-            bullet.x + bullet.width > alien.x &&
-            bullet.y < alien.y + alien.height &&
-            bullet.y + bullet.height > alien.y) {
+        if (checkCollision(bullet, alien)) {
           bullets.splice(i, 1);
-          gameState.score += alien.points;
+          setScore(prev => prev + alien.points);
           aliens.splice(j, 1);
           break;
         }
@@ -418,10 +477,7 @@ export default function SpaceInvadersGame() {
     // Collision detection: alien bullets vs player
     for (let i = alienBullets.length - 1; i >= 0; i--) {
       const bullet = alienBullets[i];
-      if (bullet.x < player.x + player.width &&
-          bullet.x + bullet.width > player.x &&
-          bullet.y < player.y + player.height &&
-          bullet.y + bullet.height > player.y) {
+      if (checkCollision(bullet, player)) {
         alienBullets.splice(i, 1);
         setLives(prev => {
           const newLives = prev - 1;
@@ -430,6 +486,7 @@ export default function SpaceInvadersGame() {
           }
           return newLives;
         });
+        // Brief invincibility could be added here
         break;
       }
     }
@@ -438,70 +495,88 @@ export default function SpaceInvadersGame() {
     if (aliens.length === 0) {
       gameState.gameWon = true;
     }
+  }, [level]);
 
-    // Update score state
-    setScore(gameState.score);
-  };
-
-  // Main game loop
+  // Main game loop with proper cleanup
   useEffect(() => {
-    if (!isPlaying || isPaused) return;
+    if (!isPlaying || isPaused) {
+      if (gameLoopRef.current) {
+        cancelAnimationFrame(gameLoopRef.current);
+        gameLoopRef.current = null;
+      }
+      return;
+    }
 
     const canvasSetup = setupCanvas();
     if (!canvasSetup) return;
 
     const { ctx, width, height } = canvasSetup;
-    const gameState = createGameState(width, height);
-    gameStateRef.current = gameState;
+    
+    // Create new game state or preserve existing one
+    if (!gameStateRef.current || gameStateRef.current.canvas.width !== width) {
+      gameStateRef.current = createGameState(width, height);
+      gameStateRef.current.score = score; // Preserve score
+    }
 
     let lastTime = performance.now();
-    let animationId;
 
     const gameLoop = (currentTime) => {
       const deltaTime = currentTime - lastTime;
       lastTime = currentTime;
 
+      const gameState = gameStateRef.current;
+      if (!gameState) return;
+
+      // Handle game over
       if (gameState.gameOver) {
         setGameOver(true);
         setIsPlaying(false);
-        if (gameState.score > highScore) {
-          setHighScore(gameState.score);
+        const finalScore = Math.max(score, gameState.score || 0);
+        if (finalScore > highScoreMemoryRef.current) {
+          setHighScore(finalScore);
+          highScoreMemoryRef.current = finalScore;
         }
         return;
       }
 
+      // Handle game won
       if (gameState.gameWon) {
         setGameWon(true);
         setIsPlaying(false);
-        if (gameState.score > highScore) {
-          setHighScore(gameState.score);
+        const finalScore = Math.max(score, gameState.score || 0);
+        if (finalScore > highScoreMemoryRef.current) {
+          setHighScore(finalScore);
+          highScoreMemoryRef.current = finalScore;
         }
         return;
       }
 
-      updateGame(gameState, deltaTime);
+      // Update game logic
+      updateGame(gameState, deltaTime, currentTime);
 
-      // Render
-      drawBackground(ctx, width, height, gameState.stars);
+      // Render game
+      drawBackground(ctx, width, height, gameState.stars, currentTime * 0.001);
       drawPlayer(ctx, gameState.player);
       
       gameState.aliens.forEach(alien => drawAlien(ctx, alien, alien.animFrame));
       gameState.bullets.forEach(bullet => drawBullet(ctx, bullet, '#00ff88'));
       gameState.alienBullets.forEach(bullet => drawBullet(ctx, bullet, '#ff4757'));
 
-      if (!isPaused) {
-        animationId = requestAnimationFrame(gameLoop);
+      // Continue loop
+      if (!isPaused && isPlaying) {
+        gameLoopRef.current = requestAnimationFrame(gameLoop);
       }
     };
 
-    gameLoopRef.current = animationId = requestAnimationFrame(gameLoop);
+    gameLoopRef.current = requestAnimationFrame(gameLoop);
 
     return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
+      if (gameLoopRef.current) {
+        cancelAnimationFrame(gameLoopRef.current);
+        gameLoopRef.current = null;
       }
     };
-  }, [isPlaying, isPaused, createGameState, setupCanvas, level, highScore]);
+  }, [isPlaying, isPaused, setupCanvas, createGameState, updateGame, score]);
 
   // Draw static state when not playing
   useEffect(() => {
@@ -513,45 +588,66 @@ export default function SpaceInvadersGame() {
     const { ctx, width, height } = canvasSetup;
     const staticState = createGameState(width, height);
 
-    drawBackground(ctx, width, height, staticState.stars);
+    drawBackground(ctx, width, height, staticState.stars, 0);
     drawPlayer(ctx, staticState.player);
     staticState.aliens.forEach(alien => drawAlien(ctx, alien, 0));
   }, [isVisible, isPlaying, setupCanvas, createGameState]);
 
-  // Handle resize
+  // Handle resize with debounce
   useEffect(() => {
+    let resizeTimeout;
     const handleResize = () => {
-      if (isVisible) {
-        setTimeout(setupCanvas, 100);
-      }
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (isVisible && !isPlaying) {
+          setupCanvas();
+        }
+      }, 150);
     };
     
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isVisible, setupCanvas]);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
+    };
+  }, [isVisible, isPlaying, setupCanvas]);
 
   // Game control functions
   const startGame = () => {
+    // Reset all states
     setScore(0);
     setLives(3);
     setLevel(1);
     setGameOver(false);
     setGameWon(false);
     setIsPaused(false);
-    setIsPlaying(true);
-    touchStateRef.current = { left: false, right: false, shoot: false, moving: false, lastMoveX: 0 };
+    
+    // Clear refs
+    gameStateRef.current = null;
+    touchStateRef.current = { left: false, right: false, shoot: false, dragging: false, lastX: 0 };
     keysRef.current.clear();
+    
+    // Start playing
+    setIsPlaying(true);
   };
 
   const nextLevel = () => {
     setLevel(prev => prev + 1);
     setGameWon(false);
     setIsPaused(false);
+    gameStateRef.current = null; // Force new game state creation
+    touchStateRef.current = { left: false, right: false, shoot: false, dragging: false, lastX: 0 };
     setIsPlaying(true);
-    touchStateRef.current = { left: false, right: false, shoot: false, moving: false, lastMoveX: 0 };
   };
 
   const resetGame = () => {
+    // Cancel any running animation
+    if (gameLoopRef.current) {
+      cancelAnimationFrame(gameLoopRef.current);
+      gameLoopRef.current = null;
+    }
+    
+    // Reset all states
     setScore(0);
     setLives(3);
     setLevel(1);
@@ -559,7 +655,10 @@ export default function SpaceInvadersGame() {
     setGameWon(false);
     setIsPaused(false);
     setIsPlaying(false);
-    touchStateRef.current = { left: false, right: false, shoot: false, moving: false, lastMoveX: 0 };
+    
+    // Clear refs
+    gameStateRef.current = null;
+    touchStateRef.current = { left: false, right: false, shoot: false, dragging: false, lastX: 0 };
     keysRef.current.clear();
   };
 
