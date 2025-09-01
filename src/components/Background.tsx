@@ -95,7 +95,7 @@ const Background = () => {
       title: 'Marketing Coordinator',
       institution: 'Initium Venture Solutions',
       location: 'Kempton Park',
-      description: 'Freelance role witch focused on marketing for Initium Venture Solutions.',
+      description: 'Freelance role which focused on marketing for Initium Venture Solutions.',
       icon: Briefcase,
       color: 'navy'
     }
