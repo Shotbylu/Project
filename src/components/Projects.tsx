@@ -102,7 +102,7 @@ const Projects = () => {
       category: 'Machine Learning Infrastructure (SaaS)',
       techStack: ['Python', 'Scikit-learn', 'FastAPI', 'Plotly', 'MCP'],
       videoUrl: '/assets/documents/auto-ml-video.mp4', 
-      githubUrl: '#',
+      githubUrl: 'https://github.com/Shotbylu/automl-mcp-server',
       liveUrl: '#',
       year: '2024',
       status: 'Developing',
