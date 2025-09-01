@@ -89,7 +89,7 @@ const Projects = () => {
       techStack: ['OpenCV', 'Python', 'Anaconda', 'NumPy'],
       // Try multiple potential paths for your video
       videoUrl: '/assets/documents/ping-pong-video.mp4', // Absolute path
-      githubUrl: '#',
+      githubUrl: 'https://github.com/Shotbylu/Computer-vision-motion-detection-zoom',
       liveUrl: '#',
       year: '2025',
       status: 'Completed',
