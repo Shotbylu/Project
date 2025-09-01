@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Award } from 'lucide-react';
 
 const Skills = () => {
-  const [activeTab, setActiveTab] = useState('Development');
+  const [activeTab, setActiveTab] = useState('Marketing Management');
 
   const tabs = ['Marketing Management', 'Design', 'Development'];
 
@@ -39,6 +39,7 @@ const Skills = () => {
     'Adobe - Photoshop Essential Skills',
     'Microsoft - Career Essentials in Data Analysis',
     'Google - Digital Marketing Certification',
+    'IBM - Python for Data Science',
     'Johns Hopkins University - Advanced Statistics for Data Science',
   ];
 
