@@ -239,14 +239,18 @@ const Projects = () => {
                       }}
                     />
                   )}
-                  {/* Thumbnail for SEMO */}
+                  {/* Thumbnail for AutoML */}
                   {project.id === 3 && (
-                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
-                      <div className="text-white text-center">
-                        <TrendingUp size={48} className="mx-auto mb-2" />
-                        <p className="text-sm font-medium">SEMO Campaign</p>
-                      </div>
-                    </div>
+                    <img 
+                      src="/assets/documents/auto-ml-thumbnail.png"
+                      alt="SEMO Campaign" 
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to gradient background if image fails to load
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling.style.display = 'flex';
+                      }}
+                    />
                   )}
                   
                   {/* Fallback gradient backgrounds (hidden by default) */}
