@@ -75,7 +75,7 @@ const Projects = () => {
       category: 'Data Science Platform',
       techStack: ['Python', 'React', 'Machine Learning', 'API Integration', 'Cloud Services'],
       videoUrl: '/assets/documents/Visual-lab-video.mp4',
-      githubUrl: '#',
+      githubUrl: 'https://github.com/Shotbylu/Data-analysis-Agent',
       liveUrl: '#',
       year: '2024',
       status: 'Completed',
