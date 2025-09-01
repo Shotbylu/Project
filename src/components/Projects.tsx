@@ -101,7 +101,7 @@ const Projects = () => {
       description: 'Automates machine learning workflow with MCP: CSV upload, training, deployment, seamless integration, rapid experimentation.',
       category: 'Machine Learning Infrastructure (SaaS)',
       techStack: ['Python', 'Scikit-learn', 'FastAPI', 'Plotly', 'MCP'],
-      videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_640x360_1mb.mp4', // Test video
+      videoUrl: '/assets/documents/auto-ml-video.mp4', 
       githubUrl: '#',
       liveUrl: '#',
       year: '2024',
