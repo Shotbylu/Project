@@ -621,7 +621,7 @@ export default function SpaceInvadersGame() {
             🚀 Space Invaders 🚀
           </h1>
           <p className="text-sm sm:text-base text-gray-600 font-medium mb-4">
-            Try getting a high score while I reply to your email ✉️
+            Try getting a high score while I reply to your email
           </p>
           <button 
             onClick={() => setIsVisible(v => !v)} 
