@@ -98,7 +98,16 @@ const Background = () => {
       description: 'Freelance role which focused on marketing for Initium Venture Solutions.',
       icon: Briefcase,
       color: 'navy'
-    }
+    },
+    {
+      year: '2025',
+      category: 'Work Experience',
+      title: 'Digital Marketing Specialist',
+      institution: 'Mazda Southern Africa',
+      location: 'Midrand',
+      description: 'Freelance role which focused on marketing for Initium Venture Solutions.',
+      icon: Briefcase,
+      color: 'navy' 
   ];
 
   const filteredData = timelineData.filter(item => {
