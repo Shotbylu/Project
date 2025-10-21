@@ -99,7 +99,7 @@ const Background = () => {
       icon: Briefcase,
       color: 'navy'
     },
-    {
+        {
       year: '2025',
       category: 'Work Experience',
       title: 'Digital Marketing Specialist',
@@ -107,7 +107,8 @@ const Background = () => {
       location: 'Midrand',
       description: 'Freelance role which focused on marketing for Initium Venture Solutions.',
       icon: Briefcase,
-      color: 'navy' 
+      color: 'navy'
+    }
   ];
 
   const filteredData = timelineData.filter(item => {
