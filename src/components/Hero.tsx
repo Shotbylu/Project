@@ -133,7 +133,7 @@ const downloadPortfolio = async () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              I turn ad spend into qualified leads and revenue through data-driven paid social campaigns on Meta, Google and LinkedIn. In the last 18 months, I've managed R600K+ across Meta and LinkedIn campaigns, generating 496+ qualified leads with an average 4.2:1 ROAS. I’ve delivered integrated marketing and communications strategies across multiple sectors, including automotive with Mazda Southern Africa, energy and chemicals with Sasol, education with Empangeni High School, and higher education with Initium Venture Solutions, focusing on what actually moves the needle: conversions, cost efficiency, and ROI.
+              I turn ad spend into qualified leads and revenue through data-driven paid social campaigns on Meta, Google and LinkedIn. I've managed over R1 000 000+ across Meta and LinkedIn campaigns, generating qualified leads with an average 4.2:1 ROAS. I’ve delivered integrated marketing and communications strategies across multiple sectors, including automotive with Mazda Southern Africa, energy and chemicals with Sasol, education with Empangeni High School, and higher education with Initium Venture Solutions, focusing on what actually moves the needle: conversions, cost efficiency, and ROI.
 Based in Johannesburg, working remotely with brands that want a paid social specialist who understands both creative strategy and performance analytics.
             </motion.p>
 
@@ -212,16 +212,18 @@ Based in Johannesburg, working remotely with brands that want a paid social spec
               <div className="font-mono text-xs sm:text-sm space-y-2">
                 <div className="text-purple-400">const <span className="text-yellow-300">Lungelo Sibisi</span> = {`{`}</div>
                 <div className="ml-4 text-blue-300">Expertise: <span className="text-green-300">[</span></div>
-                <div className="ml-8 text-orange-300">"Marketing & Communications",</div>
-                <div className="ml-8 text-orange-300">"Data Analysis & Cloud Services",</div>
-                <div className="ml-8 text-orange-300">"Graphic design & Web Development"</div>
+                <div className="ml-8 text-orange-300">"Paid Social Media, Meta, Google & LinkedIn Ads ",</div>
+                <div className="ml-8 text-orange-300">"Campaign Strategy & Execution",</div>
+                <div className="ml-8 text-orange-300">"A/B Testing & Optimization",</div>
+                <div className="ml-8 text-orange-300">"Audience Targeting & Segmentation",</div>
+                <div className="ml-8 text-orange-300">"Performance Analytics & Reporting"</div>
                 <div className="ml-4 text-green-300">],</div>
                 <div className="ml-4">
                   <span className="text-blue-300">location:</span> <span className="text-orange-300">"Johannesburg, South Africa"</span>,
                 </div>
                 <div className="ml-4 text-blue-300">technologies: <span className="text-green-300">[</span></div>
-                <div className="ml-8 text-orange-300">"Python", "Power BI", "Adobe Creative Suite",</div>
-                <div className="ml-8 text-orange-300">"CRM Tools", "Azure, Oracle & AWS"</div>
+                <div className="ml-8 text-orange-300">"Google Analytics 4", "Meta Business Suite", "Google Ads",</div>
+                <div className="ml-8 text-orange-300">"LinkedIn Campaign Manager", "HubSpot, Adobe Creative Suite"</div>
                 <div className="ml-4 text-green-300">],</div>
                 <div className="ml-4">
                   <span className="text-blue-300">available:</span> <span className="text-green-400">true</span>
