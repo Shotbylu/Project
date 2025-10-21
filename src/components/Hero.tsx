@@ -133,7 +133,7 @@ const downloadPortfolio = async () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              I turn ad spend into qualified leads and revenue through data-driven paid social campaigns on Meta, Google and LinkedIn. In the last 18 months, I've managed R600K+ across Meta and LinkedIn campaigns, generating 496+ qualified leads with an average 4.2:1 ROAS. I’ve delivered integrated marketing and communications strategies across multiple sectors — including automotive with Mazda Southern Africa, corporate with Sasol, education with Empangeni High School, and higher education with Initium Venture Solutions, focusing on what actually moves the needle: conversions, cost efficiency, and ROI.
+              I turn ad spend into qualified leads and revenue through data-driven paid social campaigns on Meta, Google and LinkedIn. In the last 18 months, I've managed R600K+ across Meta and LinkedIn campaigns, generating 496+ qualified leads with an average 4.2:1 ROAS. I’ve delivered integrated marketing and communications strategies across multiple sectors, including automotive with Mazda Southern Africa, energy and chemicals with Sasol, education with Empangeni High School, and higher education with Initium Venture Solutions, focusing on what actually moves the needle: conversions, cost efficiency, and ROI.
 Based in Johannesburg, working remotely with brands that want a paid social specialist who understands both creative strategy and performance analytics.
             </motion.p>
 
