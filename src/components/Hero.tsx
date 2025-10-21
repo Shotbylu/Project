@@ -111,7 +111,7 @@ const downloadPortfolio = async () => {
                 Lungelo Sibisi<span className="text-orange-500">.</span>
               </h1>
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-700">
-                Marketing Analytics & Communications Specialist
+                Digital Marketing Specialist | Paid Social Media | Meta, Google & LinkedIn Ads
               </h2>
             </motion.div>
 
@@ -123,7 +123,7 @@ const downloadPortfolio = async () => {
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-              Available for new projects
+              Available for remote work
             </motion.div>
 
             {/* Bio */}
@@ -133,7 +133,9 @@ const downloadPortfolio = async () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Hey there stranger, I'm Lungelo, a marketing, analytics, and communications specialist who loves coding and building tools to make everything I do easier. With a background in sales and three years in marketing and data analysis, I create campaigns that are both creative and measurable. I design visuals in Adobe, handle data with Python and SQL on Azure and AWS, and build dashboards in Power BI so stakeholders actually understand the story. CRMs (Zoho, HubSpot, Salesforce) are always on autopilot. Currently based in Johannesburg, if you want a marketer who's creative, data-driven, and a little technical, check out my portfolio and let's chat!
+              I turn ad spend into qualified leads and revenue through data-driven paid social campaigns on Meta, Google and LinkedIn.
+Over the last 18 months, I've managed R600K+ in paid social advertising, generating 496+ qualified leads with an average 4.2:1 ROAS across B2C automotive and B2B SaaS campaigns.
+Currently based in Johannesburg, working remotely with brands that need measurable performance from their social advertising.
             </motion.p>
 
             <motion.div
