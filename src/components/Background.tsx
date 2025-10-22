@@ -105,7 +105,7 @@ const Background = () => {
       title: 'Digital Marketing Specialist',
       institution: 'Mazda Southern Africa',
       location: 'Midrand',
-      description: 'Currently serving as a Digital Marketing Specialist, leveraging expertise in digital strategies, data-driven campaigns, consumer behavior analysis, and brand management to enhance Mazda's online presence, drive customer engagement, and optimize marketing performance across social media.',
+      description: 'Digital Marketing Specialist applying data-driven strategies and consumer insights to elevate Mazda’s brand and online presence.',
       icon: Briefcase,
       color: 'navy'
     }
