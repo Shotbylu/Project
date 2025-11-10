@@ -1,0 +1,300 @@
+export type Channel =
+  | 'Meta'
+  | 'Google'
+  | 'LinkedIn'
+  | 'TikTok'
+  | 'YouTube'
+  | 'Programmatic'
+  | 'Email/CRM'
+  | 'Web';
+
+export type Employer =
+  | 'Mazda Southern Africa'
+  | 'Sasol'
+  | 'Empangeni High School'
+  | 'Initium Venture Solutions'
+  | 'CCI Global'
+  | 'South32'
+  | 'Other';
+
+export interface Asset {
+  type: 'video' | 'image';
+  src: string;
+  poster?: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+export interface KPI {
+  label: string;
+  value: string;
+}
+
+export interface Campaign {
+  id: string;
+  title: string;
+  employer: Employer;
+  role: string;
+  period: string;
+  channels: Channel[];
+  summary: string;
+  responsibilities: string[];
+  assets: Asset[];
+  kpis: KPI[];
+  tech: string[];
+  caseStudyUrl?: string;
+  externalUrl?: string;
+}
+
+export const campaigns: Campaign[] = [
+  {
+    id: 'mazda-gfv-q3-2025',
+    title: 'Mazda Assured: Drive Now. Pay Easy.',
+    employer: 'Mazda Southern Africa',
+    role: 'Digital Marketing Specialist',
+    period: '2025 Q3',
+    channels: ['Meta', 'Google', 'LinkedIn', 'Email/CRM'],
+    summary:
+      'Full-funnel GFV campaign driving qualified dealer enquiries at sub-R400 CPL and 4.2:1 ROAS.',
+    responsibilities: [
+      'Campaign architecture (prospecting, retargeting, lead nurture)',
+      'Creative briefing and content organisation (Reels, 9:16 statics)',
+      'A/B testing (copy, CTA, placements), daily optimisation',
+      'Rival IQ benchmarking and Power BI reporting to leadership',
+      'POPIA-compliant lead handling via HubSpot'
+    ],
+    assets: [
+      {
+        type: 'video',
+        src: '/assets/campaigns/mazda-gfv-q3-2025/hero.txt',
+        poster: '/assets/campaigns/mazda-gfv-q3-2025/hero.svg',
+        alt: 'Mazda2 9:16 paid social reel',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/mazda-gfv-q3-2025/frame1.svg',
+        alt: 'Mazda2 headline frame',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'ROAS', value: '4.2:1' },
+      { label: 'CPL', value: 'R366' },
+      { label: 'Leads', value: '1 240' },
+      { label: 'CTR', value: '2.8%' }
+    ],
+    tech: ['Meta Business Suite', 'GA4', 'Rival IQ', 'Power BI', 'HubSpot'],
+    caseStudyUrl: '/assets/case-studies/mazda-assured-q3-2025.pdf',
+    externalUrl: 'https://www.mazda.co.za/'
+  },
+  {
+    id: 'mazda-cx-safety-q1-2025',
+    title: 'Mazda CX Safety Week',
+    employer: 'Mazda Southern Africa',
+    role: 'Performance Marketing Lead',
+    period: '2025 Q1',
+    channels: ['Meta', 'Google', 'YouTube', 'Email/CRM'],
+    summary: 'Omni-channel safety education burst that lifted CX-60 test drive requests by 36% week-on-week.',
+    responsibilities: [
+      'Storyboarding 9:16 reels with creative partners and brand management',
+      'Sequenced messaging by funnel stage across paid social, search and CRM touchpoints',
+      'Automated GA4 dashboards for daily decision making',
+      'Led dealer enablement webinars to align offline experience'
+    ],
+    assets: [
+      {
+        type: 'video',
+        src: '/assets/campaigns/mazda-safety-q1-2025/story.txt',
+        poster: '/assets/campaigns/mazda-safety-q1-2025/story.svg',
+        alt: 'Safety feature storytelling reel',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/mazda-safety-q1-2025/frame1.svg',
+        alt: 'CX-60 call-to-action frame',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'Leads', value: '740' },
+      { label: 'Test Drives', value: '+36%' },
+      { label: 'CPL', value: 'R342' },
+      { label: 'ROAS', value: '3.8:1' }
+    ],
+    tech: ['Meta Business Suite', 'GA4', 'HubSpot', 'Power BI'],
+    externalUrl: 'https://www.mazda.co.za/vehicles/cx-60'
+  },
+  {
+    id: 'sasol-green-future-2024',
+    title: 'Sasol Green Future Scholarships',
+    employer: 'Sasol',
+    role: 'Digital Marketing Manager',
+    period: '2024 Intake',
+    channels: ['Meta', 'Google', 'Web'],
+    summary: 'Scholarship acquisition wave pairing storytelling with conversion optimisation for STEM bursaries.',
+    responsibilities: [
+      'Designed landing journey with UX partner and implemented CRO testing plan',
+      'Implemented lead scoring to prioritise high intent applicants',
+      'Built executive dashboards highlighting ROI from regional media splits',
+      'Collaborated with HR to align campaign messaging with campus presence'
+    ],
+    assets: [
+      {
+        type: 'image',
+        src: '/assets/campaigns/sasol-green-future-2024/visual.svg',
+        alt: 'Sasol scholarship announcement creative',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'Applications', value: '8 400' },
+      { label: 'CPL', value: 'R58' },
+      { label: 'CTR', value: '3.1%' }
+    ],
+    tech: ['Google Ads', 'GA4', 'Power BI', 'Microsoft Dynamics'],
+    externalUrl: 'https://www.sasol.com/'
+  },
+  {
+    id: 'empangeni-open-day-2023',
+    title: 'Empangeni High School Open Day',
+    employer: 'Empangeni High School',
+    role: 'Marketing & Alumni Lead',
+    period: '2023 Q3',
+    channels: ['Meta', 'TikTok', 'Email/CRM'],
+    summary: 'Community-first recruitment weekend uniting parents, alumni and Grade 7 prospects.',
+    responsibilities: [
+      'Coordinated student ambassador programme to capture authentic stories',
+      'Built automation journey nudging RSVPs, reminders and post-event surveys',
+      'Managed real-time TikTok live stream crew and comment moderation'
+    ],
+    assets: [
+      {
+        type: 'image',
+        src: '/assets/campaigns/empangeni-open-day-2023/poster.svg',
+        alt: 'Empangeni open day hero poster',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'RSVPs', value: '620' },
+      { label: 'Attendance', value: '94%' },
+      { label: 'Email CTR', value: '42%' }
+    ],
+    tech: ['Meta Business Suite', 'Mailchimp', 'Canva', 'Google Forms']
+  },
+  {
+    id: 'initium-b2b-acceleration-2025',
+    title: 'Initium Venture Solutions B2B Accelerator',
+    employer: 'Initium Venture Solutions',
+    role: 'Growth Strategist',
+    period: '2025 Cohort',
+    channels: ['LinkedIn', 'Google', 'Email/CRM', 'Programmatic'],
+    summary: 'Account-based ABM motion delivering net-new pipeline for SaaS partners.',
+    responsibilities: [
+      'Segmented ICP list building with firmographic enrichment',
+      'Crafted LinkedIn conversation ads and nurtures by buying stage',
+      'Optimised programmatic placements against attention scores',
+      'Stitched attribution insights inside Power BI for investors'
+    ],
+    assets: [
+      {
+        type: 'image',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/panel.svg',
+        alt: 'Initium accelerator promo panel',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/report.svg',
+        alt: 'ABM report highlight frame',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'Pipeline', value: '$3.4M' },
+      { label: 'SQL Rate', value: '28%' },
+      { label: 'CPL', value: '$72' },
+      { label: 'Email Reply', value: '19%' }
+    ],
+    tech: ['LinkedIn Campaign Manager', '6sense', 'HubSpot', 'Power BI']
+  },
+  {
+    id: 'cci-global-talent-2024',
+    title: 'CCI Global Talent Magnet',
+    employer: 'CCI Global',
+    role: 'Demand Generation Lead',
+    period: '2024 Q4',
+    channels: ['Meta', 'TikTok', 'YouTube', 'Web'],
+    summary: 'Always-on employer branding with talent community capture across Sub-Saharan Africa.',
+    responsibilities: [
+      'Built performance creative toolkit ensuring localisation while protecting brand voice',
+      'Implemented TikTok Spark Ads with creator partnerships for authenticity',
+      'Launched progressive web form with gamified onboarding drip'
+    ],
+    assets: [
+      {
+        type: 'image',
+        src: '/assets/campaigns/cci-global-talent-2024/story.svg',
+        alt: 'CCI talent community story frame',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/cci-global-talent-2024/frame1.svg',
+        alt: 'Employer branding stat slide',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'Talent Pool', value: '35k' },
+      { label: 'CPL', value: 'R42' },
+      { label: 'Engagement', value: '7.4%' },
+      { label: 'Video Views', value: '1.8M' }
+    ],
+    tech: ['TikTok Ads Manager', 'Meta Business Suite', 'Hotjar', 'GA4']
+  },
+  {
+    id: 'south32-community-2024',
+    title: 'South32 Community Impact Drives',
+    employer: 'South32',
+    role: 'Integrated Marketing Manager',
+    period: '2024 Programme',
+    channels: ['Meta', 'Google', 'Programmatic', 'Web'],
+    summary: 'Behaviour-change storytelling aligning ESG commitments with measurable community outcomes.',
+    responsibilities: [
+      'Stood up Power BI sustainability dashboards for leadership visibility',
+      'Activated programmatic guaranteed to secure premium news inventory',
+      'Embedded qualitative sentiment tracking into weekly retros'
+    ],
+    assets: [
+      {
+        type: 'image',
+        src: '/assets/campaigns/south32-community-2024/impact.svg',
+        alt: 'Community upliftment campaign creative',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'Reach', value: '1.2M' },
+      { label: 'ROAS', value: '3.1:1' },
+      { label: 'Engagement', value: '5.2%' }
+    ],
+    tech: ['Campaign Manager 360', 'Google Ads', 'Power BI', 'Tableau']
+  }
+];
+
+export default campaigns;

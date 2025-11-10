@@ -7,6 +7,7 @@ const Header = () => {
 
   const menuItems = [
     { id: 'reception', label: 'Reception' },
+    { id: 'campaigns', label: 'Campaigns' },
     { id: 'background', label: 'Background' },
     { id: 'skills', label: 'Skills' },
     { id: 'projects', label: 'Projects' },

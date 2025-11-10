@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Linkedin, Mail, FileText, ExternalLink, Folder } from 'lucide-react';
+import { Github, Linkedin, Mail, FileText, Folder } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Hero = () => {
