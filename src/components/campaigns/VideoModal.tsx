@@ -27,12 +27,24 @@ const VideoModal: React.FC<VideoModalProps> = ({
   const [assetVisible, setAssetVisible] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
+  // Reset current index when modal opens
   useEffect(() => {
     if (isOpen) {
       setCurrentIndex(initialAssetIndex);
     }
   }, [initialAssetIndex, isOpen]);
 
+  // Ensure currentIndex stays within bounds
+  useEffect(() => {
+    if (!campaign) {
+      return;
+    }
+    if (currentIndex >= campaign.assets.length) {
+      setCurrentIndex(0);
+    }
+  }, [campaign, currentIndex]);
+
+  // Intersection observer for lazy loading
   useEffect(() => {
     if (!isOpen) {
       setAssetVisible(false);
@@ -64,6 +76,51 @@ const VideoModal: React.FC<VideoModalProps> = ({
     return () => observer.disconnect();
   }, [isOpen, currentIndex]);
 
+  // Focus management - set initial focus
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    const modalNode = modalRef.current;
+    if (!modalNode) {
+      return;
+    }
+    const focusable = Array.from(
+      modalNode.querySelectorAll<HTMLElement>(focusableSelectors)
+    ).filter((element) => !element.hasAttribute('data-focus-guard'));
+    focusable[0]?.focus();
+  }, [isOpen, campaign, currentIndex]);
+
+  const assets = campaign?.assets ?? [];
+  const assetsLength = assets.length;
+  const activeAsset = assets[currentIndex];
+  const isVideoPlaceholder =
+    activeAsset?.type === 'video' && activeAsset.src.endsWith('.txt');
+
+  const goToPrevious = useCallback(() => {
+    if (!assetsLength) {
+      return;
+    }
+    setCurrentIndex((prev) => (prev - 1 + assetsLength) % assetsLength);
+    setVideoError(false);
+  }, [assetsLength]);
+
+  const goToNext = useCallback(() => {
+    if (!assetsLength) {
+      return;
+    }
+    setCurrentIndex((prev) => (prev + 1) % assetsLength);
+    setVideoError(false);
+  }, [assetsLength]);
+
+  const handleClose = useCallback(() => {
+    onClose();
+    window.setTimeout(() => {
+      triggerRef.current?.focus();
+    }, 0);
+  }, [onClose, triggerRef]);
+
+  // Keyboard event handler
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -111,49 +168,6 @@ const VideoModal: React.FC<VideoModalProps> = ({
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [handleClose, goToNext, goToPrevious, isOpen]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-    const modalNode = modalRef.current;
-    if (!modalNode) {
-      return;
-    }
-    const focusable = Array.from(
-      modalNode.querySelectorAll<HTMLElement>(focusableSelectors)
-    ).filter((element) => !element.hasAttribute('data-focus-guard'));
-    focusable[0]?.focus();
-  }, [isOpen, campaign, currentIndex]);
-
-  const assets = campaign?.assets ?? [];
-  const assetsLength = assets.length;
-  const activeAsset = assets[currentIndex];
-  const isVideoPlaceholder =
-    activeAsset?.type === 'video' && activeAsset.src.endsWith('.txt');
-
-  const goToPrevious = useCallback(() => {
-    if (!assetsLength) {
-      return;
-    }
-    setCurrentIndex((prev) => (prev - 1 + assetsLength) % assetsLength);
-    setVideoError(false);
-  }, [assetsLength]);
-
-  const goToNext = useCallback(() => {
-    if (!assetsLength) {
-      return;
-    }
-    setCurrentIndex((prev) => (prev + 1) % assetsLength);
-    setVideoError(false);
-  }, [assetsLength]);
-
-  const handleClose = useCallback(() => {
-    onClose();
-    window.setTimeout(() => {
-      triggerRef.current?.focus();
-    }, 0);
-  }, [onClose, triggerRef]);
 
   const hasMultipleAssets = assetsLength > 1;
 

@@ -137,7 +137,7 @@ const Skills = () => {
           className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 sm:p-8"
         >
           <div className="flex items-center justify-center mb-4 sm:mb-6">
-            <Award className="text-[#1f3bff] mr-3" size={24} className="sm:w-8 sm:h-8" />
+            <Award className="text-[#1f3bff] mr-3 sm:w-8 sm:h-8" size={24} />
             <h3 className="text-xl sm:text-2xl font-bold text-[#0f1a2b]">Certifications & Training</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
@@ -146,7 +146,7 @@ const Skills = () => {
                 key={index}
                 className="bg-white p-3 sm:p-4 rounded-xl shadow-md flex items-center space-x-2 sm:space-x-3"
               >
-                <Award className="text-[#1f3bff] flex-shrink-0" size={16} className="sm:w-5 sm:h-5" />
+                <Award className="text-[#1f3bff] flex-shrink-0 sm:w-5 sm:h-5" size={16} />
                 <span className="text-xs sm:text-sm font-medium text-gray-700">{cert}</span>
               </div>
             ))}
