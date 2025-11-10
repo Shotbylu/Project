@@ -128,8 +128,8 @@ export const campaigns: Campaign[] = [
         type: 'image',
         src: '/assets/campaigns/mazda-gfv-q3-2025/frame1.svg',
         alt: 'Mazda2 headline frame',
-        width: 1080,
-        height: 1920
+        width: 1440,
+        height: 1440
       }
     ],
     kpis: [
@@ -171,8 +171,8 @@ export const campaigns: Campaign[] = [
         type: 'image',
         src: '/assets/campaigns/mazda-safety-q1-2025/frame1.svg',
         alt: 'CX-60 call-to-action frame',
-        width: 1080,
-        height: 1920
+        width: 1440,
+        height: 1440
       }
     ],
     kpis: [
@@ -205,8 +205,8 @@ export const campaigns: Campaign[] = [
         type: 'image',
         src: '/assets/campaigns/sasol-green-future-2024/visual.svg',
         alt: 'Sasol scholarship announcement creative',
-        width: 1080,
-        height: 1920
+        width: 1440,
+        height: 1440
       }
     ],
     kpis: [
@@ -235,8 +235,8 @@ export const campaigns: Campaign[] = [
         type: 'image',
         src: '/assets/campaigns/empangeni-open-day-2023/poster.svg',
         alt: 'Empangeni open day hero poster',
-        width: 1080,
-        height: 1920
+        width: 1440,
+        height: 1440
       }
     ],
     kpis: [
@@ -265,15 +265,15 @@ export const campaigns: Campaign[] = [
         type: 'image',
         src: '/assets/campaigns/initium-b2b-acceleration-2025/panel.svg',
         alt: 'Initium accelerator promo panel',
-        width: 1080,
-        height: 1920
+        width: 1440,
+        height: 1440
       },
       {
         type: 'image',
         src: '/assets/campaigns/initium-b2b-acceleration-2025/report.svg',
         alt: 'ABM report highlight frame',
-        width: 1080,
-        height: 1920
+        width: 1440,
+        height: 1440
       }
     ],
     kpis: [
@@ -302,15 +302,15 @@ export const campaigns: Campaign[] = [
         type: 'image',
         src: '/assets/campaigns/cci-global-talent-2024/story.svg',
         alt: 'CCI talent community story frame',
-        width: 1080,
-        height: 1920
+        width: 1440,
+        height: 1440
       },
       {
         type: 'image',
         src: '/assets/campaigns/cci-global-talent-2024/frame1.svg',
         alt: 'Employer branding stat slide',
-        width: 1080,
-        height: 1920
+        width: 1440,
+        height: 1440
       }
     ],
     kpis: [
@@ -339,8 +339,8 @@ export const campaigns: Campaign[] = [
         type: 'image',
         src: '/assets/campaigns/south32-community-2024/impact.svg',
         alt: 'Community upliftment campaign creative',
-        width: 1080,
-        height: 1920
+        width: 1440,
+        height: 1440
       }
     ],
     kpis: [
