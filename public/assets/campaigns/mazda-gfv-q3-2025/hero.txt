@@ -1,0 +1,2 @@
+Placeholder reference for the Mazda Assured hero video.
+Provide a 1080x1920 MP4 at build time (e.g., hero.mp4) and update src/data/campaigns.ts accordingly.

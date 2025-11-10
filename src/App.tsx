@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -8,6 +8,7 @@ import Background from './components/Background';
 import Contact from './components/Contact';
 import DinosaurGame from './components/DinosaurGame';
 import Footer from './components/Footer';
+const Campaigns = React.lazy(() => import('./sections/Campaigns'));
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,17 @@ const App: React.FC = () => {
     >
       <Header />
       <Hero />
+      <Suspense
+        fallback={
+          <div className="bg-white py-24">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="h-24 animate-pulse rounded-3xl bg-gray-100" />
+            </div>
+          </div>
+        }
+      >
+        <Campaigns />
+      </Suspense>
       <Background />
       <Skills />
       <Projects />
