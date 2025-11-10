@@ -26,21 +26,27 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
 
   useEffect(() => {
     const node = cardRef.current;
-    if (!node) return;
+    if (!node || isVisible) return;
 
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setIsVisible(true)),
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          setIsVisible(true);
+          obs.unobserve(entry.target);
+        });
+      },
       { rootMargin: '0px 0px -10% 0px', threshold: 0.2 }
     );
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [isVisible]);
+
+  const topKpis = useMemo(() => campaign.kpis.slice(0, 3), [campaign.kpis]);
 
   const primaryAsset = campaign.assets[0];
   if (!primaryAsset) return null;
-
-  const topKpis = useMemo(() => campaign.kpis.slice(0, 3), [campaign.kpis]);
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>, assetIndex = 0) => {
     onOpen(campaign, assetIndex, event.currentTarget as HTMLElement);
@@ -129,11 +135,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex gap-2 overflow-x-auto pb-1 whitespace-nowrap sm:grid sm:grid-cols-2 sm:gap-2 sm:overflow-visible sm:whitespace-normal">
           {topKpis.map((kpi) => (
             <span
               key={kpi.label}
-              className="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700"
+              className="inline-flex flex-shrink-0 items-center rounded-full border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700"
             >
               {kpi.label} {kpi.value}
             </span>
