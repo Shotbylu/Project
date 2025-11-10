@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, GraduationCap, Briefcase, Folder } from 'lucide-react';
+import { ChevronLeft, ChevronRight, GraduationCap, Briefcase } from 'lucide-react';
 
 const Background = () => {
   const [activeFilter, setActiveFilter] = useState('Work Experience');
@@ -202,7 +202,7 @@ const Background = () => {
 
         {/* Timeline Cards */}
         <div className="grid gap-4 sm:gap-6 mb-12 sm:mb-16">
-          {filteredData.map((item, index) => (
+          {filteredData.map((item) => (
             <div
               key={`${item.year}-${item.title}`}
               className={`bg-white rounded-2xl shadow-lg border-l-4 ${getColorClasses(item.color)} p-4 sm:p-6 hover:shadow-xl transition-shadow duration-200`}
@@ -236,7 +236,7 @@ const Background = () => {
         {/* Stats */}
         <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 text-center">
-            {stats.map((stat, index) => (
+            {stats.map((stat) => (
               <div key={stat.label} className="space-y-2">
                 <h3 className="text-xl sm:text-2xl font-bold text-slate-800">{stat.value}</h3>
                 <p className="text-gray-600 font-medium text-sm sm:text-base">{stat.label}</p>
