@@ -35,7 +35,7 @@ const Campaigns: React.FC = () => {
   return (
     <section
       id="campaigns"
-      className="relative overflow-hidden bg-slate-950 py-24 text-slate-100 sm:py-32"
+      className="relative overflow-hidden bg-gradient-to-b from-[#f9fafb] to-[#ffffff] py-24 sm:py-32"
     >
       {/* Removed all complex background animations and effects for a cleaner look */}
       
@@ -48,13 +48,13 @@ const Campaigns: React.FC = () => {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-3xl space-y-6 pb-12"
         >
-          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-orange-200/80">
+          <span className="inline-flex items-center rounded-full border border-[#fed7aa] bg-[#fff7ed] px-4 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-[#c2410c]">
             Case Studies
           </span>
-          <h2 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+          <h2 className="text-4xl font-semibold tracking-tight text-[#111827] sm:text-5xl">
             Integrated Campaign Portfolio
           </h2>
-          <p className="max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
+          <p className="max-w-2xl text-base leading-relaxed text-[#4b5563] sm:text-lg">
             A curated selection of high-impact campaigns, showcasing strategic thinking and measurable results across various clients and channels. Click to view the full case study.
           </p>
         </motion.div>
