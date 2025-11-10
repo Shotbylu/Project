@@ -81,8 +81,7 @@ const Campaigns: React.FC = () => {
     [filteredCampaigns]
   );
 
-  const channelCount = channels.length;
-  const employerCount = employers.length;
+
   const totalCampaigns = campaignsData.length;
   const filteredCount = filteredCampaigns.length;
   const hasActiveFilters = selectedEmployers.length > 0 || selectedChannels.length > 0;
@@ -160,15 +159,7 @@ const Campaigns: React.FC = () => {
             <p className="mt-2 text-xs text-slate-400">
               Toggle employers and channels to surface the case studies most relevant to your objectives.
             </p>
-            <div className="mt-6">
-              <CampaignFilters
-                employers={employers}
-                channels={channels}
-                selectedEmployers={selectedEmployers}
-                selectedChannels={selectedChannels}
-                onEmployersChange={setSelectedEmployers}
-                onChannelsChange={setSelectedChannels}
-              />
+
             </div>
           </motion.div>
         </motion.div>
@@ -194,74 +185,17 @@ const Campaigns: React.FC = () => {
           )}
 
           {shouldShowEmptyState ? (
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center justify-center gap-5 rounded-3xl border border-dashed border-white/20 bg-white/5 px-10 py-16 text-center backdrop-blur"
-            >
-              <div className="space-y-3">
-                <h3 className="text-2xl font-semibold text-white">No campaigns match these filters</h3>
-                <p className="text-sm text-slate-300">Adjust the filters or reset to explore the full showcase again.</p>
+
               </div>
               <button
                 type="button"
                 onClick={clearFilters}
-                className="inline-flex items-center rounded-full bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500 px-6 py-2.5 text-sm font-semibold uppercase tracking-[0.28em] text-white shadow-[0_20px_60px_-40px_rgba(236,72,153,0.9)] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-200"
-              >
-                Reset filters
-              </button>
-            </motion.div>
-          ) : (
-            <>
-              {featuredCampaign && (
-                <motion.div
-                  initial={{ opacity: 0, y: 32 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                  className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:items-stretch"
-                >
-                  <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 via-white/3 to-white/5 p-8 backdrop-blur">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.12),_transparent_60%)]" aria-hidden="true" />
-                    <div className="relative space-y-5">
-                      <p className="text-xs font-semibold uppercase tracking-[0.35em] text-orange-200/80">Featured campaign</p>
-                      <h3 className="text-3xl font-semibold text-white sm:text-4xl">Brand Meaning Level 2 — Mazda Southern Africa</h3>
-                      <p className="text-base leading-relaxed text-slate-200">{featuredCampaign.summary}</p>
-                      <p className="text-sm text-slate-400">
-                        Three cinematic 9:16 edits translate Mazda’s brand meaning into measurable demand. Dive into the carousel to
-                        explore sequencing, KPIs and channel-specific insights.
-                      </p>
-                      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                        {featuredCampaign.kpis.slice(0, 2).map((kpi) => (
-                          <div key={kpi.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">{kpi.label}</p>
-                            <p className="mt-2 text-2xl font-semibold text-white">{kpi.value}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="lg:pl-4">
-                    <CampaignCard campaign={featuredCampaign} onOpen={handleOpen} isFeatured className="break-inside-avoid" />
-                  </div>
-                </motion.div>
+
               )}
 
               {secondaryCampaigns.length > 0 && (
                 <motion.div
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                  className="[column-fill:_balance] columns-1 gap-6 md:columns-2 xl:columns-3"
-                >
-                  {secondaryCampaigns.map((campaign) => (
-                    <CampaignCard
-                      key={campaign.id}
-                      campaign={campaign}
-                      onOpen={handleOpen}
-                      className="mb-6 break-inside-avoid"
-                    />
+
                   ))}
                 </motion.div>
               )}

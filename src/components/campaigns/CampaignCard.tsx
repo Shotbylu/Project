@@ -149,31 +149,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
           ))}
         </div>
 
-        <ul className="grid gap-3 sm:grid-cols-2">
-          {topKpis.map((kpi) => {
-            const progress = parseProgressValue(kpi.value);
-            return (
-              <li
-                key={kpi.label}
-                className="group/kpi relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur transition duration-500"
-              >
-                <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-400">{kpi.label}</div>
-                <div className="mt-2 text-2xl font-semibold text-white">{kpi.value}</div>
-                {progress !== null && (
-                  <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10">
-                    <span
-                      className="block h-full rounded-full bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500"
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                )}
-                <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover/kpi:opacity-100">
-                  <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-orange-400/20 via-transparent to-transparent" />
-                </div>
-              </li>
-            );
-          })}
-        </ul>
       </div>
 
       <div className="mt-auto pt-6">
