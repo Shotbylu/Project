@@ -26,6 +26,17 @@ const VideoModal: React.FC<VideoModalProps> = ({
   const [currentIndex, setCurrentIndex] = useState(initialAssetIndex);
   const [assetVisible, setAssetVisible] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const campaignId = campaign?.id ?? null;
+
+  const emitAnalyticsEvent = useCallback(
+    (name: string, detail: Record<string, unknown>) => {
+      if (typeof window === 'undefined') {
+        return;
+      }
+      window.dispatchEvent(new CustomEvent(name, { detail }));
+    },
+    []
+  );
 
   useEffect(() => {
     if (isOpen) {
@@ -77,15 +88,20 @@ const VideoModal: React.FC<VideoModalProps> = ({
     if (!isOpen) {
       return;
     }
-    const modalNode = modalRef.current;
-    if (!modalNode) {
-      return;
-    }
-    const focusable = Array.from(
-      modalNode.querySelectorAll<HTMLElement>(focusableSelectors)
-    ).filter((element) => !element.hasAttribute('data-focus-guard'));
-    focusable[0]?.focus();
-  }, [isOpen, campaign, currentIndex]);
+
+    const timer = window.setTimeout(() => {
+      const modalNode = modalRef.current;
+      if (!modalNode) {
+        return;
+      }
+      const focusable = Array.from(
+        modalNode.querySelectorAll<HTMLElement>(focusableSelectors)
+      ).filter((element) => !element.hasAttribute('data-focus-guard'));
+      focusable[0]?.focus();
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [isOpen, campaignId]);
 
   const assets = campaign?.assets ?? [];
   const assetsLength = assets.length;
@@ -348,7 +364,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
 
               <div>
                 <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Key Results</h3>
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {campaign.kpis.map((kpi) => (
                     <span
                       key={kpi.label}
@@ -372,6 +388,13 @@ const VideoModal: React.FC<VideoModalProps> = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                    data-analytics="campaign-modal-download"
+                    onClick={() =>
+                      emitAnalyticsEvent('campaign-modal-cta', {
+                        action: 'download',
+                        campaignId
+                      })
+                    }
                   >
                     <Download className="h-4 w-4" />
                     Download Case Study
@@ -383,6 +406,13 @@ const VideoModal: React.FC<VideoModalProps> = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 transition hover:border-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                    data-analytics="campaign-modal-external"
+                    onClick={() =>
+                      emitAnalyticsEvent('campaign-modal-cta', {
+                        action: 'external',
+                        campaignId
+                      })
+                    }
                   >
                     <ExternalLink className="h-4 w-4" />
                     Visit Link

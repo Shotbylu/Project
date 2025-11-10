@@ -114,6 +114,16 @@ const Campaigns: React.FC = () => {
     setInitialAssetIndex(0);
   }, []);
 
+  const handleResetFilters = useCallback(() => {
+    setSelectedEmployers([]);
+    setSelectedChannels([]);
+  }, []);
+
+  const totalCampaigns = campaignsData.length;
+  const filteredCount = filteredCampaigns.length;
+  const filtersActive = selectedEmployers.length > 0 || selectedChannels.length > 0;
+  const noResults = filteredCount === 0;
+
   return (
     <section id="campaigns" className="bg-white py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -145,36 +155,81 @@ const Campaigns: React.FC = () => {
         </div>
 
         <div className="mt-12 space-y-12">
-          {featuredCampaign && (
-            <div className="space-y-6">
-              <div className="rounded-3xl border border-orange-100/60 bg-white/80 p-6 shadow-sm shadow-orange-100/40 sm:p-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-500">Featured Campaign</p>
-                <h3 className="mt-3 text-2xl font-semibold text-gray-900 sm:text-3xl">
-                  Brand Meaning Level 2 — Mazda Southern Africa
-                </h3>
-                <p className="mt-4 text-sm text-gray-600 sm:text-base">
-                  {featuredCampaign.summary}
-                </p>
-                <p className="mt-4 text-xs text-gray-500">
-                  Three cinematic 9:16 edits ladder Mazda’s brand meaning into measurable demand. Open the case to explore the
-                  full video carousel, KPIs, and tech stack.
-                </p>
-              </div>
-              <CampaignCard campaign={featuredCampaign} onOpen={handleOpen} isFeatured />
+          {(filtersActive || noResults) && (
+            <div className="flex flex-wrap items-center gap-4">
+              {filtersActive && (
+                <div className="inline-flex items-center gap-2 rounded-full border border-gray-100 bg-white px-4 py-2 text-xs font-medium text-gray-600">
+                  Showing
+                  <span className="font-semibold text-gray-900">{filteredCount}</span>
+                  of
+                  <span className="font-semibold text-gray-900">{totalCampaigns}</span>
+                  campaigns
+                </div>
+              )}
+              {filtersActive && (
+                <button
+                  type="button"
+                  onClick={handleResetFilters}
+                  className="inline-flex items-center rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600 transition hover:border-gray-300 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                  data-analytics="campaign-reset-filters"
+                >
+                  Reset filters
+                </button>
+              )}
             </div>
           )}
 
-          {secondaryCampaigns.length > 0 && (
-            <motion.div
-              className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3"
-              initial="hidden"
-              animate="visible"
-              variants={{ hidden: {}, visible: {} }}
-            >
-              {secondaryCampaigns.map((campaign) => (
-                <CampaignCard key={campaign.id} campaign={campaign} onOpen={handleOpen} />
-              ))}
-            </motion.div>
+          {noResults ? (
+            <div className="rounded-3xl border border-dashed border-gray-200 bg-white/70 p-12 text-center shadow-sm">
+              <h3 className="text-lg font-semibold text-gray-900">No campaigns match these filters</h3>
+              <p className="mt-2 text-sm text-gray-600">
+                Try clearing your selections or broaden the channels and employers you’re exploring.
+              </p>
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="mt-6 inline-flex items-center rounded-full bg-gray-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                data-analytics="campaign-reset-filters"
+              >
+                Reset filters
+              </button>
+            </div>
+          ) : (
+            <>
+              {featuredCampaign && (
+                <div className="space-y-6 md:grid md:grid-cols-2 md:items-start md:gap-8 md:space-y-0">
+                  <div className="rounded-3xl border border-orange-100/60 bg-white/80 p-6 shadow-sm shadow-orange-100/40 sm:p-8">
+                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-500">Featured Campaign</p>
+                    <h3 className="mt-3 text-2xl font-semibold text-gray-900 sm:text-3xl">
+                      Brand Meaning Level 2 — Mazda Southern Africa
+                    </h3>
+                    <p className="mt-4 text-sm text-gray-600 sm:text-base">
+                      {featuredCampaign.summary}
+                    </p>
+                    <p className="mt-4 text-xs text-gray-500">
+                      Three cinematic 9:16 edits ladder Mazda’s brand meaning into measurable demand. Open the case to explore the
+                      full video carousel, KPIs, and tech stack.
+                    </p>
+                  </div>
+                  <div className="md:h-full">
+                    <CampaignCard campaign={featuredCampaign} onOpen={handleOpen} isFeatured />
+                  </div>
+                </div>
+              )}
+
+              {secondaryCampaigns.length > 0 && (
+                <motion.div
+                  className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3"
+                  initial="hidden"
+                  animate="visible"
+                  variants={{ hidden: {}, visible: {} }}
+                >
+                  {secondaryCampaigns.map((campaign) => (
+                    <CampaignCard key={campaign.id} campaign={campaign} onOpen={handleOpen} />
+                  ))}
+                </motion.div>
+              )}
+            </>
           )}
         </div>
       </div>

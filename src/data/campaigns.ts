@@ -68,8 +68,8 @@ export const campaigns: Campaign[] = [
         src: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/MAWR_06_240 - Mazda 3 6 A 1080 x 1920.mp4',
         poster: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/bm-level2-hero-poster.svg',
         alt: 'Brand Meaning Level 2 — hero cut',
-        width: 1080,
-        height: 1920
+        width: 1440,
+        height: 1440
       },
       {
         type: 'video',

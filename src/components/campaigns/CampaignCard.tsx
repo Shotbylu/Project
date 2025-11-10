@@ -31,10 +31,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
     }
 
     const observer = new IntersectionObserver(
-      (entries) => {
+      (entries, obs) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setIsVisible(true);
+            obs.unobserve(entry.target);
           }
         });
       },
@@ -140,11 +141,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex gap-2 overflow-x-auto pb-1">
           {topKpis.map((kpi) => (
             <span
               key={kpi.label}
-              className="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700"
+              className="inline-flex flex-none items-center rounded-full border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700"
             >
               {kpi.label} {kpi.value}
             </span>
