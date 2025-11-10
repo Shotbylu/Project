@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+// File: src/components/campaigns/Campaigns.tsx
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play, ExternalLink, Sparkles, Globe, Linkedin, Music4, Youtube, Mail, Network } from 'lucide-react';
 import type { Campaign, Channel } from '../../data/campaigns';
@@ -46,8 +47,35 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
 
   const topKpis = useMemo(() => campaign.kpis.slice(0, 3), [campaign.kpis]);
 
-  const primaryAsset = campaign.assets[0];
-  if (!primaryAsset) return null;
+  // Read URL hash
+  useEffect(() => {
+    if (typeof window === 'undefined' || didParseHash.current) return;
+
+    const hash = window.location.hash;
+    if (hash.startsWith('#campaigns')) {
+      const [, query = ''] = hash.split('?');
+      const params = new URLSearchParams(query);
+      const empVals = decodeList(params.get('emp'), employers);
+      const chVals = decodeList(params.get('ch'), channels);
+      if (empVals.length) setSelectedEmployers(empVals);
+      if (chVals.length) setSelectedChannels(chVals);
+    }
+    didParseHash.current = true;
+  }, [employers, channels]);
+
+  // Write URL hash
+  useEffect(() => {
+    if (typeof window === 'undefined' || !didParseHash.current) return;
+
+    const params = new URLSearchParams();
+    if (selectedEmployers.length) params.set('emp', selectedEmployers.join(','));
+    if (selectedChannels.length) params.set('ch', selectedChannels.join(','));
+    const query = params.toString();
+    const newHash = `#campaigns${query ? `?${query}` : ''}`;
+    if (window.location.hash !== newHash) {
+      window.history.replaceState(null, '', newHash);
+    }
+  }, [selectedEmployers, selectedChannels]);
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>, assetIndex = 0) => {
     onOpen(campaign, assetIndex, event.currentTarget as HTMLElement);
@@ -182,4 +210,4 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
   );
 };
 
-export default CampaignCard;
+export default Campaigns;

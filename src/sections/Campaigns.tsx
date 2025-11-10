@@ -5,7 +5,10 @@ import { CampaignCard, CampaignFilters, VideoModal } from '../components/campaig
 
 const decodeList = <T extends string>(value: string | null, options: readonly T[]): T[] => {
   if (!value) return [];
-  const decoded = value.split(',').map((i) => decodeURIComponent(i)).filter(Boolean) as T[];
+  const decoded = value
+    .split(',')
+    .map((i) => decodeURIComponent(i))
+    .filter(Boolean) as T[];
   return decoded.filter((i) => options.includes(i));
 };
 
@@ -53,8 +56,12 @@ const Campaigns: React.FC = () => {
     if (typeof window === 'undefined' || !didParseHash.current) return;
 
     const params = new URLSearchParams();
-    if (selectedEmployers.length) params.set('emp', selectedEmployers.join(','));
-    if (selectedChannels.length) params.set('ch', selectedChannels.join(','));
+    if (selectedEmployers.length) {
+      params.set('emp', selectedEmployers.map(encodeURIComponent).join(','));
+    }
+    if (selectedChannels.length) {
+      params.set('ch', selectedChannels.map(encodeURIComponent).join(','));
+    }
     const query = params.toString();
     const newHash = `#campaigns${query ? `?${query}` : ''}`;
     if (window.location.hash !== newHash) {
@@ -65,8 +72,11 @@ const Campaigns: React.FC = () => {
   // Filtered list
   const filteredCampaigns = useMemo(() => {
     return campaignsData.filter((c) => {
-      const employerMatch = selectedEmployers.length === 0 || selectedEmployers.includes(c.employer);
-      const channelMatch = selectedChannels.length === 0 || c.channels.some((ch) => selectedChannels.includes(ch));
+      const employerMatch =
+        selectedEmployers.length === 0 || selectedEmployers.includes(c.employer);
+      const channelMatch =
+        selectedChannels.length === 0 ||
+        c.channels.some((ch) => selectedChannels.includes(ch));
       return employerMatch && channelMatch;
     });
   }, [selectedChannels, selectedEmployers]);
@@ -76,6 +86,7 @@ const Campaigns: React.FC = () => {
     () => filteredCampaigns.find((c) => c.id === FEATURED_CAMPAIGN_ID) ?? null,
     [filteredCampaigns]
   );
+
   const secondaryCampaigns = useMemo(
     () => filteredCampaigns.filter((c) => c.id !== FEATURED_CAMPAIGN_ID),
     [filteredCampaigns]
@@ -99,6 +110,16 @@ const Campaigns: React.FC = () => {
     triggerRef.current = trigger;
     setIsModalOpen(true);
   }, []);
+
+  const handleOpen = useCallback(
+    (campaign: Campaign, assetIndex: number, trigger: HTMLElement) => {
+      setActiveCampaign(campaign);
+      setInitialAssetIndex(assetIndex);
+      triggerRef.current = trigger;
+      setIsModalOpen(true);
+    },
+    []
+  );
 
   const handleClose = useCallback(() => {
     setIsModalOpen(false);
