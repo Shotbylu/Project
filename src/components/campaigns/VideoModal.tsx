@@ -31,7 +31,16 @@ const VideoModal: React.FC<VideoModalProps> = ({
     if (isOpen) {
       setCurrentIndex(initialAssetIndex);
     }
-  }, [initialAssetIndex, isOpen]);
+  }, [campaign, initialAssetIndex, isOpen]);
+
+  useEffect(() => {
+    if (!campaign) {
+      return;
+    }
+    if (currentIndex >= campaign.assets.length) {
+      setCurrentIndex(0);
+    }
+  }, [campaign, currentIndex]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -62,7 +71,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [isOpen, currentIndex]);
+  }, [campaign, currentIndex, isOpen]);
 
   useEffect(() => {
     if (!isOpen) {
