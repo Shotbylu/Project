@@ -78,7 +78,7 @@ const Skills = () => {
           className="flex justify-center mb-8 sm:mb-12"
         >
           <div className="flex flex-wrap sm:flex-nowrap gap-2 sm:gap-3 bg-gray-100 rounded-2xl p-2">
-            {['Marketing Management', 'Design', 'Development'].map((tab) => (
+            {tabs.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}

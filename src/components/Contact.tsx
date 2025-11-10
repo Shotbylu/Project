@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Mail, MapPin, Linkedin, Github, FileText, Send, Eye, CheckCircle, AlertCircle, Calendar, Code, Activity, Star } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Mail, MapPin, Linkedin, Github, Send, CheckCircle, AlertCircle, Code } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -10,10 +10,9 @@ const Contact = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const [submitStatus, setSubmitStatus] = useState<null | 'success' | 'error'>(null);
   const [emailJSLoaded, setEmailJSLoaded] = useState(false);
-  const [githubData, setGithubData] = useState(null);
-  const [githubLoading, setGithubLoading] = useState(true);
+  const githubLoading = false;
 
   // Load EmailJS script
   useEffect(() => {
@@ -42,23 +41,6 @@ const Contact = () => {
         script.parentNode.removeChild(script);
       }
     };
-  }, []);
-
-  // Fetch GitHub data (without token for security)
-  useEffect(() => {
-    const fetchGitHubData = async () => {
-      try {
-        const response = await fetch('https://api.github.com/users/Shotbylu');
-        const data = await response.json();
-        setGithubData(data);
-      } catch (error) {
-        console.error('Failed to fetch GitHub data:', error);
-      } finally {
-        setGithubLoading(false);
-      }
-    };
-
-    fetchGitHubData();
   }, []);
 
   const handleInputChange = (e) => {
@@ -138,8 +120,8 @@ const Contact = () => {
         {/* GitHub Activity Section */}
         <div className="mb-12 sm:mb-16">
           <div className="text-center mb-6 sm:mb-8">
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-2 sm:gap-3">
-              <Code className="text-orange-500" size={24} className="sm:w-7 sm:h-7" />
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-2 sm:gap-3">
+              <Code className="text-orange-500 sm:w-7 sm:h-7" size={24} />
               GitHub Activity
             </h3>
             <p className="text-gray-600 text-sm sm:text-base">My coding journey and contributions</p>
