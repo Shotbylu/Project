@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Download, ExternalLink } from 'lucide-react';
 import type { Campaign } from '../../data/campaigns';
+import { trackAnalyticsEvent } from '../../utils/analytics';
 
 interface VideoModalProps {
   campaign: Campaign | null;
@@ -60,20 +61,33 @@ const VideoModal: React.FC<VideoModalProps> = ({
   }, [isOpen, currentIndex]);
 
   // Initial focus
+  const campaignId = campaign?.id;
+
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || !campaignId) return;
     const modalNode = modalRef.current;
     if (!modalNode) return;
     const focusable = Array.from(
       modalNode.querySelectorAll<HTMLElement>(focusableSelectors)
     ).filter((el) => !el.hasAttribute('data-focus-guard'));
     focusable[0]?.focus();
-  }, [isOpen, campaign, currentIndex]);
+  }, [campaignId, isOpen]);
 
   const assets = campaign?.assets ?? [];
   const assetsLength = assets.length;
   const activeAsset = assets[currentIndex];
   const isVideoPlaceholder = activeAsset?.type === 'video' && activeAsset.src.endsWith('.txt');
+
+  const analyticsContext = useMemo(
+    () => ({
+      campaignId: campaign?.id,
+      campaignTitle: campaign?.title,
+      assetIndex: currentIndex,
+      assetType: activeAsset?.type,
+      assetSrc: activeAsset?.src
+    }),
+    [activeAsset?.src, activeAsset?.type, campaign?.id, campaign?.title, currentIndex]
+  );
 
   const goToPrevious = useCallback(() => {
     if (!assetsLength) return;
@@ -317,11 +331,11 @@ const VideoModal: React.FC<VideoModalProps> = ({
 
               <div>
                 <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Key Results</h3>
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mt-3 flex gap-2 overflow-x-auto pb-2 whitespace-nowrap sm:grid sm:grid-cols-2 sm:gap-2 sm:overflow-visible sm:whitespace-normal">
                   {campaign.kpis.map((kpi) => (
                     <span
                       key={kpi.label}
-                      className="inline-flex items-center rounded-full border border-gray-200 px-3 py-1 text-xs font-semibold text-gray-700"
+                      className="inline-flex flex-shrink-0 items-center rounded-full border border-gray-200 px-3 py-1 text-xs font-semibold text-gray-700"
                     >
                       {kpi.label} {kpi.value}
                     </span>
@@ -341,6 +355,13 @@ const VideoModal: React.FC<VideoModalProps> = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                    data-analytics="campaign-modal-download"
+                    onClick={() =>
+                      trackAnalyticsEvent('campaign_modal_download_click', {
+                        ...analyticsContext,
+                        href: campaign.caseStudyUrl
+                      })
+                    }
                   >
                     <Download className="h-4 w-4" />
                     Download Case Study
@@ -352,6 +373,13 @@ const VideoModal: React.FC<VideoModalProps> = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 transition hover:border-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                    data-analytics="campaign-modal-external"
+                    onClick={() =>
+                      trackAnalyticsEvent('campaign_modal_external_click', {
+                        ...analyticsContext,
+                        href: campaign.externalUrl
+                      })
+                    }
                   >
                     <ExternalLink className="h-4 w-4" />
                     Visit Link
