@@ -5,7 +5,10 @@ import { CampaignCard, CampaignFilters, VideoModal } from '../components/campaig
 
 const decodeList = <T extends string>(value: string | null, options: readonly T[]): T[] => {
   if (!value) return [];
-  const decoded = value.split(',').map((i) => decodeURIComponent(i)).filter(Boolean) as T[];
+  const decoded = value
+    .split(',')
+    .map((i) => decodeURIComponent(i))
+    .filter(Boolean) as T[];
   return decoded.filter((i) => options.includes(i));
 };
 
@@ -53,8 +56,12 @@ const Campaigns: React.FC = () => {
     if (typeof window === 'undefined' || !didParseHash.current) return;
 
     const params = new URLSearchParams();
-    if (selectedEmployers.length) params.set('emp', selectedEmployers.join(','));
-    if (selectedChannels.length) params.set('ch', selectedChannels.join(','));
+    if (selectedEmployers.length) {
+      params.set('emp', selectedEmployers.map(encodeURIComponent).join(','));
+    }
+    if (selectedChannels.length) {
+      params.set('ch', selectedChannels.map(encodeURIComponent).join(','));
+    }
     const query = params.toString();
     const newHash = `#campaigns${query ? `?${query}` : ''}`;
     if (window.location.hash !== newHash) {
@@ -65,8 +72,11 @@ const Campaigns: React.FC = () => {
   // Filtered list
   const filteredCampaigns = useMemo(() => {
     return campaignsData.filter((c) => {
-      const employerMatch = selectedEmployers.length === 0 || selectedEmployers.includes(c.employer);
-      const channelMatch = selectedChannels.length === 0 || c.channels.some((ch) => selectedChannels.includes(ch));
+      const employerMatch =
+        selectedEmployers.length === 0 || selectedEmployers.includes(c.employer);
+      const channelMatch =
+        selectedChannels.length === 0 ||
+        c.channels.some((ch) => selectedChannels.includes(ch));
       return employerMatch && channelMatch;
     });
   }, [selectedChannels, selectedEmployers]);
@@ -76,30 +86,59 @@ const Campaigns: React.FC = () => {
     () => filteredCampaigns.find((c) => c.id === FEATURED_CAMPAIGN_ID) ?? null,
     [filteredCampaigns]
   );
+
   const secondaryCampaigns = useMemo(
     () => filteredCampaigns.filter((c) => c.id !== FEATURED_CAMPAIGN_ID),
     [filteredCampaigns]
   );
 
-  // Calculate counts
-  const channelCount = channels.length;
-  const employerCount = employers.length;
-  const totalCampaigns = campaignsData.length;
-  const filteredCount = filteredCampaigns.length;
-  const hasActiveFilters = selectedEmployers.length > 0 || selectedChannels.length > 0;
-  const shouldShowEmptyState = filteredCount === 0;
+  // Calculate counts once; avoids shadowing and repeated work
+  const {
+    channelsCount,
+    employersCount,
+    totalCampaigns,
+    filteredCount,
+    hasActiveFilters,
+    shouldShowEmptyState,
+  } = useMemo(() => {
+    const channelsCount = channels.length;
+    const employersCount = employers.length;
+    const totalCampaigns = campaignsData.length;
+    const filteredCount = filteredCampaigns.length;
+    const hasActiveFilters =
+      selectedEmployers.length > 0 || selectedChannels.length > 0;
+    const shouldShowEmptyState = filteredCount === 0;
+    return {
+      channelsCount,
+      employersCount,
+      totalCampaigns,
+      filteredCount,
+      hasActiveFilters,
+      shouldShowEmptyState,
+    };
+  }, [
+    channels.length,
+    employers.length,
+    campaignsData.length,
+    filteredCampaigns.length,
+    selectedEmployers.length,
+    selectedChannels.length,
+  ]);
 
   const clearFilters = useCallback(() => {
     setSelectedEmployers([]);
     setSelectedChannels([]);
   }, []);
 
-  const handleOpen = useCallback((campaign: Campaign, assetIndex: number, trigger: HTMLElement) => {
-    setActiveCampaign(campaign);
-    setInitialAssetIndex(assetIndex);
-    triggerRef.current = trigger;
-    setIsModalOpen(true);
-  }, []);
+  const handleOpen = useCallback(
+    (campaign: Campaign, assetIndex: number, trigger: HTMLElement) => {
+      setActiveCampaign(campaign);
+      setInitialAssetIndex(assetIndex);
+      triggerRef.current = trigger;
+      setIsModalOpen(true);
+    },
+    []
+  );
 
   const handleClose = useCallback(() => {
     setIsModalOpen(false);
@@ -108,7 +147,10 @@ const Campaigns: React.FC = () => {
   }, []);
 
   return (
-    <section id="campaigns" className="relative overflow-hidden bg-slate-950 py-24 text-slate-100 sm:py-32">
+    <section
+      id="campaigns"
+      className="relative overflow-hidden bg-slate-950 py-24 text-slate-100 sm:py-32"
+    >
       <motion.div
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-[-20%] h-[32rem] w-[32rem] -translate-x-1/2 rounded-full bg-orange-500/40 blur-[160px]"
@@ -132,24 +174,42 @@ const Campaigns: React.FC = () => {
             <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-orange-200/80">
               Campaigns
             </span>
-            <h2 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">Full-funnel campaign leadership</h2>
+            <h2 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+              Full-funnel campaign leadership
+            </h2>
             <p className="max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
-              A high-impact gallery of integrated campaigns that ladder brand storytelling into measurable growth. Explore each
-              narrative, analyse the multi-channel architecture, and see how testing insights compound into momentum.
+              A high-impact gallery of integrated campaigns that ladder brand
+              storytelling into measurable growth. Explore each narrative, analyse the
+              multi-channel architecture, and see how testing insights compound into
+              momentum.
             </p>
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">Channels orchestrated</p>
-                <p className="mt-1 text-2xl font-semibold text-white">{channelCount}</p>
-                <p className="mt-2 text-xs text-slate-400">From paid social and video to CRM, web and programmatic placements.</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">
+                  Channels orchestrated
+                </p>
+                <p className="mt-1 text-2xl font-semibold text-white">
+                  {channelsCount}
+                </p>
+                <p className="mt-2 text-xs text-slate-400">
+                  From paid social and video to CRM, web and programmatic placements.
+                </p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">Employers represented</p>
-                <p className="mt-1 text-2xl font-semibold text-white">{employerCount}</p>
-                <p className="mt-2 text-xs text-slate-400">Enterprise and growth-stage partners across automotive, tech and energy.</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">
+                  Employers represented
+                </p>
+                <p className="mt-1 text-2xl font-semibold text-white">
+                  {employersCount}
+                </p>
+                <p className="mt-2 text-xs text-slate-400">
+                  Enterprise and growth-stage partners across automotive, tech and
+                  energy.
+                </p>
               </div>
             </div>
           </div>
+
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -157,9 +217,12 @@ const Campaigns: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_30px_120px_-60px_rgba(15,118,110,0.6)] backdrop-blur"
           >
-            <p className="text-sm font-semibold uppercase tracking-[0.32em] text-slate-400">Filter campaigns</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.32em] text-slate-400">
+              Filter campaigns
+            </p>
             <p className="mt-2 text-xs text-slate-400">
-              Toggle employers and channels to surface the case studies most relevant to your objectives.
+              Toggle employers and channels to surface the case studies most relevant to
+              your objectives.
             </p>
             <CampaignFilters
               employers={employers}
@@ -198,8 +261,12 @@ const Campaigns: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               className="rounded-2xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur"
             >
-              <p className="text-lg font-semibold text-white">No campaigns match your filters</p>
-              <p className="mt-2 text-sm text-slate-400">Try adjusting your selection or reset all filters.</p>
+              <p className="text-lg font-semibold text-white">
+                No campaigns match your filters
+              </p>
+              <p className="mt-2 text-sm text-slate-400">
+                Try adjusting your selection or reset all filters.
+              </p>
               <button
                 type="button"
                 onClick={clearFilters}
@@ -217,11 +284,7 @@ const Campaigns: React.FC = () => {
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <CampaignCard
-                    campaign={featuredCampaign}
-                    onOpen={handleOpen}
-                    featured
-                  />
+                  <CampaignCard campaign={featuredCampaign} onOpen={handleOpen} featured />
                 </motion.div>
               )}
 
@@ -241,10 +304,7 @@ const Campaigns: React.FC = () => {
                       viewport={{ once: true, amount: 0.2 }}
                       transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
                     >
-                      <CampaignCard
-                        campaign={campaign}
-                        onOpen={handleOpen}
-                      />
+                      <CampaignCard campaign={campaign} onOpen={handleOpen} />
                     </motion.div>
                   ))}
                 </motion.div>
