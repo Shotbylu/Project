@@ -160,7 +160,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
     <AnimatePresence>
       {isOpen && campaign && (
         <motion.div
-          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/70 px-4 py-10"
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-[rgba(0,0,0,0.9)] px-4 py-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -174,7 +174,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
         >
           <motion.div
             ref={modalRef}
-            className="relative flex w-full max-w-6xl flex-col gap-6 overflow-hidden rounded-3xl bg-white p-6 shadow-2xl lg:flex-row"
+            className="relative flex w-full max-w-6xl flex-col gap-6 overflow-hidden rounded-3xl bg-[#111827] p-6 shadow-2xl lg:flex-row"
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 16 }}
@@ -183,7 +183,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
             <button
               type="button"
               onClick={handleClose}
-              className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-gray-700 shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+              className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(255,255,255,0.8)] text-[#111827] shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffffff]"
               aria-label="Close campaign detail"
             >
               <X className="h-5 w-5" />
@@ -192,7 +192,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
             <div className="flex flex-col gap-4 lg:w-1/2">
               <div
                 ref={assetContainerRef}
-                className="relative w-full overflow-hidden rounded-2xl bg-neutral-900 shadow-xl aspect-[9/16]"
+                className="relative w-full overflow-hidden rounded-2xl bg-[#111827] shadow-xl aspect-[9/16]"
               >
                 <AnimatePresence mode="wait">
                   {activeAsset && (
@@ -220,7 +220,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
                             <source src={activeAsset.src} type="video/mp4" />
                           </video>
                         ) : (
-                          <div className="relative flex h-full w-full items-center justify-center bg-neutral-900 text-center text-white/80">
+                          <div className="relative flex h-full w-full items-center justify-center bg-[#111827] text-center text-[rgba(255,255,255,0.8)]">
                             <img
                               src={activeAsset.poster ?? activeAsset.src}
                               alt={activeAsset.alt}
@@ -280,7 +280,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
                       type="button"
                       onClick={() => setCurrentIndex(index)}
                       className={`h-2.5 w-8 rounded-full transition ${
-                        currentIndex === index ? 'bg-gray-900' : 'bg-gray-200 hover:bg-gray-300'
+                        currentIndex === index ? 'bg-[#111827]' : 'bg-[#e5e7eb] hover:bg-[#e5e7eb]'
                       }`}
                       aria-label={`View asset ${index + 1} of ${assets.length}`}
                     />
@@ -291,27 +291,27 @@ const VideoModal: React.FC<VideoModalProps> = ({
 
             <div className="flex flex-1 flex-col gap-6 overflow-y-auto pr-2">
               <div>
-                <span className="inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold text-gray-600">
+                <span className="inline-flex items-center rounded-full border border-[#fed7aa] bg-[#fff7ed] px-3 py-1 text-xs font-semibold text-[#c2410c]">
                   {campaign.employer}
                 </span>
-                <h2 id={`campaign-${campaign.id}-title`} className="mt-3 text-2xl font-semibold text-gray-900">
+                <h2 id={`campaign-${campaign.id}-title`} className="mt-3 text-2xl font-semibold text-[#ffffff]">
                   {campaign.title}
                 </h2>
-                <p className="text-sm font-medium text-gray-500">{campaign.role}</p>
-                <p className="text-sm text-gray-500">{campaign.period}</p>
+                <p className="text-sm font-medium text-[rgba(255,255,255,0.7)]">{campaign.role}</p>
+                <p className="text-sm text-[rgba(255,255,255,0.7)]">{campaign.period}</p>
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Summary</h3>
-                <p className="mt-2 text-sm text-gray-700">{campaign.summary}</p>
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-[rgba(255,255,255,0.7)]">Summary</h3>
+                <p className="mt-2 text-sm text-[rgba(255,255,255,0.7)]">{campaign.summary}</p>
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Responsibilities</h3>
-                <ul className="mt-2 space-y-2 text-sm text-gray-700">
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-[rgba(255,255,255,0.7)]">Responsibilities</h3>
+                <ul className="mt-2 space-y-2 text-sm text-[rgba(255,255,255,0.7)]">
                   {campaign.responsibilities.map((item) => (
                     <li key={item} className="flex gap-2">
-                      <span aria-hidden="true" className="text-orange-500">•</span>
+                      <span aria-hidden="true" className="text-[#f97316]">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -319,10 +319,10 @@ const VideoModal: React.FC<VideoModalProps> = ({
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Channels</h3>
-                <div className="mt-2 flex flex-wrap gap-2 text-sm text-gray-700">
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-[rgba(255,255,255,0.7)]">Channels</h3>
+                <div className="mt-2 flex flex-wrap gap-2 text-sm">
                   {campaign.channels.map((channel) => (
-                    <span key={channel} className="rounded-full border border-gray-200 px-3 py-1">
+                    <span key={channel} className="rounded-full border border-[#bfdbfe] bg-[#eff6ff] px-3 py-1 text-[#1d4ed8]">
                       {channel}
                     </span>
                   ))}
@@ -330,12 +330,12 @@ const VideoModal: React.FC<VideoModalProps> = ({
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Key Results</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-[rgba(255,255,255,0.7)]">Key Results</h3>
                 <div className="mt-3 flex gap-2 overflow-x-auto pb-2 whitespace-nowrap sm:grid sm:grid-cols-2 sm:gap-2 sm:overflow-visible sm:whitespace-normal">
                   {campaign.kpis.map((kpi) => (
                     <span
                       key={kpi.label}
-                      className="inline-flex flex-shrink-0 items-center rounded-full border border-gray-200 px-3 py-1 text-xs font-semibold text-gray-700"
+                      className="inline-flex flex-shrink-0 items-center rounded-full border border-[#bfdbfe] bg-[#dbeafe] px-3 py-1 text-xs font-semibold text-[#1d4ed8]"
                     >
                       {kpi.label} {kpi.value}
                     </span>
@@ -344,8 +344,8 @@ const VideoModal: React.FC<VideoModalProps> = ({
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Tech Stack</h3>
-                <p className="mt-2 text-sm text-gray-700">{techList}</p>
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-[rgba(255,255,255,0.7)]">Tech Stack</h3>
+                <p className="mt-2 text-sm text-[rgba(255,255,255,0.7)]">{techList}</p>
               </div>
 
               <div className="flex flex-wrap gap-3">
@@ -354,7 +354,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
                     href={campaign.caseStudyUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#f97316] to-[#3b82f6] px-4 py-2 text-sm font-semibold text-[#ffffff] transition hover:from-[#ea580c] hover:to-[#2563eb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
                     data-analytics="campaign-modal-download"
                     onClick={() =>
                       trackAnalyticsEvent('campaign_modal_download_click', {
@@ -372,7 +372,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
                     href={campaign.externalUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 transition hover:border-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                    className="inline-flex items-center gap-2 rounded-full border border-[rgba(255,255,255,0.7)] px-4 py-2 text-sm font-semibold text-[rgba(255,255,255,0.9)] transition hover:bg-[rgba(255,255,255,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
                     data-analytics="campaign-modal-external"
                     onClick={() =>
                       trackAnalyticsEvent('campaign_modal_external_click', {
