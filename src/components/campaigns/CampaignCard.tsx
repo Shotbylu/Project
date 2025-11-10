@@ -6,7 +6,7 @@ import type { Campaign, Channel } from '../../data/campaigns';
 interface CampaignCardProps {
   campaign: Campaign;
   onOpen: (campaign: Campaign, assetIndex: number, trigger: HTMLElement) => void;
-  isFeatured?: boolean;
+  featured?: boolean;
   className?: string;
 }
 
@@ -21,7 +21,7 @@ const channelIconMap: Record<Channel, React.ReactNode> = {
   Web: <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
 };
 
-const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeatured = false, className = '' }) => {
+const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, featured = false, className = '' }) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -68,12 +68,12 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
       transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
       whileHover={{ y: -6 }}
       className={`group relative flex h-full flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white px-6 py-7 text-slate-900 shadow-xl transition-all duration-500 ${
-        isFeatured ? 'ring-2 ring-[#FF6B00]/80' : ''
+        featured ? 'ring-2 ring-[#FF6B00]/80' : ''
       } ${className}`}
       data-analytics="campaign-card"
     >
       <div className="relative w-full overflow-hidden rounded-2xl bg-slate-100 shadow-lg aspect-[9/16]">
-        {isFeatured && (
+        {featured && (
           <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-[#0f1a2b]/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-white shadow">
             Featured
           </span>
