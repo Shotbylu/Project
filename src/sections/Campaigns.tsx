@@ -32,6 +32,10 @@ const Campaigns: React.FC = () => {
     return Array.from(unique);
   }, []);
 
+  // Calculate counts
+  const channelCount = channels.length;
+  const employerCount = employers.length;
+
   // Read URL hash
   useEffect(() => {
     if (typeof window === 'undefined' || didParseHash.current) return;
