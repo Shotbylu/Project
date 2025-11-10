@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1440" viewBox="0 0 1440 1440" fill="none">
+  <metadata>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+      <rdf:Description dc:title="Mazda Brand Meaning Level 2 Cover" dc:description="Square 1440x1440 cover art for Mazda Brand Meaning Level 2 campaign" dc:format="image/svg+xml" />
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <linearGradient id="bm2-bg" x1="0" y1="0" x2="1440" y2="1440" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0f172a" />
+      <stop offset="0.55" stop-color="#111827" />
+      <stop offset="1" stop-color="#1f2937" />
+    </linearGradient>
+    <radialGradient id="bm2-glow" cx="50%" cy="38%" r="65%">
+      <stop offset="0" stop-color="#f97316" stop-opacity="0.7" />
+      <stop offset="0.45" stop-color="#facc15" stop-opacity="0.25" />
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0.12" />
+    </radialGradient>
+    <filter id="bm2-noise" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7" />
+      <feComponentTransfer>
+        <feFuncR type="linear" slope="0.6" />
+        <feFuncG type="linear" slope="0.6" />
+        <feFuncB type="linear" slope="0.6" />
+        <feFuncA type="linear" slope="0.08" />
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1440" height="1440" fill="url(#bm2-bg)" />
+  <rect x="160" y="160" width="1120" height="1120" rx="120" fill="url(#bm2-glow)" opacity="0.75" />
+  <rect width="1440" height="1440" fill="url(#bm2-bg)" opacity="0.45" />
+  <rect width="1440" height="1440" fill="#000" opacity="0.2" />
+  <rect width="1440" height="1440" fill="url(#bm2-bg)" opacity="0.35" />
+  <rect width="1440" height="1440" fill="url(#bm2-bg)" opacity="0.4" filter="url(#bm2-noise)" />
+  <g fill="white" font-family="'Inter', 'Segoe UI', sans-serif" text-anchor="middle">
+    <text x="720" y="360" font-size="64" font-weight="600" fill="#f8fafc" letter-spacing="0.55em" opacity="0.75">MAZDA</text>
+    <text x="720" y="520" font-size="170" font-weight="700" fill="#f97316">BRAND</text>
+    <text x="720" y="660" font-size="150" font-weight="700" fill="#f97316">MEANING</text>
+    <text x="720" y="820" font-size="60" font-weight="500" fill="#f8fafc" letter-spacing="0.32em">LEVEL&nbsp;2</text>
+    <text x="720" y="940" font-size="46" font-weight="500" fill="#cbd5f5" opacity="0.85">Narrative · Craft · Joy of Driving</text>
+  </g>
+  <g fill="#cbd5f5" font-family="'Inter', 'Segoe UI', sans-serif" opacity="0.88">
+    <text x="320" y="1040" font-size="38" font-weight="600">Video-first storytelling</text>
+    <text x="320" y="1108" font-size="26" font-weight="400">Optimised for 9:16 paid media surfaces.</text>
+    <text x="320" y="1176" font-size="26" font-weight="400">Balances brand meaning with measurable demand.</text>
+  </g>
+  <g transform="translate(320 1240)" fill="#f8fafc" font-family="'Inter', 'Segoe UI', sans-serif">
+    <rect width="360" height="84" rx="42" fill="#f97316" opacity="0.9" />
+    <text x="180" y="54" font-size="30" font-weight="600">Play Mazda Preview</text>
+  </g>
+</svg>

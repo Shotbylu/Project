@@ -19,7 +19,6 @@ export default function SpaceInvadersGame() {
   const gameLoopRef = useRef(null);
   const gameStateRef = useRef(null);
   const keysRef = useRef(new Set());
-  const lastFrameTimeRef = useRef(0);
   const highScoreMemoryRef = useRef(0);
   
   const touchStateRef = useRef({

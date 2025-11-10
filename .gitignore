@@ -1,1 +1,5 @@
 node_modules
+dist
+
+# Campaign media (videos uploaded outside version control)
+public/assets/campaigns/**/*.mp4
