@@ -1,12 +1,21 @@
-// File: src/components/campaigns/Campaigns.tsx
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Play, ExternalLink, Sparkles, Globe, Linkedin, Music4, Youtube, Mail, Network } from 'lucide-react';
+import {
+  Play,
+  ExternalLink,
+  Sparkles,
+  Globe,
+  Linkedin,
+  Music4,
+  Youtube,
+  Mail,
+  Network,
+} from 'lucide-react';
 import type { Campaign, Channel } from '../../data/campaigns';
 
 interface CampaignCardProps {
   campaign: Campaign;
-  onOpen: (campaign: Campaign, assetIndex: number, trigger: HTMLElement) => void;
+  onOpen?: (campaign: Campaign, assetIndex: number, trigger: HTMLElement) => void;
   isFeatured?: boolean;
   className?: string;
 }
@@ -19,10 +28,15 @@ const channelIconMap: Record<Channel, React.ReactNode> = {
   YouTube: <Youtube className="h-3.5 w-3.5" aria-hidden="true" />,
   Programmatic: <Network className="h-3.5 w-3.5" aria-hidden="true" />,
   'Email/CRM': <Mail className="h-3.5 w-3.5" aria-hidden="true" />,
-  Web: <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+  Web: <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />,
 };
 
-const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeatured = false, className = '' }) => {
+const CampaignCard: React.FC<CampaignCardProps> = ({
+  campaign,
+  onOpen,
+  isFeatured = false,
+  className = '',
+}) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -45,39 +59,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
     return () => observer.disconnect();
   }, [isVisible]);
 
+  const primaryAsset = campaign.assets[0];
   const topKpis = useMemo(() => campaign.kpis.slice(0, 3), [campaign.kpis]);
 
-  // Read URL hash
-  useEffect(() => {
-    if (typeof window === 'undefined' || didParseHash.current) return;
-
-    const hash = window.location.hash;
-    if (hash.startsWith('#campaigns')) {
-      const [, query = ''] = hash.split('?');
-      const params = new URLSearchParams(query);
-      const empVals = decodeList(params.get('emp'), employers);
-      const chVals = decodeList(params.get('ch'), channels);
-      if (empVals.length) setSelectedEmployers(empVals);
-      if (chVals.length) setSelectedChannels(chVals);
-    }
-    didParseHash.current = true;
-  }, [employers, channels]);
-
-  // Write URL hash
-  useEffect(() => {
-    if (typeof window === 'undefined' || !didParseHash.current) return;
-
-    const params = new URLSearchParams();
-    if (selectedEmployers.length) params.set('emp', selectedEmployers.join(','));
-    if (selectedChannels.length) params.set('ch', selectedChannels.join(','));
-    const query = params.toString();
-    const newHash = `#campaigns${query ? `?${query}` : ''}`;
-    if (window.location.hash !== newHash) {
-      window.history.replaceState(null, '', newHash);
-    }
-  }, [selectedEmployers, selectedChannels]);
-
   const handleOpen = (event: React.MouseEvent<HTMLElement>, assetIndex = 0) => {
+    if (!onOpen) return;
     onOpen(campaign, assetIndex, event.currentTarget as HTMLElement);
   };
 
@@ -100,48 +86,54 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
       } ${className}`}
       data-analytics="campaign-card"
     >
-      <div className="relative w-full overflow-hidden rounded-2xl bg-slate-100 shadow-lg aspect-[9/16]">
+      <div className="relative aspect-[9/16] w-full overflow-hidden rounded-2xl bg-slate-100 shadow-lg">
         {isFeatured && (
           <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-[#0f1a2b]/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-white shadow">
             Featured
           </span>
         )}
 
-        {primaryAsset.type === 'video' && primaryAsset.poster ? (
-          <button
-            type="button"
-            onClick={(event) => handleOpen(event, 0)}
-            className="group relative flex h-full w-full items-center justify-center"
-            aria-label={`View ${campaign.title} media`}
-            data-analytics="campaign-card-view"
-          >
-            <img
-              src={primaryAsset.poster}
-              alt={primaryAsset.alt}
-              loading="lazy"
-              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-            />
-            <span className="absolute inset-0 bg-black/30 transition group-hover:bg-black/40" aria-hidden="true" />
-            <span className="relative inline-flex h-16 w-16 items-center justify-center rounded-full bg-white text-[#0f1a2b] shadow-xl transition group-hover:scale-105">
-              <Play className="h-6 w-6 fill-[#0f1a2b]" />
-            </span>
-          </button>
+        {primaryAsset ? (
+          primaryAsset.type === 'video' && primaryAsset.poster ? (
+            <button
+              type="button"
+              onClick={(event) => handleOpen(event, 0)}
+              className="group relative flex h-full w-full items-center justify-center"
+              aria-label={`View ${campaign.title} media`}
+              data-analytics="campaign-card-view"
+            >
+              <img
+                src={primaryAsset.poster}
+                alt={primaryAsset.alt}
+                loading="lazy"
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              />
+              <span className="absolute inset-0 bg-black/30 transition group-hover:bg-black/40" aria-hidden="true" />
+              <span className="relative inline-flex h-16 w-16 items-center justify-center rounded-full bg-white text-[#0f1a2b] shadow-xl transition group-hover:scale-105">
+                <Play className="h-6 w-6 fill-[#0f1a2b]" />
+              </span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={(event) => handleOpen(event, 0)}
+              className="relative flex h-full w-full items-center justify-center"
+              aria-label={`View ${campaign.title} media`}
+              data-analytics="campaign-card-view"
+            >
+              <img
+                src={primaryAsset.poster ?? primaryAsset.src}
+                alt={primaryAsset.alt}
+                loading="lazy"
+                className="h-full w-full object-cover transition duration-500 hover:scale-105"
+              />
+              <span className="absolute inset-0 bg-black/10" aria-hidden="true" />
+            </button>
+          )
         ) : (
-          <button
-            type="button"
-            onClick={(event) => handleOpen(event, 0)}
-            className="relative flex h-full w-full items-center justify-center"
-            aria-label={`View ${campaign.title} media`}
-            data-analytics="campaign-card-view"
-          >
-            <img
-              src={primaryAsset.poster ?? primaryAsset.src}
-              alt={primaryAsset.alt}
-              loading="lazy"
-              className="h-full w-full object-cover transition duration-500 hover:scale-105"
-            />
-            <span className="absolute inset-0 bg-black/10" aria-hidden="true" />
-          </button>
+          <div className="flex h-full w-full items-center justify-center bg-slate-200 text-sm text-slate-600">
+            Media preview unavailable
+          </div>
         )}
       </div>
 
@@ -183,10 +175,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
                 <div className="mt-2 text-2xl font-semibold text-slate-900">{kpi.value}</div>
                 {progress !== null && (
                   <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white">
-                    <span
-                      className="block h-full rounded-full bg-[#FF6B00]"
-                      style={{ width: `${progress}%` }}
-                    />
+                    <span className="block h-full rounded-full bg-[#FF6B00]" style={{ width: `${progress}%` }} />
                   </div>
                 )}
               </li>
@@ -210,4 +199,4 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
   );
 };
 
-export default Campaigns;
+export default CampaignCard;
