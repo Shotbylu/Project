@@ -4,14 +4,9 @@ import campaignsData, { Campaign, Channel, Employer } from '../data/campaigns';
 import { CampaignCard, CampaignFilters, VideoModal } from '../components/campaigns';
 
 const decodeList = <T extends string>(value: string | null, options: readonly T[]): T[] => {
-  if (!value) {
-    return [];
-  }
-  const decoded = value
-    .split(',')
-    .map((item) => decodeURIComponent(item))
-    .filter(Boolean) as T[];
-  return decoded.filter((item) => options.includes(item));
+  if (!value) return [];
+  const decoded = value.split(',').map((i) => decodeURIComponent(i)).filter(Boolean) as T[];
+  return decoded.filter((i) => options.includes(i));
 };
 
 const FEATURED_CAMPAIGN_ID = 'mazda-brand-meaning-lvl2-2025';
@@ -27,50 +22,39 @@ const Campaigns: React.FC = () => {
 
   const employers = useMemo(() => {
     const unique = new Set<Employer>();
-    campaignsData.forEach((campaign) => unique.add(campaign.employer));
+    campaignsData.forEach((c) => unique.add(c.employer));
     return Array.from(unique);
   }, []);
 
   const channels = useMemo(() => {
     const unique = new Set<Channel>();
-    campaignsData.forEach((campaign) => campaign.channels.forEach((channel) => unique.add(channel)));
+    campaignsData.forEach((c) => c.channels.forEach((ch) => unique.add(ch)));
     return Array.from(unique);
   }, []);
 
+  // Read URL hash
   useEffect(() => {
-    if (typeof window === 'undefined' || didParseHash.current) {
-      return;
-    }
+    if (typeof window === 'undefined' || didParseHash.current) return;
 
     const hash = window.location.hash;
     if (hash.startsWith('#campaigns')) {
       const [, query = ''] = hash.split('?');
       const params = new URLSearchParams(query);
-      const employerValues = decodeList(params.get('emp'), employers);
-      const channelValues = decodeList(params.get('ch'), channels);
-      if (employerValues.length) {
-        setSelectedEmployers(employerValues);
-      }
-      if (channelValues.length) {
-        setSelectedChannels(channelValues);
-      }
+      const empVals = decodeList(params.get('emp'), employers);
+      const chVals = decodeList(params.get('ch'), channels);
+      if (empVals.length) setSelectedEmployers(empVals);
+      if (chVals.length) setSelectedChannels(chVals);
     }
-
     didParseHash.current = true;
   }, [employers, channels]);
 
+  // Write URL hash
   useEffect(() => {
-    if (typeof window === 'undefined' || !didParseHash.current) {
-      return;
-    }
+    if (typeof window === 'undefined' || !didParseHash.current) return;
 
     const params = new URLSearchParams();
-    if (selectedEmployers.length) {
-      params.set('emp', selectedEmployers.join(','));
-    }
-    if (selectedChannels.length) {
-      params.set('ch', selectedChannels.join(','));
-    }
+    if (selectedEmployers.length) params.set('emp', selectedEmployers.join(','));
+    if (selectedChannels.length) params.set('ch', selectedChannels.join(','));
     const query = params.toString();
     const newHash = `#campaigns${query ? `?${query}` : ''}`;
     if (window.location.hash !== newHash) {
@@ -78,35 +62,31 @@ const Campaigns: React.FC = () => {
     }
   }, [selectedEmployers, selectedChannels]);
 
+  // Filtered list
   const filteredCampaigns = useMemo(() => {
-    return campaignsData.filter((campaign) => {
-      const employerMatch =
-        selectedEmployers.length === 0 || selectedEmployers.includes(campaign.employer);
-      const channelMatch =
-        selectedChannels.length === 0 || campaign.channels.some((channel) => selectedChannels.includes(channel));
+    return campaignsData.filter((c) => {
+      const employerMatch = selectedEmployers.length === 0 || selectedEmployers.includes(c.employer);
+      const channelMatch = selectedChannels.length === 0 || c.channels.some((ch) => selectedChannels.includes(ch));
       return employerMatch && channelMatch;
     });
   }, [selectedChannels, selectedEmployers]);
 
+  // Featured + secondary
   const featuredCampaign = useMemo(
-    () => filteredCampaigns.find((campaign) => campaign.id === FEATURED_CAMPAIGN_ID) ?? null,
+    () => filteredCampaigns.find((c) => c.id === FEATURED_CAMPAIGN_ID) ?? null,
     [filteredCampaigns]
   );
-
   const secondaryCampaigns = useMemo(
-    () => filteredCampaigns.filter((campaign) => campaign.id !== FEATURED_CAMPAIGN_ID),
+    () => filteredCampaigns.filter((c) => c.id !== FEATURED_CAMPAIGN_ID),
     [filteredCampaigns]
   );
 
-  const handleOpen = useCallback(
-    (campaign: Campaign, assetIndex: number, trigger: HTMLElement) => {
-      setActiveCampaign(campaign);
-      setInitialAssetIndex(assetIndex);
-      triggerRef.current = trigger;
-      setIsModalOpen(true);
-    },
-    []
-  );
+  const handleOpen = useCallback((campaign: Campaign, assetIndex: number, trigger: HTMLElement) => {
+    setActiveCampaign(campaign);
+    setInitialAssetIndex(assetIndex);
+    triggerRef.current = trigger;
+    setIsModalOpen(true);
+  }, []);
 
   const handleClose = useCallback(() => {
     setIsModalOpen(false);

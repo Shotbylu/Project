@@ -27,84 +27,62 @@ const VideoModal: React.FC<VideoModalProps> = ({
   const [assetVisible, setAssetVisible] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
+  // Reset on open
   useEffect(() => {
-    if (isOpen) {
-      setCurrentIndex(initialAssetIndex);
-    }
-  }, [campaign, initialAssetIndex, isOpen]);
+    if (isOpen) setCurrentIndex(initialAssetIndex);
+  }, [initialAssetIndex, isOpen]);
 
+  // Clamp index
   useEffect(() => {
-    if (!campaign) {
-      return;
-    }
-    if (currentIndex >= campaign.assets.length) {
-      setCurrentIndex(0);
-    }
+    if (!campaign) return;
+    if (currentIndex >= campaign.assets.length) setCurrentIndex(0);
   }, [campaign, currentIndex]);
 
+  // Lazy load
   useEffect(() => {
     if (!isOpen) {
       setAssetVisible(false);
       return;
     }
-
     setAssetVisible(false);
     setVideoError(false);
 
     const node = assetContainerRef.current;
-    if (!node) {
-      return;
-    }
+    if (!node) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        if (entry?.isIntersecting) {
-          setAssetVisible(true);
-        }
-      },
-      {
-        root: null,
-        threshold: 0.4
-      }
+      ([entry]) => entry?.isIntersecting && setAssetVisible(true),
+      { root: null, threshold: 0.4 }
     );
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [campaign, currentIndex, isOpen]);
+  }, [isOpen, currentIndex]);
 
+  // Initial focus
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
+    if (!isOpen) return;
     const modalNode = modalRef.current;
-    if (!modalNode) {
-      return;
-    }
+    if (!modalNode) return;
     const focusable = Array.from(
       modalNode.querySelectorAll<HTMLElement>(focusableSelectors)
-    ).filter((element) => !element.hasAttribute('data-focus-guard'));
+    ).filter((el) => !el.hasAttribute('data-focus-guard'));
     focusable[0]?.focus();
   }, [isOpen, campaign, currentIndex]);
 
   const assets = campaign?.assets ?? [];
   const assetsLength = assets.length;
   const activeAsset = assets[currentIndex];
-  const isVideoPlaceholder =
-    activeAsset?.type === 'video' && activeAsset.src.endsWith('.txt');
+  const isVideoPlaceholder = activeAsset?.type === 'video' && activeAsset.src.endsWith('.txt');
 
   const goToPrevious = useCallback(() => {
-    if (!assetsLength) {
-      return;
-    }
+    if (!assetsLength) return;
     setCurrentIndex((prev) => (prev - 1 + assetsLength) % assetsLength);
     setVideoError(false);
   }, [assetsLength]);
 
   const goToNext = useCallback(() => {
-    if (!assetsLength) {
-      return;
-    }
+    if (!assetsLength) return;
     setCurrentIndex((prev) => (prev + 1) % assetsLength);
     setVideoError(false);
   }, [assetsLength]);
@@ -116,10 +94,9 @@ const VideoModal: React.FC<VideoModalProps> = ({
     }, 0);
   }, [onClose, triggerRef]);
 
+  // Keyboard support
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
+    if (!isOpen) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -136,12 +113,10 @@ const VideoModal: React.FC<VideoModalProps> = ({
       }
       if (event.key === 'Tab') {
         const modalNode = modalRef.current;
-        if (!modalNode) {
-          return;
-        }
+        if (!modalNode) return;
         const focusable = Array.from(
           modalNode.querySelectorAll<HTMLElement>(focusableSelectors)
-        ).filter((element) => !element.hasAttribute('data-focus-guard'));
+        ).filter((el) => !el.hasAttribute('data-focus-guard'));
         if (focusable.length === 0) {
           event.preventDefault();
           return;
@@ -165,7 +140,6 @@ const VideoModal: React.FC<VideoModalProps> = ({
   }, [handleClose, goToNext, goToPrevious, isOpen]);
 
   const hasMultipleAssets = assetsLength > 1;
-
   const techList = useMemo(() => campaign?.tech.join(', ') ?? '', [campaign]);
 
   return (
@@ -180,10 +154,8 @@ const VideoModal: React.FC<VideoModalProps> = ({
           aria-modal="true"
           aria-labelledby={`campaign-${campaign.id}-title`}
           data-analytics="campaign-modal"
-          onClick={(event) => {
-            if (event.target === event.currentTarget) {
-              handleClose();
-            }
+          onClick={(e) => {
+            if (e.target === e.currentTarget) handleClose();
           }}
         >
           <motion.div
@@ -308,10 +280,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
                 <span className="inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold text-gray-600">
                   {campaign.employer}
                 </span>
-                <h2
-                  id={`campaign-${campaign.id}-title`}
-                  className="mt-3 text-2xl font-semibold text-gray-900"
-                >
+                <h2 id={`campaign-${campaign.id}-title`} className="mt-3 text-2xl font-semibold text-gray-900">
                   {campaign.title}
                 </h2>
                 <p className="text-sm font-medium text-gray-500">{campaign.role}</p>

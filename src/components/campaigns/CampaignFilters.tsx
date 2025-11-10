@@ -26,7 +26,7 @@ const CampaignFilters: React.FC<CampaignFiltersProps> = ({
 }) => {
   const toggleEmployer = (employer: Employer) => {
     if (selectedEmployers.includes(employer)) {
-      onEmployersChange(selectedEmployers.filter((value) => value !== employer));
+      onEmployersChange(selectedEmployers.filter((v) => v !== employer));
       return;
     }
     onEmployersChange([...selectedEmployers, employer]);
@@ -34,7 +34,7 @@ const CampaignFilters: React.FC<CampaignFiltersProps> = ({
 
   const toggleChannel = (channel: Channel) => {
     if (selectedChannels.includes(channel)) {
-      onChannelsChange(selectedChannels.filter((value) => value !== channel));
+      onChannelsChange(selectedChannels.filter((v) => v !== channel));
       return;
     }
     onChannelsChange([...selectedChannels, channel]);
@@ -54,7 +54,9 @@ const CampaignFilters: React.FC<CampaignFiltersProps> = ({
       onClick={onClick}
       aria-pressed={isActive}
       className={`${baseChipClasses} ${
-        isActive ? 'border-orange-500 bg-orange-50 text-orange-600' : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:text-gray-900'
+        isActive
+          ? 'border-orange-500 bg-orange-50 text-orange-600'
+          : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:text-gray-900'
       }`}
       data-analytics={`campaign-filter-${analyticsId}`}
     >
@@ -67,13 +69,7 @@ const CampaignFilters: React.FC<CampaignFiltersProps> = ({
       <div>
         <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Employers</h3>
         <div className="mt-3 flex flex-wrap gap-2">
-          {renderChip(
-            'employer-all',
-            'All',
-            selectedEmployers.length === 0,
-            () => onEmployersChange([]),
-            'employer-all'
-          )}
+          {renderChip('employer-all', 'All', selectedEmployers.length === 0, () => onEmployersChange([]), 'employer-all')}
           {employers.map((employer) =>
             renderChip(
               `employer-${toKey(employer)}`,
@@ -88,13 +84,7 @@ const CampaignFilters: React.FC<CampaignFiltersProps> = ({
       <div>
         <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Channels</h3>
         <div className="mt-3 flex flex-wrap gap-2">
-          {renderChip(
-            'channel-all',
-            'All',
-            selectedChannels.length === 0,
-            () => onChannelsChange([]),
-            'channel-all'
-          )}
+          {renderChip('channel-all', 'All', selectedChannels.length === 0, () => onChannelsChange([]), 'channel-all')}
           {channels.map((channel) =>
             renderChip(
               `channel-${toKey(channel)}`,

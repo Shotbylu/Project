@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play, ExternalLink, Sparkles, Globe, Linkedin, Music4, Youtube, Mail, Network } from 'lucide-react';
 import type { Campaign, Channel } from '../../data/campaigns';
@@ -26,22 +26,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
 
   useEffect(() => {
     const node = cardRef.current;
-    if (!node) {
-      return;
-    }
+    if (!node) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-          }
-        });
-      },
-      {
-        rootMargin: '0px 0px -10% 0px',
-        threshold: 0.2
-      }
+      (entries) => entries.forEach((e) => e.isIntersecting && setIsVisible(true)),
+      { rootMargin: '0px 0px -10% 0px', threshold: 0.2 }
     );
 
     observer.observe(node);
@@ -49,10 +38,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
   }, []);
 
   const primaryAsset = campaign.assets[0];
-  if (!primaryAsset) {
-    return null;
-  }
-  const topKpis = campaign.kpis.slice(0, 3);
+  if (!primaryAsset) return null;
+
+  const topKpis = useMemo(() => campaign.kpis.slice(0, 3), [campaign.kpis]);
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>, assetIndex = 0) => {
     onOpen(campaign, assetIndex, event.currentTarget as HTMLElement);
@@ -78,6 +66,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
             Featured
           </span>
         )}
+
         {primaryAsset.type === 'video' && primaryAsset.poster ? (
           <button
             type="button"

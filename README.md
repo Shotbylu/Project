@@ -4,7 +4,7 @@ This Vite + React + TypeScript portfolio highlights marketing, design, and devel
 
 ## Key Sections
 - **Reception** – Hero introduction with CTAs.
-- **Campaigns** – Mazda’s “Brand Meaning Level 2” video series leads a filterable gallery of full-funnel case studies with 9:16 media, KPI badges, and an immersive modal experience.
+
 - **Background & Skills** – Career timeline and capability deep dive.
 - **Projects** – Spotlight on selected builds and experiments.
 - **Contact & Extras** – EmailJS contact form, GitHub insights, and a retro mini-game.
@@ -13,12 +13,11 @@ This Vite + React + TypeScript portfolio highlights marketing, design, and devel
 Campaign data lives in [`src/data/campaigns.ts`](src/data/campaigns.ts). Each entry references media in `/public/assets/campaigns/<slug>/` with the following rules:
 
 - 9:16 aspect ratio only (1080 × 1920) for both videos and images.
-- Videos should be H.264 MP4 with a matching poster image for previews (lightweight SVG posters are acceptable during development).
-- Images may be PNG or JPG.
+
 - Provide descriptive `alt` text and 3–6 KPI badges per campaign.
 - Optional case-study PDFs belong in `/public/assets/case-studies/`.
 
-Placeholder files exist under `/public/assets/placeholders/` to keep the project compiling if branded assets are unavailable. They are lightweight SVG/text stubs so binary assets never land in version control—replace them with final media before a production deploy. The featured Mazda Brand Meaning Level 2 campaign ships with `.mp4` placeholders that contain inline guidance; swap them for the final 1080×1920 exports to enable autoplay in the modal.
+
 
 ## Development
 ```bash

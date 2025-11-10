@@ -13,6 +13,7 @@ export type Employer =
   | 'Sasol'
   | 'Empangeni High School'
   | 'Initium Venture Solutions'
+  | 'CCI Global'
   | 'South32'
   | 'Other';
 
@@ -47,6 +48,7 @@ export interface Campaign {
 }
 
 export const campaigns: Campaign[] = [
+  // FEATURED — Mazda Brand Meaning Level 2 (3× videos)
   {
     id: 'mazda-brand-meaning-lvl2-2025',
     title: 'Brand Meaning Level 2',
@@ -55,11 +57,11 @@ export const campaigns: Campaign[] = [
     period: '2025',
     channels: ['Meta', 'YouTube', 'Email/CRM', 'Web'],
     summary:
-      'Video-led storytelling to translate Mazda’s brand meaning into measurable engagement and qualified demand.',
+      'Video-led storytelling translating Mazda’s brand meaning into measurable engagement and qualified demand.',
     responsibilities: [
       'Creative direction for 9:16 narrative',
-      'Sequenced placements across funnel',
-      'Daily optimisation and insights',
+      'Sequenced placements across the funnel',
+      'Daily optimisation and reporting',
       'POPIA-compliant lead routing via HubSpot'
     ],
     assets: [
@@ -91,12 +93,99 @@ export const campaigns: Campaign[] = [
     kpis: [
       { label: 'Engagement Rate', value: '↑+28%' },
       { label: 'Avg Watch Time', value: '23s' },
-      { label: 'CTR', value: '3.0%' },
-      { label: 'Leads', value: '—' }
+      { label: 'CTR', value: '3.0%' }
     ],
     tech: ['Meta Business Suite', 'GA4', 'HubSpot', 'Rival IQ', 'Power BI'],
     externalUrl: 'https://www.mazda.co.za/'
   },
+
+  // Existing showcase: Mazda GFV Q3 (mix of video/image; placeholder video)
+  {
+    id: 'mazda-gfv-q3-2025',
+    title: 'Mazda Assured: Drive Now. Pay Easy.',
+    employer: 'Mazda Southern Africa',
+    role: 'Digital Marketing Specialist',
+    period: '2025 Q3',
+    channels: ['Meta', 'Google', 'LinkedIn', 'Email/CRM'],
+    summary: 'Full-funnel GFV campaign driving qualified dealer enquiries at sub-R400 CPL and 4.2:1 ROAS.',
+    responsibilities: [
+      'Campaign architecture (prospecting, retargeting, lead nurture)',
+      'Creative briefing and content organisation (Reels, 9:16 statics)',
+      'A/B testing (copy, CTA, placements), daily optimisation',
+      'Rival IQ benchmarking and Power BI reporting to leadership',
+      'POPIA-compliant lead handling via HubSpot'
+    ],
+    assets: [
+      {
+        type: 'video',
+        src: '/assets/campaigns/mazda-gfv-q3-2025/hero.txt',
+        poster: '/assets/campaigns/mazda-gfv-q3-2025/hero.svg',
+        alt: 'Mazda2 9:16 paid social reel',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/mazda-gfv-q3-2025/frame1.svg',
+        alt: 'Mazda2 headline frame',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'ROAS', value: '4.2:1' },
+      { label: 'CPL', value: 'R366' },
+      { label: 'Leads', value: '1 240' },
+      { label: 'CTR', value: '2.8%' }
+    ],
+    tech: ['Meta Business Suite', 'GA4', 'Rival IQ', 'Power BI', 'HubSpot'],
+    caseStudyUrl: '/assets/case-studies/mazda-assured-q3-2025.pdf',
+    externalUrl: 'https://www.mazda.co.za/'
+  },
+
+  // Mazda safety (video placeholder + still)
+  {
+    id: 'mazda-cx-safety-q1-2025',
+    title: 'Mazda CX Safety Week',
+    employer: 'Mazda Southern Africa',
+    role: 'Performance Marketing Lead',
+    period: '2025 Q1',
+    channels: ['Meta', 'Google', 'YouTube', 'Email/CRM'],
+    summary: 'Omni-channel safety education burst that lifted CX-60 test drive requests by 36% week-on-week.',
+    responsibilities: [
+      'Storyboarding 9:16 reels with creative partners and brand management',
+      'Sequenced messaging by funnel stage across paid social, search and CRM touchpoints',
+      'Automated GA4 dashboards for daily decision making',
+      'Led dealer enablement webinars to align offline experience'
+    ],
+    assets: [
+      {
+        type: 'video',
+        src: '/assets/campaigns/mazda-safety-q1-2025/story.txt',
+        poster: '/assets/campaigns/mazda-safety-q1-2025/story.svg',
+        alt: 'Safety feature storytelling reel',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/mazda-safety-q1-2025/frame1.svg',
+        alt: 'CX-60 call-to-action frame',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'Leads', value: '740' },
+      { label: 'Test Drives', value: '+36%' },
+      { label: 'CPL', value: 'R342' },
+      { label: 'ROAS', value: '3.8:1' }
+    ],
+    tech: ['Meta Business Suite', 'GA4', 'HubSpot', 'Power BI'],
+    externalUrl: 'https://www.mazda.co.za/vehicles/cx-60'
+  },
+
+  // Graphics-only showcases
   {
     id: 'sasol-green-future-2024',
     title: 'Sasol Green Future Scholarships',
@@ -196,6 +285,43 @@ export const campaigns: Campaign[] = [
     tech: ['LinkedIn Campaign Manager', '6sense', 'HubSpot', 'Power BI']
   },
   {
+    id: 'cci-global-talent-2024',
+    title: 'CCI Global Talent Magnet',
+    employer: 'CCI Global',
+    role: 'Demand Generation Lead',
+    period: '2024 Q4',
+    channels: ['Meta', 'TikTok', 'YouTube', 'Web'],
+    summary: 'Always-on employer branding with talent community capture across Sub-Saharan Africa.',
+    responsibilities: [
+      'Performance creative toolkit with localisation',
+      'TikTok Spark Ads with creator partners',
+      'Progressive web form with gamified onboarding'
+    ],
+    assets: [
+      {
+        type: 'image',
+        src: '/assets/campaigns/cci-global-talent-2024/story.svg',
+        alt: 'CCI talent community story frame',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/cci-global-talent-2024/frame1.svg',
+        alt: 'Employer branding stat slide',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'Talent Pool', value: '35k' },
+      { label: 'CPL', value: 'R42' },
+      { label: 'Engagement', value: '7.4%' },
+      { label: 'Video Views', value: '1.8M' }
+    ],
+    tech: ['TikTok Ads Manager', 'Meta Business Suite', 'Hotjar', 'GA4']
+  },
+  {
     id: 'south32-community-2024',
     title: 'South32 Community Impact Drives',
     employer: 'South32',
@@ -204,9 +330,9 @@ export const campaigns: Campaign[] = [
     channels: ['Meta', 'Google', 'Programmatic', 'Web'],
     summary: 'Behaviour-change storytelling aligning ESG commitments with measurable community outcomes.',
     responsibilities: [
-      'Stood up Power BI sustainability dashboards for leadership visibility',
-      'Activated programmatic guaranteed to secure premium news inventory',
-      'Embedded qualitative sentiment tracking into weekly retros'
+      'Power BI sustainability dashboards for leadership',
+      'Programmatic guaranteed on premium news inventory',
+      'Qualitative sentiment tracking in weekly retros'
     ],
     assets: [
       {
