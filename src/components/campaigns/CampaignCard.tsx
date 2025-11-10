@@ -7,6 +7,7 @@ interface CampaignCardProps {
   campaign: Campaign;
   onOpen: (campaign: Campaign, assetIndex: number, trigger: HTMLElement) => void;
   isFeatured?: boolean;
+  className?: string;
 }
 
 const channelIconMap: Record<Channel, React.ReactNode> = {
@@ -20,7 +21,7 @@ const channelIconMap: Record<Channel, React.ReactNode> = {
   Web: <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
 };
 
-const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeatured = false }) => {
+const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeatured = false, className = '' }) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -52,23 +53,34 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
     onOpen(campaign, assetIndex, event.currentTarget as HTMLElement);
   };
 
+  const parseProgressValue = (value: string) => {
+    if (!value.includes('%')) return null;
+    const numeric = Number.parseFloat(value.replace(/[^0-9.]/g, ''));
+    if (Number.isNaN(numeric)) return null;
+    return Math.max(0, Math.min(100, numeric));
+  };
+
   return (
     <motion.article
       ref={cardRef}
       initial={{ opacity: 0, y: 24 }}
       animate={isVisible ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
-      whileHover={{ y: -4 }}
-      className={`flex h-full flex-col rounded-3xl border bg-white p-6 shadow-lg shadow-black/5 transition ${
+      transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+      whileHover={{ y: -6 }}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-3xl border px-6 py-7 text-slate-100 shadow-[0_30px_80px_-50px_rgba(8,47,73,0.8)] transition-all duration-500 ${
         isFeatured
-          ? 'border-orange-200/70 bg-gradient-to-br from-white via-white to-orange-50/30'
-          : 'border-gray-100'
-      }`}
+          ? 'border-orange-400/50 bg-gradient-to-br from-slate-950 via-slate-900 to-orange-950/40'
+          : 'border-white/10 bg-gradient-to-br from-slate-950/80 via-slate-900 to-slate-950'
+      } ${className}`}
       data-analytics="campaign-card"
     >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-20 -top-32 h-72 w-72 rounded-full bg-orange-500/10 blur-3xl transition-all duration-700 group-hover:-top-40 group-hover:bg-orange-400/20 group-hover:blur-[140px]"
+      />
       <div className="relative w-full overflow-hidden rounded-2xl bg-neutral-900 shadow-lg aspect-[9/16]">
         {isFeatured && (
-          <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-orange-600 shadow">
+          <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-black/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-orange-300 shadow">
             Featured
           </span>
         )}
@@ -88,7 +100,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
               className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
             />
             <span className="absolute inset-0 bg-black/30 transition group-hover:bg-black/40" aria-hidden="true" />
-            <span className="relative inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-neutral-900 shadow-xl">
+            <span className="relative inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-neutral-900 shadow-xl transition group-hover:scale-105">
               <Play className="h-6 w-6 fill-neutral-900" />
             </span>
           </button>
@@ -111,47 +123,39 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
         )}
       </div>
 
-      <div className="mt-6 flex flex-col gap-4">
-        <div className="space-y-1">
-          <div className="inline-flex items-center gap-2">
-            <span className="inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold text-gray-600">
+      <div className="mt-7 flex flex-col gap-5">
+        <div className="space-y-3">
+          <div className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.3em] text-slate-400">
+            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-[0.25em] text-orange-200/90">
               {campaign.employer}
             </span>
-            <span className="text-xs font-medium uppercase tracking-wider text-gray-400">{campaign.period}</span>
+            <span className="text-[11px] tracking-[0.35em] text-slate-500">{campaign.period}</span>
           </div>
-          <h3 className="text-lg font-semibold text-gray-900">{campaign.title}</h3>
-          <p className="text-sm text-gray-600">{campaign.summary}</p>
+          <h3 className="text-xl font-semibold text-white sm:text-2xl">{campaign.title}</h3>
+          <p className="text-sm leading-relaxed text-slate-300">{campaign.summary}</p>
         </div>
 
         <div className="flex flex-wrap gap-2">
           {campaign.channels.map((channel) => (
             <span
               key={channel}
-              className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-xs font-medium text-gray-700"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-100/90 backdrop-blur"
             >
-              {channelIconMap[channel]}
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/10 text-orange-200">
+                {channelIconMap[channel]}
+              </span>
               {channel}
             </span>
           ))}
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-1 whitespace-nowrap sm:grid sm:grid-cols-2 sm:gap-2 sm:overflow-visible sm:whitespace-normal">
-          {topKpis.map((kpi) => (
-            <span
-              key={kpi.label}
-              className="inline-flex flex-shrink-0 items-center rounded-full border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700"
-            >
-              {kpi.label} {kpi.value}
-            </span>
-          ))}
-        </div>
       </div>
 
       <div className="mt-auto pt-6">
         <button
           type="button"
           onClick={(event) => handleOpen(event, 0)}
-          className="inline-flex w-full items-center justify-center rounded-full bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+          className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-15px_rgba(236,72,153,0.8)] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-200 hover:shadow-[0_18px_45px_-20px_rgba(236,72,153,0.9)]"
           aria-label={`Open ${campaign.title} campaign detail`}
           data-analytics="campaign-card-view"
         >

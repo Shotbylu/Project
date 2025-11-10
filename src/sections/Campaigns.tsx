@@ -81,6 +81,7 @@ const Campaigns: React.FC = () => {
     [filteredCampaigns]
   );
 
+
   const totalCampaigns = campaignsData.length;
   const filteredCount = filteredCampaigns.length;
   const hasActiveFilters = selectedEmployers.length > 0 || selectedChannels.length > 0;
@@ -105,97 +106,96 @@ const Campaigns: React.FC = () => {
   }, []);
 
   return (
-    <section id="campaigns" className="bg-white py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl">
-            <p className="text-sm font-semibold uppercase tracking-widest text-orange-500">Campaigns</p>
-            <h2 className="mt-2 text-3xl font-semibold text-gray-900 sm:text-4xl">Full-funnel campaign leadership</h2>
-            <p className="mt-4 text-sm text-gray-600">
-              A curated view of performance, creative and analytics sprints that showcase how every brief was turned into
-              measurable value. Filter by employer or channel to dive into what matters most to you.
-            </p>
-          </div>
-          <div className="md:w-80">
-            <p className="text-xs text-gray-500">
-              Data-led storytelling, consistent branding and cross-functional orchestration power these case studies.
-            </p>
-          </div>
-        </div>
+    <section id="campaigns" className="relative overflow-hidden bg-slate-950 py-24 text-slate-100 sm:py-32">
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-[-20%] h-[32rem] w-[32rem] -translate-x-1/2 rounded-full bg-orange-500/40 blur-[160px]"
+        animate={{ y: [0, 40, 0] }}
+        transition={{ duration: 18, ease: 'easeInOut', repeat: Infinity }}
+      />
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(15,118,110,0.08),_transparent_55%)]"
+        aria-hidden="true"
+      />
 
-        <div className="mt-12 rounded-3xl border border-gray-100 bg-white/70 p-6 shadow-sm">
-          <CampaignFilters
-            employers={employers}
-            channels={channels}
-            selectedEmployers={selectedEmployers}
-            selectedChannels={selectedChannels}
-            onEmployersChange={setSelectedEmployers}
-            onChannelsChange={setSelectedChannels}
-          />
-        </div>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 48 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:items-start"
+        >
+          <div className="space-y-6">
+            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-orange-200/80">
+              Campaigns
+            </span>
+            <h2 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">Full-funnel campaign leadership</h2>
+            <p className="max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
+              A high-impact gallery of integrated campaigns that ladder brand storytelling into measurable growth. Explore each
+              narrative, analyse the multi-channel architecture, and see how testing insights compound into momentum.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">Channels orchestrated</p>
+                <p className="mt-1 text-2xl font-semibold text-white">{channelCount}</p>
+                <p className="mt-2 text-xs text-slate-400">From paid social and video to CRM, web and programmatic placements.</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">Employers represented</p>
+                <p className="mt-1 text-2xl font-semibold text-white">{employerCount}</p>
+                <p className="mt-2 text-xs text-slate-400">Enterprise and growth-stage partners across automotive, tech and energy.</p>
+              </div>
+            </div>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_30px_120px_-60px_rgba(15,118,110,0.6)] backdrop-blur"
+          >
+            <p className="text-sm font-semibold uppercase tracking-[0.32em] text-slate-400">Filter campaigns</p>
+            <p className="mt-2 text-xs text-slate-400">
+              Toggle employers and channels to surface the case studies most relevant to your objectives.
+            </p>
 
-        <div className="mt-12 space-y-10">
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <div className="mt-14 space-y-12">
           {hasActiveFilters && (
-            <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3 text-sm text-gray-700">
-              <span className="font-medium text-gray-900">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm text-slate-200 backdrop-blur"
+            >
+              <span className="font-semibold text-white">
                 Showing {filteredCount} of {totalCampaigns} campaigns
               </span>
               <button
                 type="button"
                 onClick={clearFilters}
-                className="inline-flex items-center rounded-full border border-gray-300 bg-white px-3 py-1 text-sm font-semibold text-gray-700 transition hover:border-gray-400 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                className="inline-flex items-center rounded-full border border-white/20 bg-transparent px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.28em] text-slate-200 transition hover:border-orange-300/60 hover:bg-orange-500/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-200"
               >
                 Reset filters
               </button>
-            </div>
+            </motion.div>
           )}
 
           {shouldShowEmptyState ? (
-            <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-gray-200 bg-gray-50/70 px-8 py-16 text-center">
-              <div className="space-y-2">
-                <h3 className="text-xl font-semibold text-gray-900">No campaigns match these filters</h3>
-                <p className="text-sm text-gray-600">Try adjusting the filters or reset to see all campaigns again.</p>
+
               </div>
               <button
                 type="button"
                 onClick={clearFilters}
-                className="inline-flex items-center rounded-full bg-gray-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
-              >
-                Reset filters
-              </button>
-            </div>
-          ) : (
-            <>
-              {featuredCampaign && (
-                <div className="space-y-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10 lg:space-y-0">
-                  <div className="rounded-3xl border border-orange-100/60 bg-white/80 p-6 shadow-sm shadow-orange-100/40 sm:p-8">
-                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-500">Featured Campaign</p>
-                    <h3 className="mt-3 text-2xl font-semibold text-gray-900 sm:text-3xl">
-                      Brand Meaning Level 2 — Mazda Southern Africa
-                    </h3>
-                    <p className="mt-4 text-sm text-gray-600 sm:text-base">
-                      {featuredCampaign.summary}
-                    </p>
-                    <p className="mt-4 text-xs text-gray-500">
-                      Three cinematic 9:16 edits ladder Mazda’s brand meaning into measurable demand. Open the case to explore the
-                      full video carousel, KPIs, and tech stack.
-                    </p>
-                  </div>
-                  <div className="lg:h-full">
-                    <CampaignCard campaign={featuredCampaign} onOpen={handleOpen} isFeatured />
-                  </div>
-                </div>
+
               )}
 
               {secondaryCampaigns.length > 0 && (
                 <motion.div
-                  className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3"
-                  initial="hidden"
-                  animate="visible"
-                  variants={{ hidden: {}, visible: {} }}
-                >
-                  {secondaryCampaigns.map((campaign) => (
-                    <CampaignCard key={campaign.id} campaign={campaign} onOpen={handleOpen} />
+
                   ))}
                 </motion.div>
               )}
