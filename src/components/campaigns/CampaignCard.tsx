@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import campaignsData, { Campaign, Channel, Employer } from '../data/campaigns';
+import campaignsData, { Campaign, Channel, Employer } from '../../data/campaigns';
 import { CampaignCard, CampaignFilters, VideoModal } from '../components/campaigns';
 
 const decodeList = <T extends string>(value: string | null, options: readonly T[]): T[] => {
