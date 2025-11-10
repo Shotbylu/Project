@@ -32,6 +32,10 @@ const Campaigns: React.FC = () => {
     return Array.from(unique);
   }, []);
 
+  // Calculate counts
+  const channelCount = channels.length;
+  const employerCount = employers.length;
+
   // Read URL hash
   useEffect(() => {
     if (typeof window === 'undefined' || didParseHash.current) return;
@@ -81,7 +85,6 @@ const Campaigns: React.FC = () => {
     [filteredCampaigns]
   );
 
-
   const totalCampaigns = campaignsData.length;
   const filteredCount = filteredCampaigns.length;
   const hasActiveFilters = selectedEmployers.length > 0 || selectedChannels.length > 0;
@@ -90,7 +93,7 @@ const Campaigns: React.FC = () => {
   const clearFilters = useCallback(() => {
     setSelectedEmployers([]);
     setSelectedChannels([]);
-  }, [setSelectedChannels, setSelectedEmployers]);
+  }, []);
 
   const handleOpen = useCallback((campaign: Campaign, assetIndex: number, trigger: HTMLElement) => {
     setActiveCampaign(campaign);
@@ -159,8 +162,14 @@ const Campaigns: React.FC = () => {
             <p className="mt-2 text-xs text-slate-400">
               Toggle employers and channels to surface the case studies most relevant to your objectives.
             </p>
-
-            </div>
+            <CampaignFilters
+              employers={employers}
+              channels={channels}
+              selectedEmployers={selectedEmployers}
+              selectedChannels={selectedChannels}
+              onEmployersChange={setSelectedEmployers}
+              onChannelsChange={setSelectedChannels}
+            />
           </motion.div>
         </motion.div>
 
@@ -185,17 +194,59 @@ const Campaigns: React.FC = () => {
           )}
 
           {shouldShowEmptyState ? (
-
-              </div>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-2xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur"
+            >
+              <p className="text-lg font-semibold text-white">No campaigns match your filters</p>
+              <p className="mt-2 text-sm text-slate-400">Try adjusting your selection or reset all filters.</p>
               <button
                 type="button"
                 onClick={clearFilters}
-
+                className="mt-4 inline-flex items-center rounded-full border border-white/20 bg-transparent px-6 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-slate-200 transition hover:border-orange-300/60 hover:bg-orange-500/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-200"
+              >
+                Reset filters
+              </button>
+            </motion.div>
+          ) : (
+            <>
+              {featuredCampaign && (
+                <motion.div
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <CampaignCard
+                    campaign={featuredCampaign}
+                    onOpen={handleOpen}
+                    featured
+                  />
+                </motion.div>
               )}
 
               {secondaryCampaigns.length > 0 && (
                 <motion.div
-
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+                >
+                  {secondaryCampaigns.map((campaign, idx) => (
+                    <motion.div
+                      key={campaign.id}
+                      initial={{ opacity: 0, y: 24 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <CampaignCard
+                        campaign={campaign}
+                        onOpen={handleOpen}
+                      />
+                    </motion.div>
                   ))}
                 </motion.div>
               )}
