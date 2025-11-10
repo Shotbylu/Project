@@ -57,8 +57,8 @@ const CampaignFilters: React.FC<CampaignFiltersProps> = ({
       aria-pressed={isActive}
       className={`${baseChipClasses} ${
         isActive
-          ? 'border-orange-400/80 bg-gradient-to-r from-orange-400/70 via-pink-500/60 to-purple-500/60 text-white shadow-[0_12px_30px_-20px_rgba(236,72,153,0.8)]'
-          : 'border-white/10 bg-white/5 text-slate-200 hover:border-white/30 hover:bg-white/10 hover:text-white'
+          ? 'border-transparent bg-[#FF6B00] text-white shadow-md'
+          : 'border-gray-200 bg-white text-slate-600 hover:border-orange-200 hover:bg-orange-50 hover:text-[#FF6B00]'
       }`}
       data-analytics={`campaign-filter-${analyticsId}`}
     >
@@ -67,9 +67,9 @@ const CampaignFilters: React.FC<CampaignFiltersProps> = ({
   );
 
   return (
-    <div className="space-y-8 text-slate-100">
+    <div className="space-y-8 text-slate-600">
       <div className="space-y-4">
-        <h3 className="text-sm font-semibold uppercase tracking-[0.28em] text-slate-400">Employers</h3>
+        <h3 className="text-sm font-semibold uppercase tracking-[0.28em] text-slate-500">Employers</h3>
         <div className="flex flex-wrap gap-2.5">
           {renderChip('employer-all', 'All', selectedEmployers.length === 0, () => onEmployersChange([]), 'employer-all')}
           {employers.map((employer) =>
@@ -84,7 +84,7 @@ const CampaignFilters: React.FC<CampaignFiltersProps> = ({
         </div>
       </div>
       <div className="space-y-4">
-        <h3 className="text-sm font-semibold uppercase tracking-[0.28em] text-slate-400">Channels</h3>
+        <h3 className="text-sm font-semibold uppercase tracking-[0.28em] text-slate-500">Channels</h3>
         <div className="flex flex-wrap gap-2.5">
           {renderChip('channel-all', 'All', selectedChannels.length === 0, () => onChannelsChange([]), 'channel-all')}
           {channels.map((channel) =>

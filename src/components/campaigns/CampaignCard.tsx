@@ -67,20 +67,14 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
       animate={isVisible ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
       whileHover={{ y: -6 }}
-      className={`group relative flex h-full flex-col overflow-hidden rounded-3xl border px-6 py-7 text-slate-100 shadow-[0_30px_80px_-50px_rgba(8,47,73,0.8)] transition-all duration-500 ${
-        isFeatured
-          ? 'border-orange-400/50 bg-gradient-to-br from-slate-950 via-slate-900 to-orange-950/40'
-          : 'border-white/10 bg-gradient-to-br from-slate-950/80 via-slate-900 to-slate-950'
+      className={`group relative flex h-full flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white px-6 py-7 text-slate-900 shadow-xl transition-all duration-500 ${
+        isFeatured ? 'ring-2 ring-[#FF6B00]/80' : ''
       } ${className}`}
       data-analytics="campaign-card"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-20 -top-32 h-72 w-72 rounded-full bg-orange-500/10 blur-3xl transition-all duration-700 group-hover:-top-40 group-hover:bg-orange-400/20 group-hover:blur-[140px]"
-      />
-      <div className="relative w-full overflow-hidden rounded-2xl bg-neutral-900 shadow-lg aspect-[9/16]">
+      <div className="relative w-full overflow-hidden rounded-2xl bg-slate-100 shadow-lg aspect-[9/16]">
         {isFeatured && (
-          <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-black/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-orange-300 shadow">
+          <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-[#0f1a2b]/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-white shadow">
             Featured
           </span>
         )}
@@ -100,8 +94,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
               className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
             />
             <span className="absolute inset-0 bg-black/30 transition group-hover:bg-black/40" aria-hidden="true" />
-            <span className="relative inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-neutral-900 shadow-xl transition group-hover:scale-105">
-              <Play className="h-6 w-6 fill-neutral-900" />
+            <span className="relative inline-flex h-16 w-16 items-center justify-center rounded-full bg-white text-[#0f1a2b] shadow-xl transition group-hover:scale-105">
+              <Play className="h-6 w-6 fill-[#0f1a2b]" />
             </span>
           </button>
         ) : (
@@ -125,23 +119,23 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
 
       <div className="mt-7 flex flex-col gap-5">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.3em] text-slate-400">
-            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-[0.25em] text-orange-200/90">
+          <div className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.28em] text-slate-500">
+            <span className="inline-flex items-center rounded-full border border-orange-100 bg-orange-50 px-3 py-1 text-[11px] font-semibold tracking-[0.25em] text-[#FF6B00]">
               {campaign.employer}
             </span>
-            <span className="text-[11px] tracking-[0.35em] text-slate-500">{campaign.period}</span>
+            <span className="text-[11px] tracking-[0.32em] text-slate-400">{campaign.period}</span>
           </div>
-          <h3 className="text-xl font-semibold text-white sm:text-2xl">{campaign.title}</h3>
-          <p className="text-sm leading-relaxed text-slate-300">{campaign.summary}</p>
+          <h3 className="text-xl font-semibold text-slate-900 sm:text-2xl">{campaign.title}</h3>
+          <p className="text-sm leading-relaxed text-slate-600">{campaign.summary}</p>
         </div>
 
         <div className="flex flex-wrap gap-2">
           {campaign.channels.map((channel) => (
             <span
               key={channel}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-100/90 backdrop-blur"
+              className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold text-slate-600"
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/10 text-orange-200">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#FF6B00]/10 text-[#FF6B00]">
                 {channelIconMap[channel]}
               </span>
               {channel}
@@ -149,13 +143,35 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeature
           ))}
         </div>
 
+        <ul className="grid gap-3 sm:grid-cols-2">
+          {topKpis.map((kpi) => {
+            const progress = parseProgressValue(kpi.value);
+            return (
+              <li
+                key={kpi.label}
+                className="group/kpi relative overflow-hidden rounded-2xl border border-gray-200 bg-slate-50 p-4 transition duration-500"
+              >
+                <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">{kpi.label}</div>
+                <div className="mt-2 text-2xl font-semibold text-slate-900">{kpi.value}</div>
+                {progress !== null && (
+                  <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white">
+                    <span
+                      className="block h-full rounded-full bg-[#FF6B00]"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
       </div>
 
       <div className="mt-auto pt-6">
         <button
           type="button"
           onClick={(event) => handleOpen(event, 0)}
-          className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-15px_rgba(236,72,153,0.8)] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-200 hover:shadow-[0_18px_45px_-20px_rgba(236,72,153,0.9)]"
+          className="inline-flex w-full items-center justify-center rounded-full bg-[#FF6B00] px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300"
           aria-label={`Open ${campaign.title} campaign detail`}
           data-analytics="campaign-card-view"
         >
