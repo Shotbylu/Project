@@ -48,6 +48,58 @@ export interface Campaign {
 }
 
 export const campaigns: Campaign[] = [
+  // FEATURED — Mazda Brand Meaning Level 2 (3× videos)
+  {
+    id: 'mazda-brand-meaning-lvl2-2025',
+    title: 'Brand Meaning Level 2',
+    employer: 'Mazda Southern Africa',
+    role: 'Digital Marketing Specialist',
+    period: '2025',
+    channels: ['Meta', 'YouTube', 'Email/CRM', 'Web'],
+    summary:
+      'Video-led storytelling translating Mazda’s brand meaning into measurable engagement and qualified demand.',
+    responsibilities: [
+      'Creative direction for 9:16 narrative',
+      'Sequenced placements across the funnel',
+      'Daily optimisation and reporting',
+      'POPIA-compliant lead routing via HubSpot'
+    ],
+    assets: [
+      {
+        type: 'video',
+        src: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/MAWR_06_240 - Mazda 3 6 A 1080 x 1920.mp4',
+        poster: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/bm-level2-hero-poster.svg',
+        alt: 'Brand Meaning Level 2 — hero cut',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'video',
+        src: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/MAWR_06_223 - CX-5_6_A_Graded 1080 x 1920.mp4',
+        poster: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/bm-level2-feature1-poster.svg',
+        alt: 'Design & craft feature cut',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'video',
+        src: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/MAWR_06_214 - CX-60_06_A-2 Graded 1080 x 1920 (1).mp4',
+        poster: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/bm-level2-feature2-poster.svg',
+        alt: 'Joy of driving feature cut',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'Engagement Rate', value: '↑+28%' },
+      { label: 'Avg Watch Time', value: '23s' },
+      { label: 'CTR', value: '3.0%' }
+    ],
+    tech: ['Meta Business Suite', 'GA4', 'HubSpot', 'Rival IQ', 'Power BI'],
+    externalUrl: 'https://www.mazda.co.za/'
+  },
+
+  // Existing showcase: Mazda GFV Q3 (mix of video/image; placeholder video)
   {
     id: 'mazda-gfv-q3-2025',
     title: 'Mazda Assured: Drive Now. Pay Easy.',
@@ -55,8 +107,7 @@ export const campaigns: Campaign[] = [
     role: 'Digital Marketing Specialist',
     period: '2025 Q3',
     channels: ['Meta', 'Google', 'LinkedIn', 'Email/CRM'],
-    summary:
-      'Full-funnel GFV campaign driving qualified dealer enquiries at sub-R400 CPL and 4.2:1 ROAS.',
+    summary: 'Full-funnel GFV campaign driving qualified dealer enquiries at sub-R400 CPL and 4.2:1 ROAS.',
     responsibilities: [
       'Campaign architecture (prospecting, retargeting, lead nurture)',
       'Creative briefing and content organisation (Reels, 9:16 statics)',
@@ -91,6 +142,8 @@ export const campaigns: Campaign[] = [
     caseStudyUrl: '/assets/case-studies/mazda-assured-q3-2025.pdf',
     externalUrl: 'https://www.mazda.co.za/'
   },
+
+  // Mazda safety (video placeholder + still)
   {
     id: 'mazda-cx-safety-q1-2025',
     title: 'Mazda CX Safety Week',
@@ -131,6 +184,8 @@ export const campaigns: Campaign[] = [
     tech: ['Meta Business Suite', 'GA4', 'HubSpot', 'Power BI'],
     externalUrl: 'https://www.mazda.co.za/vehicles/cx-60'
   },
+
+  // Graphics-only showcases
   {
     id: 'sasol-green-future-2024',
     title: 'Sasol Green Future Scholarships',
@@ -238,9 +293,9 @@ export const campaigns: Campaign[] = [
     channels: ['Meta', 'TikTok', 'YouTube', 'Web'],
     summary: 'Always-on employer branding with talent community capture across Sub-Saharan Africa.',
     responsibilities: [
-      'Built performance creative toolkit ensuring localisation while protecting brand voice',
-      'Implemented TikTok Spark Ads with creator partnerships for authenticity',
-      'Launched progressive web form with gamified onboarding drip'
+      'Performance creative toolkit with localisation',
+      'TikTok Spark Ads with creator partners',
+      'Progressive web form with gamified onboarding'
     ],
     assets: [
       {
@@ -275,9 +330,9 @@ export const campaigns: Campaign[] = [
     channels: ['Meta', 'Google', 'Programmatic', 'Web'],
     summary: 'Behaviour-change storytelling aligning ESG commitments with measurable community outcomes.',
     responsibilities: [
-      'Stood up Power BI sustainability dashboards for leadership visibility',
-      'Activated programmatic guaranteed to secure premium news inventory',
-      'Embedded qualitative sentiment tracking into weekly retros'
+      'Power BI sustainability dashboards for leadership',
+      'Programmatic guaranteed on premium news inventory',
+      'Qualitative sentiment tracking in weekly retros'
     ],
     assets: [
       {

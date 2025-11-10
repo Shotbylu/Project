@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" fill="none">
+  <defs>
+    <linearGradient id="feature2-bg" x1="0" y1="0" x2="1080" y2="1920" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0a0f1c" />
+      <stop offset="0.5" stop-color="#111827" />
+      <stop offset="1" stop-color="#1e293b" />
+    </linearGradient>
+    <radialGradient id="feature2-glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(540 860) rotate(90) scale(1020 620)">
+      <stop offset="0" stop-color="#f97316" stop-opacity="0.9" />
+      <stop offset="0.4" stop-color="#f97316" stop-opacity="0.45" />
+      <stop offset="1" stop-color="#ecfeff" stop-opacity="0.1" />
+    </radialGradient>
+  </defs>
+  <rect width="1080" height="1920" fill="url(#feature2-bg)" />
+  <ellipse cx="540" cy="900" rx="520" ry="600" fill="url(#feature2-glow)" opacity="0.7" />
+  <path d="M200 620H880" stroke="#f97316" stroke-width="4" stroke-opacity="0.4" stroke-dasharray="14 18" />
+  <path d="M220 1530H860" stroke="#f97316" stroke-width="4" stroke-opacity="0.25" stroke-dasharray="12 16" />
+  <g fill="#f8fafc" font-family="'Inter', 'Segoe UI', sans-serif" text-anchor="middle">
+    <text x="540" y="430" font-size="50" font-weight="600" opacity="0.8">JOY OF DRIVING</text>
+    <text x="540" y="520" font-size="126" font-weight="700" fill="#f97316">IGNITED</text>
+    <text x="540" y="610" font-size="48" font-weight="500" opacity="0.75">Emotion-first sequencing</text>
+  </g>
+  <g fill="#cbd5f5" font-family="'Inter', 'Segoe UI', sans-serif">
+    <text x="230" y="980" font-size="24" font-weight="500">Scene order</text>
+    <text x="230" y="1036" font-size="20" font-weight="400">• Exterior hero / movement reveal</text>
+    <text x="230" y="1092" font-size="20" font-weight="400">• Driver POV and cabin immersion</text>
+    <text x="230" y="1148" font-size="20" font-weight="400">• CTA overlay to book a driving experience</text>
+  </g>
+  <g fill="#f8fafc" font-family="'Inter', 'Segoe UI', sans-serif" text-anchor="middle">
+    <rect x="360" y="1250" width="360" height="72" rx="36" fill="rgba(249,115,22,0.85)" />
+    <text x="540" y="1300" font-size="28" font-weight="600">Play feature cut</text>
+  </g>
+</svg>

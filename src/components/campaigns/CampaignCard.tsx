@@ -6,6 +6,7 @@ import type { Campaign, Channel } from '../../data/campaigns';
 interface CampaignCardProps {
   campaign: Campaign;
   onOpen: (campaign: Campaign, assetIndex: number, trigger: HTMLElement) => void;
+  isFeatured?: boolean;
 }
 
 const channelIconMap: Record<Channel, React.ReactNode> = {
@@ -19,28 +20,17 @@ const channelIconMap: Record<Channel, React.ReactNode> = {
   Web: <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
 };
 
-const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen }) => {
+const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeatured = false }) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const node = cardRef.current;
-    if (!node) {
-      return;
-    }
+    if (!node) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-          }
-        });
-      },
-      {
-        rootMargin: '0px 0px -10% 0px',
-        threshold: 0.2
-      }
+      (entries) => entries.forEach((e) => e.isIntersecting && setIsVisible(true)),
+      { rootMargin: '0px 0px -10% 0px', threshold: 0.2 }
     );
 
     observer.observe(node);
@@ -48,6 +38,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen }) => {
   }, []);
 
   const primaryAsset = campaign.assets[0];
+  if (!primaryAsset) return null;
+
   const topKpis = useMemo(() => campaign.kpis.slice(0, 3), [campaign.kpis]);
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>, assetIndex = 0) => {
@@ -61,16 +53,27 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen }) => {
       animate={isVisible ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
       whileHover={{ y: -4 }}
-      className="flex h-full flex-col rounded-3xl border border-gray-100 bg-white p-6 shadow-lg shadow-black/5"
+      className={`flex h-full flex-col rounded-3xl border bg-white p-6 shadow-lg shadow-black/5 transition ${
+        isFeatured
+          ? 'border-orange-200/70 bg-gradient-to-br from-white via-white to-orange-50/30'
+          : 'border-gray-100'
+      }`}
       data-analytics="campaign-card"
     >
       <div className="relative w-full overflow-hidden rounded-2xl bg-neutral-900 shadow-lg aspect-[9/16]">
+        {isFeatured && (
+          <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-orange-600 shadow">
+            Featured
+          </span>
+        )}
+
         {primaryAsset.type === 'video' && primaryAsset.poster ? (
           <button
             type="button"
             onClick={(event) => handleOpen(event, 0)}
             className="group relative flex h-full w-full items-center justify-center"
             aria-label={`View ${campaign.title} media`}
+            data-analytics="campaign-card-view"
           >
             <img
               src={primaryAsset.poster}
@@ -89,6 +92,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen }) => {
             onClick={(event) => handleOpen(event, 0)}
             className="relative flex h-full w-full items-center justify-center"
             aria-label={`View ${campaign.title} media`}
+            data-analytics="campaign-card-view"
           >
             <img
               src={primaryAsset.poster ?? primaryAsset.src}
