@@ -27,12 +27,14 @@ const VideoModal: React.FC<VideoModalProps> = ({
   const [assetVisible, setAssetVisible] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
+  // Reset current index when modal opens
   useEffect(() => {
     if (isOpen) {
       setCurrentIndex(initialAssetIndex);
     }
-  }, [campaign, initialAssetIndex, isOpen]);
+  }, [initialAssetIndex, isOpen]);
 
+  // Ensure currentIndex stays within bounds
   useEffect(() => {
     if (!campaign) {
       return;
@@ -42,6 +44,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
     }
   }, [campaign, currentIndex]);
 
+  // Intersection observer for lazy loading
   useEffect(() => {
     if (!isOpen) {
       setAssetVisible(false);
@@ -71,8 +74,9 @@ const VideoModal: React.FC<VideoModalProps> = ({
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [campaign, currentIndex, isOpen]);
+  }, [isOpen, currentIndex]);
 
+  // Focus management - set initial focus
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -116,6 +120,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
     }, 0);
   }, [onClose, triggerRef]);
 
+  // Keyboard event handler
   useEffect(() => {
     if (!isOpen) {
       return;
