@@ -1,7 +1,12 @@
+// File: src/components/campaigns/Campaigns.tsx
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+
+// data lives at src/data/campaigns
 import campaignsData, { Campaign, Channel, Employer } from '../../data/campaigns';
-import { CampaignCard, CampaignFilters, VideoModal } from '../components/campaigns';
+
+// components live in the same folder (src/components/campaigns)
+import { CampaignCard, CampaignFilters, VideoModal } from './index';
 
 const decodeList = <T extends string>(value: string | null, options: readonly T[]): T[] => {
   if (!value) return [];
