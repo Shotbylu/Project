@@ -1,41 +1,51 @@
 // File: src/components/campaigns/Campaigns.tsx
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Play, ExternalLink, Sparkles, Globe, Linkedin, Music4, Youtube, Mail, Network } from 'lucide-react';
+import type { Campaign, Channel } from '../../data/campaigns';
 
-// data lives at src/data/campaigns
-import campaignsData, { Campaign, Channel, Employer } from '../../data/campaigns';
+interface CampaignCardProps {
+  campaign: Campaign;
+  onOpen: (campaign: Campaign, assetIndex: number, trigger: HTMLElement) => void;
+  isFeatured?: boolean;
+  className?: string;
+}
 
-// components live in the same folder (src/components/campaigns)
-import { CampaignCard, CampaignFilters, VideoModal } from './index';
-
-const decodeList = <T extends string>(value: string | null, options: readonly T[]): T[] => {
-  if (!value) return [];
-  const decoded = value.split(',').map((i) => decodeURIComponent(i)).filter(Boolean) as T[];
-  return decoded.filter((i) => options.includes(i));
+const channelIconMap: Record<Channel, React.ReactNode> = {
+  Meta: <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />,
+  Google: <Globe className="h-3.5 w-3.5" aria-hidden="true" />,
+  LinkedIn: <Linkedin className="h-3.5 w-3.5" aria-hidden="true" />,
+  TikTok: <Music4 className="h-3.5 w-3.5" aria-hidden="true" />,
+  YouTube: <Youtube className="h-3.5 w-3.5" aria-hidden="true" />,
+  Programmatic: <Network className="h-3.5 w-3.5" aria-hidden="true" />,
+  'Email/CRM': <Mail className="h-3.5 w-3.5" aria-hidden="true" />,
+  Web: <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
 };
 
-const FEATURED_CAMPAIGN_ID = 'mazda-brand-meaning-lvl2-2025';
+const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onOpen, isFeatured = false, className = '' }) => {
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-const Campaigns: React.FC = () => {
-  const [selectedEmployers, setSelectedEmployers] = useState<Employer[]>([]);
-  const [selectedChannels, setSelectedChannels] = useState<Channel[]>([]);
-  const [activeCampaign, setActiveCampaign] = useState<Campaign | null>(null);
-  const [initialAssetIndex, setInitialAssetIndex] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const triggerRef = useRef<HTMLElement | null>(null);
-  const didParseHash = useRef(false);
+  useEffect(() => {
+    const node = cardRef.current;
+    if (!node || isVisible) return;
 
-  const employers = useMemo(() => {
-    const unique = new Set<Employer>();
-    campaignsData.forEach((c) => unique.add(c.employer));
-    return Array.from(unique);
-  }, []);
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          setIsVisible(true);
+          obs.unobserve(entry.target);
+        });
+      },
+      { rootMargin: '0px 0px -10% 0px', threshold: 0.2 }
+    );
 
-  const channels = useMemo(() => {
-    const unique = new Set<Channel>();
-    campaignsData.forEach((c) => c.channels.forEach((ch) => unique.add(ch)));
-    return Array.from(unique);
-  }, []);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [isVisible]);
+
+  const topKpis = useMemo(() => campaign.kpis.slice(0, 3), [campaign.kpis]);
 
   // Read URL hash
   useEffect(() => {
@@ -67,206 +77,136 @@ const Campaigns: React.FC = () => {
     }
   }, [selectedEmployers, selectedChannels]);
 
-  // Filtered list
-  const filteredCampaigns = useMemo(() => {
-    return campaignsData.filter((c) => {
-      const employerMatch = selectedEmployers.length === 0 || selectedEmployers.includes(c.employer);
-      const channelMatch = selectedChannels.length === 0 || c.channels.some((ch) => selectedChannels.includes(ch));
-      return employerMatch && channelMatch;
-    });
-  }, [selectedChannels, selectedEmployers]);
+  const handleOpen = (event: React.MouseEvent<HTMLElement>, assetIndex = 0) => {
+    onOpen(campaign, assetIndex, event.currentTarget as HTMLElement);
+  };
 
-  // Featured + secondary
-  const featuredCampaign = useMemo(
-    () => filteredCampaigns.find((c) => c.id === FEATURED_CAMPAIGN_ID) ?? null,
-    [filteredCampaigns]
-  );
-  const secondaryCampaigns = useMemo(
-    () => filteredCampaigns.filter((c) => c.id !== FEATURED_CAMPAIGN_ID),
-    [filteredCampaigns]
-  );
-
-  // Calculate counts
-  const channelCount = channels.length;
-  const employerCount = employers.length;
-  const totalCampaigns = campaignsData.length;
-  const filteredCount = filteredCampaigns.length;
-  const hasActiveFilters = selectedEmployers.length > 0 || selectedChannels.length > 0;
-  const shouldShowEmptyState = filteredCount === 0;
-
-  const clearFilters = useCallback(() => {
-    setSelectedEmployers([]);
-    setSelectedChannels([]);
-  }, []);
-
-  const handleOpen = useCallback((campaign: Campaign, assetIndex: number, trigger: HTMLElement) => {
-    setActiveCampaign(campaign);
-    setInitialAssetIndex(assetIndex);
-    triggerRef.current = trigger;
-    setIsModalOpen(true);
-  }, []);
-
-  const handleClose = useCallback(() => {
-    setIsModalOpen(false);
-    setActiveCampaign(null);
-    setInitialAssetIndex(0);
-  }, []);
+  const parseProgressValue = (value: string) => {
+    if (!value.includes('%')) return null;
+    const numeric = Number.parseFloat(value.replace(/[^0-9.]/g, ''));
+    if (Number.isNaN(numeric)) return null;
+    return Math.max(0, Math.min(100, numeric));
+  };
 
   return (
-    <section id="campaigns" className="relative overflow-hidden bg-slate-950 py-24 text-slate-100 sm:py-32">
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[-20%] h-[32rem] w-[32rem] -translate-x-1/2 rounded-full bg-orange-500/40 blur-[160px]"
-        animate={{ y: [0, 40, 0] }}
-        transition={{ duration: 18, ease: 'easeInOut', repeat: Infinity }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(15,118,110,0.08),_transparent_55%)]"
-        aria-hidden="true"
-      />
+    <motion.article
+      ref={cardRef}
+      initial={{ opacity: 0, y: 24 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+      whileHover={{ y: -6 }}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white px-6 py-7 text-slate-900 shadow-xl transition-all duration-500 ${
+        isFeatured ? 'ring-2 ring-[#FF6B00]/80' : ''
+      } ${className}`}
+      data-analytics="campaign-card"
+    >
+      <div className="relative w-full overflow-hidden rounded-2xl bg-slate-100 shadow-lg aspect-[9/16]">
+        {isFeatured && (
+          <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-[#0f1a2b]/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-white shadow">
+            Featured
+          </span>
+        )}
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 48 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:items-start"
-        >
-          <div className="space-y-6">
-            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-orange-200/80">
-              Campaigns
-            </span>
-            <h2 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">Full-funnel campaign leadership</h2>
-            <p className="max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
-              A high-impact gallery of integrated campaigns that ladder brand storytelling into measurable growth. Explore each
-              narrative, analyse the multi-channel architecture, and see how testing insights compound into momentum.
-            </p>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">Channels orchestrated</p>
-                <p className="mt-1 text-2xl font-semibold text-white">{channelCount}</p>
-                <p className="mt-2 text-xs text-slate-400">From paid social and video to CRM, web and programmatic placements.</p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">Employers represented</p>
-                <p className="mt-1 text-2xl font-semibold text-white">{employerCount}</p>
-                <p className="mt-2 text-xs text-slate-400">Enterprise and growth-stage partners across automotive, tech and energy.</p>
-              </div>
-            </div>
-          </div>
-          <motion.div
-            initial={{ opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_30px_120px_-60px_rgba(15,118,110,0.6)] backdrop-blur"
+        {primaryAsset.type === 'video' && primaryAsset.poster ? (
+          <button
+            type="button"
+            onClick={(event) => handleOpen(event, 0)}
+            className="group relative flex h-full w-full items-center justify-center"
+            aria-label={`View ${campaign.title} media`}
+            data-analytics="campaign-card-view"
           >
-            <p className="text-sm font-semibold uppercase tracking-[0.32em] text-slate-400">Filter campaigns</p>
-            <p className="mt-2 text-xs text-slate-400">
-              Toggle employers and channels to surface the case studies most relevant to your objectives.
-            </p>
-            <CampaignFilters
-              employers={employers}
-              channels={channels}
-              selectedEmployers={selectedEmployers}
-              selectedChannels={selectedChannels}
-              onEmployersChange={setSelectedEmployers}
-              onChannelsChange={setSelectedChannels}
+            <img
+              src={primaryAsset.poster}
+              alt={primaryAsset.alt}
+              loading="lazy"
+              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
             />
-          </motion.div>
-        </motion.div>
-
-        <div className="mt-14 space-y-12">
-          {hasActiveFilters && (
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm text-slate-200 backdrop-blur"
-            >
-              <span className="font-semibold text-white">
-                Showing {filteredCount} of {totalCampaigns} campaigns
-              </span>
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="inline-flex items-center rounded-full border border-white/20 bg-transparent px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.28em] text-slate-200 transition hover:border-orange-300/60 hover:bg-orange-500/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-200"
-              >
-                Reset filters
-              </button>
-            </motion.div>
-          )}
-
-          {shouldShowEmptyState ? (
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="rounded-2xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur"
-            >
-              <p className="text-lg font-semibold text-white">No campaigns match your filters</p>
-              <p className="mt-2 text-sm text-slate-400">Try adjusting your selection or reset all filters.</p>
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="mt-4 inline-flex items-center rounded-full border border-white/20 bg-transparent px-6 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-slate-200 transition hover:border-orange-300/60 hover:bg-orange-500/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-200"
-              >
-                Reset filters
-              </button>
-            </motion.div>
-          ) : (
-            <>
-              {featuredCampaign && (
-                <motion.div
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <CampaignCard
-                    campaign={featuredCampaign}
-                    onOpen={handleOpen}
-                    featured
-                  />
-                </motion.div>
-              )}
-
-              {secondaryCampaigns.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true, amount: 0.1 }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-                >
-                  {secondaryCampaigns.map((campaign, idx) => (
-                    <motion.div
-                      key={campaign.id}
-                      initial={{ opacity: 0, y: 24 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.2 }}
-                      transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                      <CampaignCard
-                        campaign={campaign}
-                        onOpen={handleOpen}
-                      />
-                    </motion.div>
-                  ))}
-                </motion.div>
-              )}
-            </>
-          )}
-        </div>
+            <span className="absolute inset-0 bg-black/30 transition group-hover:bg-black/40" aria-hidden="true" />
+            <span className="relative inline-flex h-16 w-16 items-center justify-center rounded-full bg-white text-[#0f1a2b] shadow-xl transition group-hover:scale-105">
+              <Play className="h-6 w-6 fill-[#0f1a2b]" />
+            </span>
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={(event) => handleOpen(event, 0)}
+            className="relative flex h-full w-full items-center justify-center"
+            aria-label={`View ${campaign.title} media`}
+            data-analytics="campaign-card-view"
+          >
+            <img
+              src={primaryAsset.poster ?? primaryAsset.src}
+              alt={primaryAsset.alt}
+              loading="lazy"
+              className="h-full w-full object-cover transition duration-500 hover:scale-105"
+            />
+            <span className="absolute inset-0 bg-black/10" aria-hidden="true" />
+          </button>
+        )}
       </div>
 
-      <VideoModal
-        campaign={activeCampaign}
-        initialAssetIndex={initialAssetIndex}
-        isOpen={isModalOpen}
-        onClose={handleClose}
-        triggerRef={triggerRef}
-      />
-    </section>
+      <div className="mt-7 flex flex-col gap-5">
+        <div className="space-y-3">
+          <div className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.28em] text-slate-500">
+            <span className="inline-flex items-center rounded-full border border-orange-100 bg-orange-50 px-3 py-1 text-[11px] font-semibold tracking-[0.25em] text-[#FF6B00]">
+              {campaign.employer}
+            </span>
+            <span className="text-[11px] tracking-[0.32em] text-slate-400">{campaign.period}</span>
+          </div>
+          <h3 className="text-xl font-semibold text-slate-900 sm:text-2xl">{campaign.title}</h3>
+          <p className="text-sm leading-relaxed text-slate-600">{campaign.summary}</p>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {campaign.channels.map((channel) => (
+            <span
+              key={channel}
+              className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold text-slate-600"
+            >
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#FF6B00]/10 text-[#FF6B00]">
+                {channelIconMap[channel]}
+              </span>
+              {channel}
+            </span>
+          ))}
+        </div>
+
+        <ul className="grid gap-3 sm:grid-cols-2">
+          {topKpis.map((kpi) => {
+            const progress = parseProgressValue(kpi.value);
+            return (
+              <li
+                key={kpi.label}
+                className="group/kpi relative overflow-hidden rounded-2xl border border-gray-200 bg-slate-50 p-4 transition duration-500"
+              >
+                <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">{kpi.label}</div>
+                <div className="mt-2 text-2xl font-semibold text-slate-900">{kpi.value}</div>
+                {progress !== null && (
+                  <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white">
+                    <span
+                      className="block h-full rounded-full bg-[#FF6B00]"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      <div className="mt-auto pt-6">
+        <button
+          type="button"
+          onClick={(event) => handleOpen(event, 0)}
+          className="inline-flex w-full items-center justify-center rounded-full bg-[#FF6B00] px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300"
+          aria-label={`Open ${campaign.title} campaign detail`}
+          data-analytics="campaign-card-view"
+        >
+          View
+        </button>
+      </div>
+    </motion.article>
   );
 };
 
