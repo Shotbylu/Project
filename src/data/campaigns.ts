@@ -123,10 +123,10 @@ export const campaigns: Campaign[] = [
       },
       {
         type: 'image',
-        src: '/assets/campaigns/mazda-gfv-q3-2025/frame1.svg',
+        src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail.jpg',
         alt: 'Mazda2 headline frame',
-        width: 1440,
-        height: 1440
+        width: 1080,
+        height: 1920
       }
     ],
     kpis: [
