@@ -150,7 +150,7 @@ export const campaigns: Campaign[] = [
   period: '2025',
   channels: ['Meta', 'Google', 'Web', 'TikTok', 'YouTube Shorts'],
   summary:
-    "MazdaCare = Service Plan + Warranty + Roadside Assistance. Ownership made effortless; coverage confirmed per VIN.",
+    "MazdaCare = Service Plan + Warranty + Roadside Assistance. Ownership made effortless.",
   responsibilities: [
     'Campaign architecture (prospecting, retargeting, lead nurture)',
     'Creative briefing and content organisation (Reels, 9:16 statics)',
@@ -161,22 +161,22 @@ export const campaigns: Campaign[] = [
   assets: [
     {
       type: 'video',
-      src: '/assets/campaigns/mazdacare-warranty-2025/MazdaCare1.mp4',
-      poster: '/assets/campaigns/mazdacare-warranty-2025/MazdaCare1.png',
+      src: '/assets/campaigns/sasol-green-future-2024/MazdaCare 1.mp4',
+      poster: '/assets/campaigns/sasol-green-future-2024/MazdaCare.png',
       alt: 'MazdaCare Warranty Stories',
       width: 1080,
       height: 1920
     },
     {
       type: 'video',
-      src: '/assets/campaigns/mazdacare-warranty-2025/MazdaCare2.mp4',
+      src: '/assets/campaigns/sasol-green-future-2024/MazdaCare2.mp4',
       alt: 'Design & craft feature cut',
       width: 1080,
       height: 1920
     },
     {
       type: 'video',
-      src: '/assets/campaigns/mazdacare-warranty-2025/MazdaCare3.mp4',
+      src: '/assets/campaigns/sasol-green-future-2024/MazdaCare3.mp4',
       alt: 'Joy of driving feature cut',
       width: 1080,
       height: 1920
