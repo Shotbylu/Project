@@ -147,30 +147,38 @@ export const campaigns: Campaign[] = [
     role: 'Digital Marketing Specialist',
     period: '2025',
     channels: ['Meta', 'Google', 'Web'],
-    summary: 'Scholarship acquisition wave pairing storytelling with conversion optimisation for STEM bursaries.',
+    summary: 'Video-led storytelling translating Mazda\'s brand meaning into measurable engagement and qualified demand.',
     responsibilities: [
-      'Designed landing journey with UX partner and implemented CRO testing plan',
-      'Implemented lead scoring to prioritise high intent applicants',
-      'Built executive dashboards highlighting ROI from regional media splits',
-      'Collaborated with HR to align campaign messaging with campus presence'
+      'Campaign architecture (prospecting, retargeting, lead nurture)',
+      'Creative briefing and content organisation (Reels, 9:16 statics)',
+      'A/B testing (copy, CTA, placements), daily optimisation',
+      'Rival IQ benchmarking and Power BI reporting to leadership',
+      'POPIA-compliant lead handling via HubSpot'
     ],
-    assets: [
+       assets: [
       {
-        type: 'image',
-        src: '/assets/campaigns/sasol-green-future-2024/visual.svg',
-        alt: 'Sasol scholarship announcement creative',
-        width: 1440,
-        height: 1440
+        type: 'video',
+        src: '/assets/campaigns/sasol-green-future-2024/MazdaCare 1.mp4',
+        poster: '/assets/campaigns/sasol-green-future-2024/MazdaCare.png',
+        alt: 'MazdaCare Warranty Stories',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'video',
+        src: '/assets/campaigns/sasol-green-future-2024/MazdaCare2.mp4',
+        alt: 'Design & craft feature cut',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'video',
+        src: '/assets/campaigns/sasol-green-future-2024/MazdaCare3.mp4',
+        alt: 'Joy of driving feature cut',
+        width: 1080,
+        height: 1920
       }
     ],
-    kpis: [
-      { label: 'Applications', value: '8 400' },
-      { label: 'CPL', value: 'R58' },
-      { label: 'CTR', value: '3.1%' }
-    ],
-    tech: ['Google Ads', 'GA4', 'Power BI', 'Microsoft Dynamics'],
-    externalUrl: 'https://www.sasol.com/'
-  },
 
   {
     id: 'empangeni-open-day-2023',
