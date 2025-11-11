@@ -142,10 +142,10 @@ export const campaigns: Campaign[] = [
 
   {
     id: 'sasol-solar-energy-2024',
-    title: 'Sasol Solar Energy Program',
-    employer: 'Sasol',
-    role: 'Digital Marketing Manager',
-    period: '2024 Intake',
+    title: 'MazdaCare Warranty Campaign',
+    employer: 'Mazda Southern Africa',
+    role: 'Digital Marketing Specialist',
+    period: '2025',
     channels: ['Meta', 'Google', 'Web'],
     summary: 'Scholarship acquisition wave pairing storytelling with conversion optimisation for STEM bursaries.',
     responsibilities: [
