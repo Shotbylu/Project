@@ -97,48 +97,50 @@ export const campaigns: Campaign[] = [
     externalUrl: 'https://www.mazda.co.za/'
   },
 
-  {
-    id: 'mazda-gfv-q3-2025',
-    title: 'Mazda2 Finance Campaign',
-    employer: 'Mazda Southern Africa',
-    role: 'Digital Marketing Specialist',
-    period: '2025 Q3',
-    channels: ['Meta', 'Google', 'LinkedIn', 'Email/CRM'],
-    summary: 'Full-funnel GFV campaign driving qualified dealer enquiries at sub-R400 CPL and 4.2:1 ROAS.',
-    responsibilities: [
-      'Campaign architecture (prospecting, retargeting, lead nurture)',
-      'Creative briefing and content organisation (Reels, 9:16 statics)',
-      'A/B testing (copy, CTA, placements), daily optimisation',
-      'Rival IQ benchmarking and Power BI reporting to leadership',
-      'POPIA-compliant lead handling via HubSpot'
-    ],
-    assets: [
-      {
-        type: 'image',
-        src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail.jpg',
-        poster: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2.jpg',
-        alt: 'Mazda2 9:16 paid social reel',
-        width: 1080,
-        height: 1920
-      },
-      {
-        type: 'image',
-        src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail2.jpg',
-        alt: 'Mazda2 headline frame',
-        width: 1080,
-        height: 1920
-      }
-    ],
-    kpis: [
-      { label: 'ROAS', value: '4.2:1' },
-      { label: 'CPL', value: 'R366' },
-      { label: 'Leads', value: '1 240' },
-      { label: 'CTR', value: '2.8%' }
-    ],
-    tech: ['Meta Business Suite', 'GA4', 'Rival IQ', 'Power BI', 'HubSpot'],
-    caseStudyUrl: '/assets/case-studies/mazda-assured-q3-2025.pdf',
-    externalUrl: 'https://www.mazda.co.za/'
-  },
+ {
+  id: 'mazda-gfv-q3-2025',
+  title: 'Mazda2 Retail Finance Promotion',
+  employer: 'Mazda Southern Africa',
+  role: 'Digital Marketing Specialist',
+  period: '2025 Q3',
+  channels: ['Meta', 'Google', 'Web'],
+  summary:
+    'Retail promotion aimed at driving sales and increasing brand consideration among active car buyers. Live across our website, Google Media and Meta.',
+  responsibilities: [
+    'Full-funnel retail architecture (in-market prospecting, dynamic remarketing, lead nurture)',
+    'Website journey optimisation (LP speed, forms, lead routing) and on-site merchandising',
+    'A/B testing (creative, copy, CTA, placements) with daily optimisation',
+    'Rival IQ benchmarking and Power BI reporting to leadership',
+    'POPIA-compliant lead handling via HubSpot and CRM hygiene'
+  ],
+  assets: [
+    {
+      type: 'image',
+      src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail.jpg',
+      poster: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2.jpg',
+      alt: 'Mazda2 9:16 paid social reel',
+      width: 1080,
+      height: 1920
+    },
+    {
+      type: 'image',
+      src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail2.jpg',
+      alt: 'Mazda2 headline frame',
+      width: 1080,
+      height: 1920
+    }
+  ],
+  kpis: [
+    { label: 'ROAS', value: '4.2:1' },
+    { label: 'CPL', value: 'R366' },
+    { label: 'Leads', value: '1 240' },
+    { label: 'CTR', value: '2.8%' },
+    { label: 'Ad Recall Lift', value: 'TBC' }
+  ],
+  tech: ['Meta Business Suite', 'GA4', 'Rival IQ', 'Power BI', 'HubSpot'],
+  caseStudyUrl: '/assets/case-studies/mazda-assured-q3-2025.pdf',
+  externalUrl: 'https://www.mazda.co.za/'
+},
 
    {
     id: 'sasol-solar-energy-2024',
