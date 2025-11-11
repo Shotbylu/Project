@@ -55,8 +55,7 @@ export const campaigns: Campaign[] = [
     role: 'Digital Marketing Specialist',
     period: '2025',
     channels: ['Meta', 'YouTube', 'Email/CRM', 'Web'],
-    summary:
-      'Video-led storytelling translating Mazda's brand meaning into measurable engagement and qualified demand.',
+    summary: 'Video-led storytelling translating Mazda\'s brand meaning into measurable engagement and qualified demand.',
     responsibilities: [
       'Creative direction for 9:16 narrative',
       'Sequenced placements across the funnel',
@@ -100,7 +99,7 @@ export const campaigns: Campaign[] = [
 
   {
     id: 'mazda-gfv-q3-2025',
-    title: 'Mazda2 Finance Campaign.',
+    title: 'Mazda2 Finance Campaign',
     employer: 'Mazda Southern Africa',
     role: 'Digital Marketing Specialist',
     period: '2025 Q3',
@@ -142,8 +141,8 @@ export const campaigns: Campaign[] = [
   },
 
   {
-    id: 'Sasol Solar Energy Program',
-    title: 'Sasol Solar Energy ',
+    id: 'sasol-solar-energy-2024',
+    title: 'Sasol Solar Energy Program',
     employer: 'Sasol',
     role: 'Digital Marketing Manager',
     period: '2024 Intake',
