@@ -183,14 +183,14 @@ export const campaigns: Campaign[] = [
     }
   ],
   // add minimally valid arrays to satisfy the Campaign interface
-  kpis: [
-    { label: 'reach', target: 1200000, unit: 'people' },
-    { label: 'vtr_3s', target: 0.35, unit: 'rate' },
-    { label: 'ctr', target: 0.95, unit: 'percent' },
-    { label: 'cpl', target: 85, unit: 'ZAR' },
-    { label: 'leads', target: 1200, unit: 'count' },
-    { label: 'test_drive_bookings', target: 180, unit: 'count' },
-    { label: 'positive_sentiment', target: 0.75, unit: 'rate' }
+kpis: [
+  { label: 'reach', target: 1_200_000, unit: 'people', description: 'Awareness — number of unique people reached.' },
+  { label: 'vtr_3s', target: 0.35, unit: 'rate', description: 'Video Thru-Rate (3s) — thumb-stop effectiveness.' },
+  { label: 'ctr', target: 0.0095, unit: 'rate', description: 'Click-through rate — engagement and intent.' },
+  { label: 'cpl', target: 85, unit: 'ZAR', description: 'Cost per lead — efficiency of lead-generation.' },
+  { label: 'leads', target: 1_200, unit: 'count', description: 'Sales-ready leads in HubSpot.' },
+  { label: 'test_drive_bookings', target: 180, unit: 'count', description: 'Bottom-funnel intent — dealership engagement.' },
+  { label: 'positive_sentiment', target: 0.75, unit: 'rate', description: 'Brand sentiment — protects long-term equity.' }
   ],
   tech: ['Meta Business Suite', 'Google Ads', 'GA4', 'HubSpot', 'Rival IQ', 'Power BI', 'SharePoint', 'TikTok Ads Manager', 'YouTube Studio']
 },
