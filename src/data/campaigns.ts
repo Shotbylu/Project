@@ -140,14 +140,15 @@ export const campaigns: Campaign[] = [
     externalUrl: 'https://www.mazda.co.za/'
   },
 
-  {
+   {
     id: 'sasol-solar-energy-2024',
     title: 'MazdaCare Warranty Campaign',
     employer: 'Mazda Southern Africa',
     role: 'Digital Marketing Specialist',
     period: '2025',
     channels: ['Meta', 'Google', 'Web'],
-    summary: 'Video-led storytelling translating Mazda\'s brand meaning into measurable engagement and qualified demand.',
+    summary:
+      "Video-led storytelling translating Mazda's brand meaning into measurable engagement and qualified demand.",
     responsibilities: [
       'Campaign architecture (prospecting, retargeting, lead nurture)',
       'Creative briefing and content organisation (Reels, 9:16 statics)',
@@ -155,7 +156,7 @@ export const campaigns: Campaign[] = [
       'Rival IQ benchmarking and Power BI reporting to leadership',
       'POPIA-compliant lead handling via HubSpot'
     ],
-       assets: [
+    assets: [
       {
         type: 'video',
         src: '/assets/campaigns/sasol-green-future-2024/MazdaCare 1.mp4',
@@ -179,7 +180,10 @@ export const campaigns: Campaign[] = [
         height: 1920
       }
     ],
-
+    // add minimally valid arrays to satisfy the Campaign interface
+    kpis: [],
+    tech: ['Meta Business Suite', 'Google Ads', 'GA4', 'HubSpot']
+  },
   {
     id: 'empangeni-open-day-2023',
     title: 'Empangeni High School Open Day',
