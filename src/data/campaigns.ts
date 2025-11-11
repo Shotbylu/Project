@@ -184,13 +184,13 @@ export const campaigns: Campaign[] = [
   ],
   // add minimally valid arrays to satisfy the Campaign interface
   kpis: [
-    { name: 'reach', target: 1200000, unit: 'people' },
-    { name: 'vtr_3s', target: 0.35, unit: 'rate' },
-    { name: 'ctr', target: 0.95, unit: 'percent' },
-    { name: 'cpl', target: 85, unit: 'ZAR' },
-    { name: 'leads', target: 1200, unit: 'count' },
-    { name: 'test_drive_bookings', target: 180, unit: 'count' },
-    { name: 'positive_sentiment', target: 0.75, unit: 'rate' }
+    { label: 'reach', target: 1200000, unit: 'people' },
+    { label: 'vtr_3s', target: 0.35, unit: 'rate' },
+    { label: 'ctr', target: 0.95, unit: 'percent' },
+    { label: 'cpl', target: 85, unit: 'ZAR' },
+    { label: 'leads', target: 1200, unit: 'count' },
+    { label: 'test_drive_bookings', target: 180, unit: 'count' },
+    { label: 'positive_sentiment', target: 0.75, unit: 'rate' }
   ],
   tech: ['Meta Business Suite', 'Google Ads', 'GA4', 'HubSpot', 'Rival IQ', 'Power BI', 'SharePoint', 'TikTok Ads Manager', 'YouTube Studio']
 },
