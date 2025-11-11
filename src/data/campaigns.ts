@@ -115,7 +115,8 @@ export const campaigns: Campaign[] = [
     assets: [
       {
         type: 'image',
-        src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2.jpg',
+        src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail.jpg',
+        poster: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2.jpg',
         alt: 'Mazda2 9:16 paid social reel',
         width: 1080,
         height: 1920
