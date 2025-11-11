@@ -142,50 +142,59 @@ export const campaigns: Campaign[] = [
   externalUrl: 'https://www.mazda.co.za/'
 },
 
-   {
-    id: 'sasol-solar-energy-2024',
-    title: 'MazdaCare Warranty Campaign',
-    employer: 'Mazda Southern Africa',
-    role: 'Digital Marketing Specialist',
-    period: '2025',
-    channels: ['Meta', 'Google', 'Web'],
-    summary:
-      "Video-led storytelling translating Mazda's brand meaning into measurable engagement and qualified demand.",
-    responsibilities: [
-      'Campaign architecture (prospecting, retargeting, lead nurture)',
-      'Creative briefing and content organisation (Reels, 9:16 statics)',
-      'A/B testing (copy, CTA, placements), daily optimisation',
-      'Rival IQ benchmarking and Power BI reporting to leadership',
-      'POPIA-compliant lead handling via HubSpot'
-    ],
-    assets: [
-      {
-        type: 'video',
-        src: '/assets/campaigns/sasol-green-future-2024/MazdaCare 1.mp4',
-        poster: '/assets/campaigns/sasol-green-future-2024/MazdaCare.png',
-        alt: 'MazdaCare Warranty Stories',
-        width: 1080,
-        height: 1920
-      },
-      {
-        type: 'video',
-        src: '/assets/campaigns/sasol-green-future-2024/MazdaCare2.mp4',
-        alt: 'Design & craft feature cut',
-        width: 1080,
-        height: 1920
-      },
-      {
-        type: 'video',
-        src: '/assets/campaigns/sasol-green-future-2024/MazdaCare3.mp4',
-        alt: 'Joy of driving feature cut',
-        width: 1080,
-        height: 1920
-      }
-    ],
-    // add minimally valid arrays to satisfy the Campaign interface
-    kpis: [],
-    tech: ['Meta Business Suite', 'Google Ads', 'GA4', 'HubSpot']
-  },
+{
+  id: 'mazdacare-warranty-2025',
+  title: 'MazdaCare Warranty Campaign',
+  employer: 'Mazda Southern Africa',
+  role: 'Digital Marketing Specialist',
+  period: '2025',
+  channels: ['Meta', 'Google', 'Web', 'TikTok', 'YouTube Shorts'],
+  summary:
+    "MazdaCare = Service Plan + Warranty + Roadside Assistance. Ownership made effortless; coverage confirmed per VIN.",
+  responsibilities: [
+    'Campaign architecture (prospecting, retargeting, lead nurture)',
+    'Creative briefing and content organisation (Reels, 9:16 statics)',
+    'A/B testing (copy, CTA, placements), daily optimisation',
+    'Rival IQ benchmarking and Power BI reporting to leadership',
+    'POPIA-compliant lead handling via HubSpot'
+  ],
+  assets: [
+    {
+      type: 'video',
+      src: '/assets/campaigns/mazdacare-warranty-2025/MazdaCare1.mp4',
+      poster: '/assets/campaigns/mazdacare-warranty-2025/MazdaCare1.png',
+      alt: 'MazdaCare Warranty Stories',
+      width: 1080,
+      height: 1920
+    },
+    {
+      type: 'video',
+      src: '/assets/campaigns/mazdacare-warranty-2025/MazdaCare2.mp4',
+      alt: 'Design & craft feature cut',
+      width: 1080,
+      height: 1920
+    },
+    {
+      type: 'video',
+      src: '/assets/campaigns/mazdacare-warranty-2025/MazdaCare3.mp4',
+      alt: 'Joy of driving feature cut',
+      width: 1080,
+      height: 1920
+    }
+  ],
+  // add minimally valid arrays to satisfy the Campaign interface
+  kpis: [
+    { name: 'reach', target: 1200000, unit: 'people' },
+    { name: 'vtr_3s', target: 0.35, unit: 'rate' },
+    { name: 'ctr', target: 0.95, unit: 'percent' },
+    { name: 'cpl', target: 85, unit: 'ZAR' },
+    { name: 'leads', target: 1200, unit: 'count' },
+    { name: 'test_drive_bookings', target: 180, unit: 'count' },
+    { name: 'positive_sentiment', target: 0.75, unit: 'rate' }
+  ],
+  tech: ['Meta Business Suite', 'Google Ads', 'GA4', 'HubSpot', 'Rival IQ', 'Power BI', 'SharePoint', 'TikTok Ads Manager', 'YouTube Studio']
+},
+
   {
     id: 'empangeni-open-day-2023',
     title: 'Empangeni High School Open Day',
