@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Space Grotesk"', ...defaultTheme.fontFamily.sans],
+        sans: ['Helvetica', '"Helvetica Neue"', 'Arial', ...defaultTheme.fontFamily.sans],
       },
     },
   },
