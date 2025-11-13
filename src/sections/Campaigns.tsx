@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import campaignsData, { Campaign, Employer } from '../data/campaigns';
+import campaignsData, { Campaign } from '../data/campaigns';
 import { CampaignCard, VideoModal } from '../components/campaigns'; // Assuming CampaignCard is now the simplified one
 
 // NOTE: All filtering and URL hash logic has been removed for simplification.
