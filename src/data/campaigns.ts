@@ -196,33 +196,57 @@ kpis: [
 },
 
   {
-    id: 'empangeni-open-day-2023',
-    title: 'Empangeni High School Open Day',
-    employer: 'Empangeni High School',
+    id: 'south32',
+    title: 'South32 Hillside Campaign Series',
+    employer: 'South32',
     role: 'Marketing & Alumni Lead',
-    period: '2023 Q3',
-    channels: ['Meta', 'TikTok', 'Email/CRM'],
-    summary: 'Community-first recruitment weekend uniting parents, alumni and Grade 7 prospects.',
+    period: '2022',
+    channels: ['Internal Comms', 'LinkedIn', 'Print Collateral', 'Community Events'],
+    summary: 'A series of internal and community-facing campaigns under the 'Brighter Futures, Together' platform. Covered wellness, education, visual storytelling and women’s month advocacy. Campaigns showcased real employee stories, leadership development and community empowerment.',
     responsibilities: [
-      'Coordinated student ambassador programme to capture authentic stories',
-      'Built automation journey nudging RSVPs, reminders and post-event surveys',
-      'Managed real-time TikTok live stream crew and comment moderation'
+      'Digital Marketing, Creative direction and visual design',
+      'Copywriting for campaign posters, spotlights, and impact stories',
+      'Photography curation and layout design for internal branding'
     ],
     assets: [
       {
         type: 'image',
-        src: '/assets/campaigns/empangeni-open-day-2023/poster.svg',
-        alt: 'Empangeni open day hero poster',
-        width: 1440,
-        height: 1440
+        src: '/assets/campaigns/empangeni-open-day-2023/South 1.jpg',
+        poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
+        alt: 'Corporate Wellness Week Hero Visual',
+        width: 1080,
+        height: 1350
+      }
+      {
+        type: 'image',
+        src: '/assets/campaigns/empangeni-open-day-2023/South 2.jpg',
+        alt: 'High School Leadership Programme Group Shot',
+        width: 1080,
+        height: 1350
+      }
+      {
+        type: 'image',
+        src: '/assets/campaigns/empangeni-open-day-2023/South 3.jpg',
+        alt: 'Campaign Poster Visuals',
+        width: 1080,
+        height: 1350
+      }
+      {
+        type: 'image',
+        src: '/assets/campaigns/empangeni-open-day-2023/South 4.jpg',
+        alt: 'Trek4Mandela Women’s Month Spotlight Series',
+        width: 1080,
+        height: 1350
       }
     ],
     kpis: [
-      { label: 'RSVPs', value: '620' },
-      { label: 'Attendance', value: '94%' },
-      { label: 'Email CTR', value: '42%' }
+      { label: 'Employees Reached', value: '3 800+' },
+      { label: 'Campaign Engagement Rate', value: '60%' },
+      { label: 'Wellness Week Participants', value: '750+' }
+      { label: 'LinkedIn Impressions', value: '85 000+' },
+      { label: 'Internal Sentiment', value: 'Positive (Wellness Survey Score: 4.6/5)' }
     ],
-    tech: ['Meta Business Suite', 'Mailchimp', 'Canva', 'Google Forms']
+    tech: ['Adobe Illustrator', 'Photoshop', 'Canva Pro', 'Microsoft SharePoint', 'Outlook Comms Planner']
   },
 
   {
