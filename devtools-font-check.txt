@@ -1,0 +1,2 @@
+Body font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, "Segoe UI", Roboto, "Noto Sans", "Liberation Sans", sans-serif
+H1 font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, "Segoe UI", Roboto, "Noto Sans", "Liberation Sans", sans-serif
