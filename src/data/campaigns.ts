@@ -214,7 +214,7 @@ export const campaigns: Campaign[] = [
         poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
         alt: 'Corporate Wellness Week Hero Visual',
         width: 1080,
-        height: 1080
+        height: 1920
       },
       {
         type: 'image',
