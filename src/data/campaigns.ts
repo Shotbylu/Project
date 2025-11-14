@@ -202,7 +202,8 @@ kpis: [
     role: 'Marketing & Alumni Lead',
     period: '2022',
     channels: ['Internal Comms', 'LinkedIn', 'Print Collateral', 'Community Events'],
-    summary: 'A series of internal and community-facing campaigns under the 'Brighter Futures, Together' platform. Covered wellness, education, visual storytelling and women’s month advocacy. Campaigns showcased real employee stories, leadership development and community empowerment.',
+    summary: "A series of internal and community-facing campaigns under the 'Brighter Futures, Together' platform. Covered wellness, education, visual storytelling and women’s month advocacy. Campaigns showcased real employee stories, leadership development and community empowerment.",
+
     responsibilities: [
       'Digital Marketing, Creative direction and visual design',
       'Copywriting for campaign posters, spotlights, and impact stories',
