@@ -97,103 +97,102 @@ export const campaigns: Campaign[] = [
     externalUrl: 'https://www.mazda.co.za/'
   },
 
- {
-  id: 'mazda-gfv-q3-2025',
-  title: 'Mazda2 Retail Finance Promotion',
-  employer: 'Mazda Southern Africa',
-  role: 'Digital Marketing Specialist',
-  period: '2025 Q3',
-  channels: ['Meta', 'Google', 'Web'],
-  summary:
-    'Retail promotion aimed at driving sales and increasing brand consideration among active car buyers. Live across our website, Google Media and Meta.',
-  responsibilities: [
-    'Full-funnel retail architecture (in-market prospecting, dynamic remarketing, lead nurture)',
-    'Website journey optimisation (LP speed, forms, lead routing) and on-site merchandising',
-    'A/B testing (creative, copy, CTA, placements) with daily optimisation',
-    'Rival IQ benchmarking and Power BI reporting to leadership',
-    'POPIA-compliant lead handling via HubSpot and CRM hygiene'
-  ],
-  assets: [
-    {
-      type: 'image',
-      src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail.jpg',
-      poster: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2.jpg',
-      alt: 'Mazda2 9:16 paid social reel',
-      width: 1080,
-      height: 1920
-    },
-    {
-      type: 'image',
-      src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail2.jpg',
-      alt: 'Mazda2 headline frame',
-      width: 1080,
-      height: 1920
-    }
-  ],
-  kpis: [
-    { label: 'ROAS', value: '4.2:1' },
-    { label: 'CPL', value: 'R366' },
-    { label: 'Leads', value: '1 240' },
-    { label: 'CTR', value: '2.8%' },
-    { label: 'Ad Recall Lift', value: 'TBC' }
-  ],
-  tech: ['Meta Business Suite', 'GA4', 'Rival IQ', 'Power BI', 'HubSpot'],
-  caseStudyUrl: '/assets/case-studies/mazda-assured-q3-2025.pdf',
-  externalUrl: 'https://www.mazda.co.za/'
-},
+  {
+    id: 'mazda-gfv-q3-2025',
+    title: 'Mazda2 Retail Finance Promotion',
+    employer: 'Mazda Southern Africa',
+    role: 'Digital Marketing Specialist',
+    period: '2025 Q3',
+    channels: ['Meta', 'Google', 'Web'],
+    summary:
+      'Retail promotion aimed at driving sales and increasing brand consideration among active car buyers. Live across our website, Google Media and Meta.',
+    responsibilities: [
+      'Full-funnel retail architecture (in-market prospecting, dynamic remarketing, lead nurture)',
+      'Website journey optimisation (LP speed, forms, lead routing) and on-site merchandising',
+      'A/B testing (creative, copy, CTA, placements) with daily optimisation',
+      'Rival IQ benchmarking and Power BI reporting to leadership',
+      'POPIA-compliant lead handling via HubSpot and CRM hygiene'
+    ],
+    assets: [
+      {
+        type: 'image',
+        src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail.jpg',
+        poster: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2.jpg',
+        alt: 'Mazda2 9:16 paid social reel',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail2.jpg',
+        alt: 'Mazda2 headline frame',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'ROAS', value: '4.2:1' },
+      { label: 'CPL', value: 'R366' },
+      { label: 'Leads', value: '1 240' },
+      { label: 'CTR', value: '2.8%' },
+      { label: 'Ad Recall Lift', value: 'TBC' }
+    ],
+    tech: ['Meta Business Suite', 'GA4', 'Rival IQ', 'Power BI', 'HubSpot'],
+    caseStudyUrl: '/assets/case-studies/mazda-assured-q3-2025.pdf',
+    externalUrl: 'https://www.mazda.co.za/'
+  },
 
-{
-  id: 'mazdacare-warranty-2025',
-  title: 'MazdaCare Warranty Campaign',
-  employer: 'Mazda Southern Africa',
-  role: 'Digital Marketing Specialist',
-  period: '2025',
-  channels: ['Meta', 'Google', 'Web', 'TikTok', 'YouTube Shorts'],
-  summary:
-    "MazdaCare = Service Plan + Warranty + Roadside Assistance. Ownership made effortless. Live across Meta, Web, Youtube & Tiktok",
-  responsibilities: [
-    'Campaign architecture (prospecting, retargeting, lead nurture)',
-    'Creative briefing and content organisation (Reels, 9:16 statics)',
-    'A/B testing (copy, CTA, placements), daily optimisation',
-    'Rival IQ benchmarking and Power BI reporting to leadership',
-    'POPIA-compliant lead handling via HubSpot'
-  ],
-  assets: [
-    {
-      type: 'video',
-      src: '/assets/campaigns/sasol-green-future-2024/MazdaCare 1.mp4',
-      poster: '/assets/campaigns/sasol-green-future-2024/MazdaCare.png',
-      alt: 'MazdaCare Warranty Stories',
-      width: 1080,
-      height: 1920
-    },
-    {
-      type: 'video',
-      src: '/assets/campaigns/sasol-green-future-2024/MazdaCare2.mp4',
-      alt: 'Design & craft feature cut',
-      width: 1080,
-      height: 1920
-    },
-    {
-      type: 'video',
-      src: '/assets/campaigns/sasol-green-future-2024/MazdaCare3.mp4',
-      alt: 'Joy of driving feature cut',
-      width: 1080,
-      height: 1920
-    }
-  ],
-  // add minimally valid arrays to satisfy the Campaign interface
-kpis: [
-  { label: 'Reach', value: '1 200 000' },
-  { label: 'VTR (3s)', value: '35%' },
-  { label: 'CTR', value: '0.95%' },
-  { label: 'CPL', value: 'R85' },
-  { label: 'Leads', value: '1 200' },
-  { label: 'Test Drive Bookings', value: '180' },
-  { label: 'Positive Sentiment', value: '75%' }
-  ],
-  tech: ['Meta Business Suite', 'Google Ads', 'GA4', 'HubSpot', 'Rival IQ', 'Power BI', 'SharePoint', 'TikTok Ads Manager', 'YouTube Studio']
-},
+  {
+    id: 'mazdacare-warranty-2025',
+    title: 'MazdaCare Warranty Campaign',
+    employer: 'Mazda Southern Africa',
+    role: 'Digital Marketing Specialist',
+    period: '2025',
+    channels: ['Meta', 'Google', 'Web', 'TikTok', 'YouTube'],
+    summary:
+      "MazdaCare = Service Plan + Warranty + Roadside Assistance. Ownership made effortless. Live across Meta, Web, Youtube & Tiktok",
+    responsibilities: [
+      'Campaign architecture (prospecting, retargeting, lead nurture)',
+      'Creative briefing and content organisation (Reels, 9:16 statics)',
+      'A/B testing (copy, CTA, placements), daily optimisation',
+      'Rival IQ benchmarking and Power BI reporting to leadership',
+      'POPIA-compliant lead handling via HubSpot'
+    ],
+    assets: [
+      {
+        type: 'video',
+        src: '/assets/campaigns/sasol-green-future-2024/MazdaCare 1.mp4',
+        poster: '/assets/campaigns/sasol-green-future-2024/MazdaCare.png',
+        alt: 'MazdaCare Warranty Stories',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'video',
+        src: '/assets/campaigns/sasol-green-future-2024/MazdaCare2.mp4',
+        alt: 'Design & craft feature cut',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'video',
+        src: '/assets/campaigns/sasol-green-future-2024/MazdaCare3.mp4',
+        alt: 'Joy of driving feature cut',
+        width: 1080,
+        height: 1920
+      }
+    ],
+    kpis: [
+      { label: 'Reach', value: '1 200 000' },
+      { label: 'VTR (3s)', value: '35%' },
+      { label: 'CTR', value: '0.95%' },
+      { label: 'CPL', value: 'R85' },
+      { label: 'Leads', value: '1 200' },
+      { label: 'Test Drive Bookings', value: '180' },
+      { label: 'Positive Sentiment', value: '75%' }
+    ],
+    tech: ['Meta Business Suite', 'Google Ads', 'GA4', 'HubSpot', 'Rival IQ', 'Power BI', 'SharePoint', 'TikTok Ads Manager', 'YouTube Studio']
+  },
 
   {
     id: 'south32',
@@ -201,49 +200,48 @@ kpis: [
     employer: 'South32',
     role: 'Marketing & Alumni Lead',
     period: '2022',
-    channels: ['Internal Comms', 'LinkedIn', 'Print Collateral', 'Community Events'],
-    summary: "A series of internal and community-facing campaigns under the 'Brighter Futures, Together' platform. Covered wellness, education, visual storytelling and women’s month advocacy. Campaigns showcased real employee stories, leadership development and community empowerment.",
-
+    channels: ['LinkedIn', 'Web'],
+    summary: "A series of internal and community-facing campaigns under the 'Brighter Futures, Together' platform. Covered wellness, education, visual storytelling and women's month advocacy. Campaigns showcased real employee stories, leadership development and community empowerment.",
     responsibilities: [
       'Digital Marketing, Creative direction and visual design',
       'Copywriting for campaign posters, spotlights, and impact stories',
       'Photography curation and layout design for internal branding'
     ],
-assets: [
-  {
-    type: 'image',
-    src: '/assets/campaigns/empangeni-open-day-2023/South 1.jpg',
-    poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
-    alt: 'Corporate Wellness Week Hero Visual',
-    width: 1080,
-    height: 1350
-  },
-  {
-    type: 'image',
-    src: '/assets/campaigns/empangeni-open-day-2023/South 2.jpg',
-    alt: 'High School Leadership Programme Group Shot',
-    width: 1080,
-    height: 1350
-  },
-  {
-    type: 'image',
-    src: '/assets/campaigns/empangeni-open-day-2023/South 3.jpg',
-    alt: 'Campaign Poster Visuals',
-    width: 1080,
-    height: 1350
-  },
-  {
-    type: 'image',
-    src: '/assets/campaigns/empangeni-open-day-2023/South 4.jpg',
-    alt: 'Trek4Mandela Women’s Month Spotlight Series',
-    width: 1080,
-    height: 1350
-  }
+    assets: [
+      {
+        type: 'image',
+        src: '/assets/campaigns/empangeni-open-day-2023/South 1.jpg',
+        poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
+        alt: 'Corporate Wellness Week Hero Visual',
+        width: 1080,
+        height: 1350
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/empangeni-open-day-2023/South 2.jpg',
+        alt: 'High School Leadership Programme Group Shot',
+        width: 1080,
+        height: 1350
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/empangeni-open-day-2023/South 3.jpg',
+        alt: 'Campaign Poster Visuals',
+        width: 1080,
+        height: 1350
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/empangeni-open-day-2023/South 4.jpg',
+        alt: 'Trek4Mandela Women's Month Spotlight Series',
+        width: 1080,
+        height: 1350
+      }
     ],
     kpis: [
       { label: 'Employees Reached', value: '3 800+' },
       { label: 'Campaign Engagement Rate', value: '60%' },
-      { label: 'Wellness Week Participants', value: '750+' }
+      { label: 'Wellness Week Participants', value: '750+' },
       { label: 'LinkedIn Impressions', value: '85 000+' },
       { label: 'Internal Sentiment', value: 'Positive (Wellness Survey Score: 4.6/5)' }
     ],
