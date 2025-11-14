@@ -213,29 +213,29 @@ export const campaigns: Campaign[] = [
         src: '/assets/campaigns/empangeni-open-day-2023/South 1.jpg',
         poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
         alt: 'Corporate Wellness Week Hero Visual',
-        width: 1080,
-        height: 1350
+        width: 3375,
+        height: 6000
       },
       {
         type: 'image',
         src: '/assets/campaigns/empangeni-open-day-2023/South 2.jpg',
         alt: 'High School Leadership Programme Group Shot',
-        width: 1080,
-        height: 1350
+        width: 3375,
+        height: 6000
       },
       {
         type: 'image',
         src: '/assets/campaigns/empangeni-open-day-2023/South 3.jpg',
         alt: 'Campaign Poster Visuals',
-        width: 1080,
-        height: 1350
+        width: 3375,
+        height: 6000
       },
       {
         type: 'image',
         src: '/assets/campaigns/empangeni-open-day-2023/South 4.jpg',
-        alt: 'Trek4Mandela Women's Month Spotlight Series',
-        width: 1080,
-        height: 1350
+        alt: 'Trek4Mandela Women\'s Month Spotlight Series',
+        width: 3375,
+        height: 6000
       }
     ],
     kpis: [
