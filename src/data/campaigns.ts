@@ -201,13 +201,21 @@ export const campaigns: Campaign[] = [
     role: 'Marketing & Alumni Lead',
     period: '2022',
     channels: ['LinkedIn', 'Web'],
-    summary: "A series of internal and community-facing campaigns under the 'Brighter Futures, Together' platform. Covered wellness, education, visual storytelling and women's month advocacy. Campaigns showcased real employee stories, leadership development and community empowerment.",
+    summary: "A series of internal and community-facing campaigns covering wellness, education, visual storytelling and women's month advocacy. Campaigns showcased real employee stories, leadership development and community empowerment.",
     responsibilities: [
       'Digital Marketing, Creative direction and visual design',
       'Copywriting for campaign posters, spotlights, and impact stories',
       'Photography curation and layout design for internal branding'
     ],
     assets: [
+        {
+        type: 'video',
+        src: '/assets/campaigns/empangeni-open-day-2023/insta_video_76990.MP4',
+        poster: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/Brand Meaning.jpg',
+        alt: 'Brand Meaning Level 2 — hero cut',
+        width: 1080,
+        height: 1920
+      },
       {
         type: 'image',
         src: '/assets/campaigns/empangeni-open-day-2023/South 1.jpg',
