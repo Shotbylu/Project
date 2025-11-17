@@ -211,7 +211,7 @@ export const campaigns: Campaign[] = [
       {
         type: 'image',
         src: '/assets/campaigns/empangeni-open-day-2023/South 1.jpg',
-        poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
+        poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.JPG',
         alt: 'South32 Cover.jpg',
         width: 1080,
         height: 1080
@@ -219,7 +219,7 @@ export const campaigns: Campaign[] = [
       {
         type: 'image',
         src: '/assets/campaigns/empangeni-open-day-2023/South 2.jpg',
-        poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
+        poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.JPG',
         alt: 'High School Leadership Programme Group Shot',
         width: 1080,
         height: 1920
@@ -227,7 +227,7 @@ export const campaigns: Campaign[] = [
       {
         type: 'image',
         src: '/assets/campaigns/empangeni-open-day-2023/South 3.jpg',
-        poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
+        poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.JPG',
         alt: 'Campaign Poster Visuals',
         width: 1080,
         height: 1920
@@ -235,7 +235,7 @@ export const campaigns: Campaign[] = [
       {
         type: 'image',
         src: '/assets/campaigns/empangeni-open-day-2023/South 4.jpg',
-        poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
+        poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.JPG',
         alt: 'Trek4Mandela Women\'s Month Spotlight Series',
         width: 1080,
         height: 1920
