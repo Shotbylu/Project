@@ -94,7 +94,7 @@ export const campaigns: Campaign[] = [
       { label: 'CTR', value: '3.0%' }
     ],
     tech: ['Meta Business Suite', 'GA4', 'HubSpot', 'Rival IQ', 'Power BI'],
-    externalUrl: 'https://www.mazda.co.za/'
+    externalUrl: 'https://bit.ly/Wonderrrr-Awaits'
   },
 
   {
