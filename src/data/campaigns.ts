@@ -287,7 +287,36 @@ export const campaigns: Campaign[] = [
         alt: 'ABM report highlight frame',
         width: 1440,
         height: 1440
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/panel.svg',
+        alt: 'Initium accelerator promo panel',
+        width: 1440,
+        height: 1440
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/report.svg',
+        alt: 'ABM report highlight frame',
+        width: 1440,
+        height: 1440
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/panel.svg',
+        alt: 'Initium accelerator promo panel',
+        width: 1440,
+        height: 1440
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/report.svg',
+        alt: 'ABM report highlight frame',
+        width: 1440,
+        height: 1440
       }
+      
     ],
     kpis: [
       { label: 'Pipeline', value: '$3.4M' },
