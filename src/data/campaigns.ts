@@ -350,21 +350,21 @@ export const campaigns: Campaign[] = [
         alt: 'Community upliftment campaign creative',
         width: 3375,
         height: 6000
-      }
+      },
       {
         type: 'image',
         src: '/assets/campaigns/south32-community-2024/Sasol2.jpg',
         alt: 'Community upliftment campaign creative',
         width: 3375,
         height: 6000
-      }
+      },
       {
         type: 'image',
         src: '/assets/campaigns/south32-community-2024/Sasol3.jpg',
         alt: 'Community upliftment campaign creative',
         width: 3375,
         height: 6000
-      }
+      },
     ],
   kpis: [
     { label: 'Employee Engagement Score', value: '78%' },
