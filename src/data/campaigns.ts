@@ -214,7 +214,7 @@ export const campaigns: Campaign[] = [
         poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
         alt: 'South32 Cover.jpg',
         width: 1080,
-        height: 1920
+        height: 1080
       },
       {
         type: 'image',
