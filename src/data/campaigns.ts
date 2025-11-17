@@ -328,33 +328,53 @@ export const campaigns: Campaign[] = [
   },
 
   {
-    id: 'south32-community-2024',
-    title: 'South32 Community Impact Drives',
-    employer: 'South32',
-    role: 'Integrated Marketing Manager',
-    period: '2024 Programme',
-    channels: ['Meta', 'Google', 'Programmatic', 'Web'],
-    summary: 'Behaviour-change storytelling aligning ESG commitments with measurable community outcomes.',
-    responsibilities: [
-      'Power BI sustainability dashboards for leadership',
-      'Programmatic guaranteed on premium news inventory',
-      'Qualitative sentiment tracking in weekly retros'
+    id: 'sasol-communications-2024',
+    title: 'Sasol Strategic Communications & Stakeholder Engagement',
+    employer: 'Sasol',
+    role: 'Communications Officer',
+    period: '2024',
+    channels: ['Internal Comms', 'Media Relations', 'Stakeholder Engagement', 'Digital Platforms'],
+  summary: 'Strategic corporate communications driving stakeholder alignment, reputation management, and operational messaging across integrated energy and chemical operations.',
+  responsibilities: [
+    'Internal communications strategy and employee engagement campaigns',
+    'Media relations and press release coordination across business units',
+    'Stakeholder mapping and engagement for ESG and community initiatives',
+    'Crisis communication support and reputation management',
+    'Content creation for executive communications and town halls',
+    'Digital content management across corporate channels'
     ],
     assets: [
       {
         type: 'image',
-        src: '/assets/campaigns/south32-community-2024/impact.svg',
+        src: '/assets/campaigns/south32-community-2024/Sasol1.jpg',
         alt: 'Community upliftment campaign creative',
-        width: 1440,
-        height: 1440
+        width: 3375,
+        height: 6000
+      }
+      {
+        type: 'image',
+        src: '/assets/campaigns/south32-community-2024/Sasol2.jpg',
+        alt: 'Community upliftment campaign creative',
+        width: 3375,
+        height: 6000
+      }
+      {
+        type: 'image',
+        src: '/assets/campaigns/south32-community-2024/Sasol3.jpg',
+        alt: 'Community upliftment campaign creative',
+        width: 3375,
+        height: 6000
       }
     ],
-    kpis: [
-      { label: 'Reach', value: '1.2M' },
-      { label: 'ROAS', value: '3.1:1' },
-      { label: 'Engagement', value: '5.2%' }
-    ],
-    tech: ['Campaign Manager 360', 'Google Ads', 'Power BI', 'Tableau']
+  kpis: [
+    { label: 'Employee Engagement Score', value: '78%' },
+    { label: 'Media Coverage (Positive/Neutral)', value: '85%' },
+    { label: 'Message Reach (Internal)', value: '12K+' },
+    { label: 'Stakeholder Satisfaction', value: '4.2/5' },
+    { label: 'Response Time (Media)', value: '<2hrs' },
+    { label: 'Content Engagement Rate', value: '6.8%' }
+  ],
+  tech: ['SharePoint', 'Microsoft 365', 'Media Monitoring Tools', 'Canva', 'CMS Platforms']
   }
 ];
 
