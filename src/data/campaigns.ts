@@ -221,24 +221,24 @@ export const campaigns: Campaign[] = [
         src: '/assets/campaigns/empangeni-open-day-2023/South 2.jpg',
         poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
         alt: 'High School Leadership Programme Group Shot',
-        width: 3375,
-        height: 6000
+        width: 1080,
+        height: 1920
       },
       {
         type: 'image',
         src: '/assets/campaigns/empangeni-open-day-2023/South 3.jpg',
         poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
         alt: 'Campaign Poster Visuals',
-        width: 3375,
-        height: 6000
+        width: 1080,
+        height: 1920
       },
       {
         type: 'image',
         src: '/assets/campaigns/empangeni-open-day-2023/South 4.jpg',
         poster: '/assets/campaigns/empangeni-open-day-2023/South32 Cover.jpg',
         alt: 'Trek4Mandela Women\'s Month Spotlight Series',
-        width: 3375,
-        height: 6000
+        width: 1080,
+        height: 1920
       }
     ],
     kpis: [
