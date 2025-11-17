@@ -211,8 +211,8 @@ export const campaigns: Campaign[] = [
         {
         type: 'video',
         src: '/assets/campaigns/empangeni-open-day-2023/insta_video_76990.MP4',
-        poster: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/Brand Meaning.jpg',
-        alt: 'Brand Meaning Level 2 — hero cut',
+        poster:  '/assets/campaigns/empangeni-open-day-2023/South32 Cover.JPG',
+        alt: 'South32 Cover.jpg',
         width: 1080,
         height: 1920
       },
