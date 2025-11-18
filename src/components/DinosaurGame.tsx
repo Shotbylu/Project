@@ -16,7 +16,8 @@ const Carousel3D: React.FC = () => {
       id: 1,
       image: '/assets/public/assets/BTS/IMG_1.jpg',
       title: 'Campaign Strategy Session',
-      description: 'Collaborating with clients on digital marketing initiatives'
+      width: 747,
+      height: 1024
     },
     {
       id: 2,
