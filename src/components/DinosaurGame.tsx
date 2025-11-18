@@ -17,32 +17,51 @@ const Carousel3D: React.FC = () => {
       id: 1,
       image: '/assets/BTS/IMG_1.jpg', // Correct path relative to public folder
       title: 'Campaign Strategy Session',
-      description: 'Deep diving into market insights and planning the roadmap.'
     },
     {
       id: 2,
       image: '/assets/BTS/IMG_2.jpg',
       title: 'Team Collaboration',
-      description: 'Working with cross-functional teams to deliver results.'
     },
     {
       id: 3,
       image: '/assets/BTS/IMG_3.jpg',
       title: 'Data Analysis',
-      description: 'Analysing campaign performance and ROI metrics.'
     },
     {
       id: 4,
       image: '/assets/BTS/IMG_4.jpg',
       title: 'Client Presentations',
-      description: 'Presenting strategies and insights to stakeholders.'
     },
     {
       id: 5,
       image: '/assets/BTS/IMG_5.jpg',
       title: 'Creative Development',
-      description: 'Developing engaging content for social media campaigns.'
-    }
+    },
+    {
+      id: 6,
+      image: '/assets/BTS/IMG_6.jpg',
+      title: 'Creative Development',
+    },
+    {
+      id: 7,
+      image: '/assets/BTS/IMG_7.jpg',
+      title: 'Creative Development',
+    },
+    {
+      id: 8,
+      image: '/assets/BTS/IMG_8.jpg',
+      title: 'Creative Development',
+    },
+    {
+      id: 9,
+      image: '/assets/BTS/IMG_9.jpg',
+      title: 'Creative Development',
+    },
+    {
+      id: 10,
+      image: '/assets/BTS/IMG_10.jpg',
+      title: 'Creative Development',
   ];
 
   const rotateCarousel = (direction: 'next' | 'prev'): void => {
