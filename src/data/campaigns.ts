@@ -295,6 +295,7 @@ export const campaigns: Campaign[] = [
     {
       type: 'image',
       src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS1.jpg',
+      poster: '/assets/campaigns/initium-b2b-acceleration-2025/IVS Poster.jpg',
       alt: 'Initium Venture Solutions qualification series - ICT, Transport & Logistics, and Business',
       width: 3375,
       height: 6000
