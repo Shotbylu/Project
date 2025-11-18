@@ -128,6 +128,7 @@ export const campaigns: Campaign[] = [
         alt: 'Mazda2 headline frame',
         width: 1080,
         height: 1920
+      }, 
       {
         type: 'image',
         src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail3.png',
