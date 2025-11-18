@@ -4,18 +4,18 @@ interface CarouselItem {
   id: number;
   image: string;
   title: string;
-  description: string;
+  description?: string; // Made optional since not all items have it
 }
 
 const Carousel3D: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
-  // UPDATED: referencing local images based on your 'public/assets/BTS' structure
+  // FIXED: Added closing brace '}' to the last item
   const items: CarouselItem[] = [
     {
       id: 1,
-      image: '/assets/BTS/IMG_1.jpg', // Correct path relative to public folder
+      image: '/assets/BTS/IMG_1.jpg',
       title: 'Campaign Strategy Session',
     },
     {
@@ -62,6 +62,7 @@ const Carousel3D: React.FC = () => {
       id: 10,
       image: '/assets/BTS/IMG_10.jpg',
       title: 'Creative Development',
+    } // <--- Missing bracket fixed here
   ];
 
   const rotateCarousel = (direction: 'next' | 'prev'): void => {
@@ -171,7 +172,6 @@ const Carousel3D: React.FC = () => {
                   alt={item.title}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    // Fallback in case path is still incorrect
                     e.currentTarget.src = 'https://via.placeholder.com/400x600?text=Image+Not+Found';
                   }}
                 />
@@ -184,8 +184,8 @@ const Carousel3D: React.FC = () => {
 
         {/* Current Item Info */}
         <div className="text-center mb-8 px-4 transition-all duration-500">
-          <h3 className="text-2xl font-semibold text-gray-900 mb-2">{currentItem.title}</h3>
-          <p className="text-gray-600 max-w-xl mx-auto">{currentItem.description}</p>
+          <h3 className="text-2xl font-semibold text-gray-900 mb-2">{currentItem?.title}</h3>
+          <p className="text-gray-600 max-w-xl mx-auto">{currentItem?.description || ''}</p>
         </div>
 
         {/* Controls */}
