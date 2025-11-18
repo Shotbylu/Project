@@ -195,7 +195,7 @@ export const campaigns: Campaign[] = [
     period: '2025',
     channels: ['Meta', 'Google', 'Web', 'TikTok', 'YouTube'],
     summary:
-      "MazdaCare = Service Plan + Warranty + Roadside Assistance Campaign. Ownership made effortless. Live across Meta, Web, Youtube & Tiktok",
+      "A digital campaign showcasing MazdaCare’s service plan, warranty and roadside assistance, boosting ownership confidence and value. Live across Meta, Web, YouTube and TikTok platforms.",
     responsibilities: [
       'Campaign architecture (prospecting, retargeting, lead nurture)',
       'Creative briefing and content organisation (Reels, 9:16 statics)',
