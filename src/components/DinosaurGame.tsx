@@ -11,37 +11,37 @@ const Carousel3D: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
+  // UPDATED: referencing local images based on your 'public/assets/BTS' structure
   const items: CarouselItem[] = [
     {
       id: 1,
-      image: '/assets/public/assets/BTS/IMG_1.jpg',
+      image: '/assets/BTS/IMG_1.jpg', // Correct path relative to public folder
       title: 'Campaign Strategy Session',
-      width: 747,
-      height: 1024
+      description: 'Deep diving into market insights and planning the roadmap.'
     },
     {
       id: 2,
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop',
+      image: '/assets/BTS/IMG_2.jpg',
       title: 'Team Collaboration',
-      description: 'Working with cross-functional teams to deliver results'
+      description: 'Working with cross-functional teams to deliver results.'
     },
     {
       id: 3,
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=600&fit=crop',
+      image: '/assets/BTS/IMG_3.jpg',
       title: 'Data Analysis',
-      description: 'Analyzing campaign performance and ROI metrics'
+      description: 'Analysing campaign performance and ROI metrics.'
     },
     {
       id: 4,
-      image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop',
+      image: '/assets/BTS/IMG_4.jpg',
       title: 'Client Presentations',
-      description: 'Presenting strategies and insights to stakeholders'
+      description: 'Presenting strategies and insights to stakeholders.'
     },
     {
       id: 5,
-      image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=600&fit=crop',
+      image: '/assets/BTS/IMG_5.jpg',
       title: 'Creative Development',
-      description: 'Developing engaging content for social media campaigns'
+      description: 'Developing engaging content for social media campaigns.'
     }
   ];
 
@@ -151,6 +151,10 @@ const Carousel3D: React.FC = () => {
                   src={item.image}
                   alt={item.title}
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Fallback in case path is still incorrect
+                    e.currentTarget.src = 'https://via.placeholder.com/400x600?text=Image+Not+Found';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent"></div>
                 <div className="absolute inset-0 border border-gray-200 rounded-xl pointer-events-none"></div>
