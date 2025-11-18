@@ -14,7 +14,7 @@ const Carousel3D: React.FC = () => {
   const items: CarouselItem[] = [
     {
       id: 1,
-      image: 'public/assets/BTS/IMG_1.jpg',
+      image: '/assets/public/assets/BTS/IMG_1.jpg',
       title: 'Campaign Strategy Session',
       description: 'Collaborating with clients on digital marketing initiatives'
     },
