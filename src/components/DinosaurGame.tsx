@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 interface CarouselItem {
   id: number;
   image: string;
-  title: string;
-  description?: string; // Made optional since not all items have it
 }
 
 const Carousel3D: React.FC = () => {
@@ -16,17 +14,14 @@ const Carousel3D: React.FC = () => {
     {
       id: 1,
       image: '/assets/BTS/IMG_1.jpg',
-      title: 'Campaign Strategy Session',
     },
     {
       id: 2,
       image: '/assets/BTS/IMG_2.jpg',
-      title: 'Team Collaboration',
     },
     {
       id: 3,
       image: '/assets/BTS/IMG_3.jpg',
-      title: 'Data Analysis',
     },
     {
       id: 4,
@@ -36,32 +31,26 @@ const Carousel3D: React.FC = () => {
     {
       id: 5,
       image: '/assets/BTS/IMG_5.jpg',
-      title: 'Creative Development',
     },
     {
       id: 6,
       image: '/assets/BTS/IMG_6.jpg',
-      title: 'Creative Development',
     },
     {
       id: 7,
       image: '/assets/BTS/IMG_7.jpg',
-      title: 'Creative Development',
     },
     {
       id: 8,
       image: '/assets/BTS/IMG_8.jpg',
-      title: 'Creative Development',
     },
     {
       id: 9,
       image: '/assets/BTS/IMG_9.jpg',
-      title: 'Creative Development',
     },
     {
       id: 10,
       image: '/assets/BTS/IMG_10.jpg',
-      title: 'Creative Development',
     } // <--- Missing bracket fixed here
   ];
 
@@ -145,7 +134,7 @@ const Carousel3D: React.FC = () => {
             A Day in <span className="text-orange-500">My Work</span>
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto mb-12">
-            From strategy sessions to campaign execution, here's a glimpse into my daily work environment
+            Here's a glimpse into my daily work life
           </p>
         </div>
 
