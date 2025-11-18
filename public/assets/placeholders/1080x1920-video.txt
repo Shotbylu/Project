@@ -1,1 +1,0 @@
-Campaign video placeholder. Replace with a branded 1080x1920 MP4 stored under public/assets/campaigns/<slug>/.
