@@ -305,7 +305,7 @@ export const campaigns: Campaign[] = [
       },
       {
         type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS3.jpg,
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS3.jpg',
         alt: 'Initium accelerator promo panel',
         width: 1440,
         height: 1440
@@ -337,7 +337,7 @@ export const campaigns: Campaign[] = [
         alt: 'ABM report highlight frame',
         width: 1440,
         height: 1440
-      
+      }
     ],
     kpis: [
       { label: 'Pipeline', value: '$3.4M' },
