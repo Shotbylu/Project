@@ -138,7 +138,7 @@ export const campaigns: Campaign[] = [
       },
       {
         type: 'video',
-        src: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/mazda2-story-video-1080x1920.mp4',
+        src:  '/assets/campaigns/mazda-gfv-q3-2025/mazda2-story-video-1080x1920.mp4',
         poster: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2.jpg',
         alt: 'Mazda2 Story Video',
         width: 1080,
