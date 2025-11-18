@@ -55,12 +55,18 @@ export const campaigns: Campaign[] = [
     role: 'Digital Marketing Specialist',
     period: '2025',
     channels: ['Meta', 'YouTube', 'Email/CRM', 'Web'],
-    summary: 'Video-led storytelling translating Mazda\'s brand meaning into measurable engagement and qualified demand.',
+    summary:
+    "Driving Mazda SA’s digital performance through full-funnel campaign strategy, video-led creative direction, daily optimisation, data analytics, and CRM-driven lead generation.",
     responsibilities: [
-      'Creative direction for 9:16 narrative',
-      'Sequenced placements across the funnel',
-      'Daily optimisation and reporting',
-      'POPIA-compliant lead routing via HubSpot'
+    'Lead creative direction for 9:16 video storytelling and digital assets',
+    'Plan and execute full-funnel campaigns across Meta, YouTube, CRM, and Web',
+    'Optimise daily and report across Meta, Google, GA4, Rival IQ, and Power BI',
+    'Manage POPIA-compliant lead flows and dealer alignment via HubSpot',
+    'Oversee community engagement and sentiment across Mazda’s social channels',
+    'Coordinate influencer/PR content, approvals, scheduling, and performance',
+    'Manage budgets, POs, invoices, and reconciliations in Oracle E-Business Suite',
+    'Maintain Mazda SA website, SharePoint content, and dealer portal updates',
+    'Collaborate with Sales, Product, CRM, and Dealer Network to drive KPIs'
     ],
     assets: [
       {
@@ -86,7 +92,31 @@ export const campaigns: Campaign[] = [
         alt: 'Joy of driving feature cut',
         width: 1080,
         height: 1920
-      }
+      },
+       {
+        type: 'image',
+        src: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/Billboard1.JPG',
+        poster: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/bm-level2-feature2-poster.svg',
+        alt: 'Joy of driving feature cut',
+        width: 1080,
+        height: 1920
+      },
+       {
+        type: 'video',
+        src: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/B 1080 x 1920.mp4',
+        poster: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/bm-level2-feature2-poster.svg',
+        alt: 'Joy of driving feature cut',
+        width: 1080,
+        height: 1920
+      },
+       {
+        type: 'video',
+        src: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/B2 1080 x 1920.mp4',
+        poster: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/bm-level2-feature2-poster.svg',
+        alt: 'Joy of driving feature cut',
+        width: 1080,
+        height: 1920
+      },
     ],
     kpis: [
       { label: 'Engagement Rate', value: '↑+28%' },
