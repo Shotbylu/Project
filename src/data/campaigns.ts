@@ -274,80 +274,104 @@ export const campaigns: Campaign[] = [
     tech: ['Adobe Illustrator', 'Photoshop', 'Canva Pro', 'Microsoft SharePoint', 'Outlook Comms Planner']
   },
 
-  {
-    id: 'initium-b2b-acceleration-2025',
-    title: 'Initium Venture Solutions Series',
-    employer: 'Initium Venture Solutions',
-    role: 'Growth Strategist',
-    period: '2025 Cohort',
-    channels: ['LinkedIn', 'Google', 'Email/CRM', 'Programmatic'],
-    summary: 'Account-based ABM motion delivering net-new pipeline for SaaS partners.',
-    responsibilities: [
-      'Segmented ICP list building with firmographic enrichment',
-      'Crafted LinkedIn conversation ads and nurtures by buying stage',
-      'Optimised programmatic placements against attention scores',
-      'Stitched attribution insights inside Power BI for investors'
-    ],
-    assets: [
-      {
-        type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS1.jpg',
-        alt: 'Initium accelerator promo panel',
-        width: 1440,
-        height: 1440
-      },
-      {
-        type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS2.jpg',
-        alt: 'ABM report highlight frame',
-        width: 1440,
-        height: 1440
-      },
-      {
-        type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS3.jpg',
-        alt: 'Initium accelerator promo panel',
-        width: 1440,
-        height: 1440
-      },
-      {
-        type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS4.jpg',
-        alt: 'ABM report highlight frame',
-        width: 1440,
-        height: 1440
-      },
-      {
-        type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS5.jpg',
-        alt: 'Initium accelerator promo panel',
-        width: 1440,
-        height: 1440
-      },
-      {
-        type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS6.jpg',
-        alt: 'ABM report highlight frame',
-        width: 1440,
-        height: 1440
-      },
-      {
-        type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS7.jpg',
-        alt: 'ABM report highlight frame',
-        width: 1440,
-        height: 1440
-      }
-    ],
-    kpis: [
-      { label: 'Pipeline', value: '$3.4M' },
-      { label: 'SQL Rate', value: '28%' },
-      { label: 'CPL', value: '$72' },
-      { label: 'Email Reply', value: '19%' }
-    ],
-    tech: ['LinkedIn Campaign Manager', '6sense', 'HubSpot', 'Power BI']
-  },
-
+ {
+  id: 'initium-venture-solutions-portfolio',
+  title: 'Initium Venture Solutions - Integrated Marketing Campaign',
+  employer: 'Initium Venture Solutions',
+  role: 'Marketing & Brand Strategist',
+  period: '2024-2025',
+  channels: ['LinkedIn', 'Social Media', 'Print', 'Digital Advertising', 'Public Relations'],
+  summary: 'Comprehensive brand development and multi-channel marketing campaign for B-BBEE Level 1 training provider, delivering industry-recognized ICT, Business, and Transport & Logistics qualifications.',
+  responsibilities: [
+    'Designed complete brand identity system including company prospectus, brochures, and marketing collateral',
+    'Created and executed targeted social media advertising campaigns across multiple qualification categories',
+    'Developed SharePoint intranet architecture and user interface for internal communications',
+    'Produced LinkedIn carousel ad campaigns optimized for B2B engagement',
+    'Secured executive positioning through strategic PR placements including The Penuel Show',
+    'Designed event marketing materials and recruitment posters for learnership programs',
+    'Crafted messaging strategy highlighting SETA, MICT SETA, and QCTO accreditations'
+  ],
+  assets: [
+    {
+      type: 'image',
+      src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS1.jpg',
+      alt: 'Initium Venture Solutions qualification series - ICT, Transport & Logistics, and Business',
+      width: 3375,
+      height: 6000
+    },
+    {
+      type: 'image',
+      src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS2.jpg',
+      alt: 'IVS file properties showing high-resolution marketing asset',
+      width: 1440,
+      height: 1440
+    },
+    {
+      type: 'image',
+      src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS3.jpg',
+      alt: 'IVS Company Prospectus - comprehensive brand collateral',
+      width: 1440,
+      height: 2880
+    },
+    {
+      type: 'image',
+      src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS4.jpg',
+      alt: 'Social media ad campaign series for Transport, ICT, and Business qualifications',
+      width: 1440,
+      height: 2880
+    },
+    {
+      type: 'image',
+      src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS5.jpg',
+      alt: 'IVS company brochure showcasing accreditation partners and training solutions',
+      width: 1440,
+      height: 2880
+    },
+    {
+      type: 'image',
+      src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS6.jpg',
+      alt: 'SharePoint intranet layout conceptualization and design',
+      width: 1440,
+      height: 2880
+    },
+    {
+      type: 'image',
+      src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS7.jpg',
+      alt: 'LinkedIn carousel ad campaign following best-practice engagement guidelines',
+      width: 1440,
+      height: 2880
+    },
+    {
+      type: 'image',
+      src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS8.jpg',
+      alt: 'CEO executive positioning on The Penuel Show - brand advocacy and PR',
+      width: 1440,
+      height: 2880
+    },
+    {
+      type: 'image',
+      src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS9.jpg',
+      alt: 'Graphic design and content creation - posters and promotional materials',
+      width: 1440,
+      height: 2880
+    }
+  ],
+  kpis: [
+    { label: 'Brand Assets Created', value: '25+' },
+    { label: 'Qualification Categories', value: '4' },
+    { label: 'Accreditation Partners', value: '3' },
+    { label: 'Media Reach', value: '112K+' }
+  ],
+  tech: ['Adobe Creative Suite', 'Microsoft PowerPoint', 'SharePoint', 'LinkedIn Campaign Manager', 'Social Media Management Tools'],
+  industries: ['Education & Training', 'Skills Development', 'Youth Empowerment'],
+  highlights: [
+    'Developed cohesive brand identity spanning digital and print touchpoints',
+    'Created conversion-optimized LinkedIn carousel ads following platform best practices',
+    'Secured high-profile media placement for CEO on influential podcast platform',
+    'Designed comprehensive SharePoint architecture for internal knowledge management',
+    'Positioned brand as bridge between industry needs and workforce development'
+  ]
+}
   {
     id: 'sasol-communications-2024',
     title: 'Sasol Strategic Communications & Stakeholder Engagement',
