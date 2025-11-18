@@ -130,7 +130,7 @@ export const campaigns: Campaign[] = [
         height: 1920
       {
         type: 'image',
-        src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail3.jpg',
+        src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail3.png',
         alt: 'Mazda2',
         width: 1080,
         height: 1920
