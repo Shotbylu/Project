@@ -128,6 +128,20 @@ export const campaigns: Campaign[] = [
         alt: 'Mazda2 headline frame',
         width: 1080,
         height: 1920
+      {
+        type: 'image',
+        src: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2 Retail3.jpg',
+        alt: 'Mazda2',
+        width: 1080,
+        height: 1920
+      },
+      {
+        type: 'video',
+        src: '/assets/campaigns/mazda-brand-meaning-lvl2-2025/Mazda2 Story Video.mp4',
+        poster: '/assets/campaigns/mazda-gfv-q3-2025/Mazda2.jpg',
+        alt: 'Mazda2 Story Video',
+        width: 1080,
+        height: 1920
       }
     ],
     kpis: [
