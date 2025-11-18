@@ -349,8 +349,8 @@ export const campaigns: Campaign[] = [
         src: '/assets/campaigns/south32-community-2024/Sasol1.jpg',
         poster: '/assets/campaigns/south32-community-2024/sasol-image.jpg',
         alt: 'Community upliftment campaign creative',
-        width: 1080,
-        height: 1920
+        width: 1200,
+        height: 2133
       },
       {
         type: 'image',
