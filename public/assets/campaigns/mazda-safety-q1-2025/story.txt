@@ -1,2 +1,0 @@
-Placeholder reference for the Mazda CX Safety Week story video.
-Supply the final 1080x1920 MP4 before deployment and point the campaign data to it.
