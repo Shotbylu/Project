@@ -133,8 +133,7 @@ const downloadPortfolio = async () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              I turn ad spend into qualified leads and revenue through data-driven paid social campaigns on Meta, Google and LinkedIn. I've managed over R1 000 000+ across Meta and LinkedIn campaigns, generating qualified leads with an average 4.2:1 ROAS. I’ve delivered integrated marketing and communications strategies across multiple sectors, including automotive with Mazda Southern Africa, energy and chemicals with Sasol, education with Empangeni High School, and higher education with Initium Venture Solutions, focusing on what actually moves the needle: conversions, cost efficiency, and ROI.
-Based in Johannesburg, working remotely with brands that want a paid social specialist who understands both creative strategy and performance analytics.
+              Hi, I'm glad you're here! Thanks for wanting to learn a bit more about me, I had a lot of fun putting my portfolio website together. I turn ad spend into qualified leads and real revenue through data-driven paid social campaigns across Meta, Google, and LinkedIn. Over the years, I've managed more than R1,000,000 in ad spend, consistently driving results with an average 4.2:1 return on ad spend (ROAS). My experience spans a range of industries, from automotive with Mazda Southern Africa, to energy and chemicals with Sasol, to mining and metals with South32, a globally diversified mining and metals company, to education with Empangeni High School, and higher education through Initium Venture Solutions. No matter the sector, I focus on what truly matters: conversions, cost efficiency, and ROI.
             </motion.p>
 
             <motion.div
@@ -214,8 +213,8 @@ Based in Johannesburg, working remotely with brands that want a paid social spec
                 <div className="ml-4 text-blue-300">Expertise: <span className="text-green-300">[</span></div>
                 <div className="ml-8 text-orange-300">"Paid Social Media, Meta, Google & LinkedIn Ads ",</div>
                 <div className="ml-8 text-orange-300">"Campaign Strategy & Execution",</div>
-                <div className="ml-8 text-orange-300">"A/B Testing & Optimization",</div>
-                <div className="ml-8 text-orange-300">"Audience Targeting & Segmentation",</div>
+                <div className="ml-8 text-orange-300">"Lead Generation & Full-Funnel Optimisation",</div>
+                <div className="ml-8 text-orange-300">"Community Management & Customer Journey Mapping",</div>
                 <div className="ml-8 text-orange-300">"Performance Analytics & Reporting"</div>
                 <div className="ml-4 text-green-300">],</div>
                 <div className="ml-4">
