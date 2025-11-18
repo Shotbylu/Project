@@ -50,7 +50,7 @@ export const campaigns: Campaign[] = [
   // FEATURED — Mazda Brand Meaning Level 2 (3× videos)
   {
     id: 'mazda-brand-meaning-lvl2-2025',
-    title: 'Brand Meaning Level 2',
+    title: 'Brand Meaning Campaign',
     employer: 'Mazda Southern Africa',
     role: 'Digital Marketing Specialist',
     period: '2025',
@@ -58,7 +58,7 @@ export const campaigns: Campaign[] = [
     summary:
     "Driving Mazda SA’s digital performance through full-funnel campaign strategy, video-led creative direction, daily optimisation, data analytics, and CRM-driven lead generation.",
     responsibilities: [
-    'Lead creative direction for 9:16 video storytelling and digital assets',
+    'Creative direction for video storytelling and digital assets',
     'Plan and execute full-funnel campaigns across Meta, YouTube, CRM, and Web',
     'Optimise daily and report across Meta, Google, GA4, Rival IQ, and Power BI',
     'Manage POPIA-compliant lead flows and dealer alignment via HubSpot',
@@ -129,13 +129,13 @@ export const campaigns: Campaign[] = [
 
   {
     id: 'mazda-gfv-q3-2025',
-    title: 'Mazda2 Retail Finance Promotion',
+    title: 'Mazda2 Retail Promotion Caampaign',
     employer: 'Mazda Southern Africa',
     role: 'Digital Marketing Specialist',
     period: '2025 Q3',
     channels: ['Meta', 'Google', 'Web'],
     summary:
-      'Retail promotion aimed at driving sales and increasing brand consideration among active car buyers. Live across our website, Google Media and Meta.',
+      'Mazda2 Retail promotion campaign aimed at driving sales and increasing brand consideration among active car buyers. Live across our website, Google Media and Meta.',
     responsibilities: [
       'Full-funnel retail architecture (in-market prospecting, dynamic remarketing, lead nurture)',
       'Website journey optimisation (LP speed, forms, lead routing) and on-site merchandising',
