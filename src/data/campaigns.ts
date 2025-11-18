@@ -276,7 +276,7 @@ export const campaigns: Campaign[] = [
 
   {
     id: 'initium-b2b-acceleration-2025',
-    title: 'Initium Venture Solutions LinkedIn Campaign',
+    title: 'Initium Venture Solutions Series',
     employer: 'Initium Venture Solutions',
     role: 'Growth Strategist',
     period: '2025 Cohort',
@@ -291,46 +291,52 @@ export const campaigns: Campaign[] = [
     assets: [
       {
         type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/panel.svg',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS1.jpg',
         alt: 'Initium accelerator promo panel',
         width: 1440,
         height: 1440
       },
       {
         type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/report.svg',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS2.jpg',
         alt: 'ABM report highlight frame',
         width: 1440,
         height: 1440
       },
       {
         type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/panel.svg',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS3.jpg,
         alt: 'Initium accelerator promo panel',
         width: 1440,
         height: 1440
       },
       {
         type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/report.svg',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS4.jpg',
         alt: 'ABM report highlight frame',
         width: 1440,
         height: 1440
       },
       {
         type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/panel.svg',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS5.jpg',
         alt: 'Initium accelerator promo panel',
         width: 1440,
         height: 1440
       },
       {
         type: 'image',
-        src: '/assets/campaigns/initium-b2b-acceleration-2025/report.svg',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS6.jpg',
         alt: 'ABM report highlight frame',
         width: 1440,
         height: 1440
-      }
+      },
+      {
+        type: 'image',
+        src: '/assets/campaigns/initium-b2b-acceleration-2025/IVS7.jpg',
+        alt: 'ABM report highlight frame',
+        width: 1440,
+        height: 1440
       
     ],
     kpis: [
