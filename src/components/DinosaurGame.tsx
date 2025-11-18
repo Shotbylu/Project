@@ -111,8 +111,8 @@ const Carousel3D: React.FC = () => {
   const currentItem = items[currentIndex];
 
   return (
-    <div className="relative min-h-screen bg-gray-50 flex items-center justify-center overflow-hidden py-20">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-orange-50/40 via-white to-gray-50" aria-hidden="true"></div>
+    <div className="relative min-h-screen bg-white flex items-center justify-center overflow-hidden py-20">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white via-white to-white" aria-hidden="true"></div>
 
       <div className="relative w-full max-w-7xl mx-auto px-4">
         {/* Header Section */}
