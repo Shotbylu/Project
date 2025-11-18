@@ -129,7 +129,7 @@ export const campaigns: Campaign[] = [
 
   {
     id: 'mazda-gfv-q3-2025',
-    title: 'Mazda2 Retail Promotion Caampaign',
+    title: 'Mazda2 Retail Promotion Campaign',
     employer: 'Mazda Southern Africa',
     role: 'Digital Marketing Specialist',
     period: '2025 Q3',
