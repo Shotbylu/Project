@@ -370,8 +370,8 @@ export const campaigns: Campaign[] = [
     'Secured high-profile media placement for CEO on influential podcast platform',
     'Designed comprehensive SharePoint architecture for internal knowledge management',
     'Positioned brand as bridge between industry needs and workforce development'
-  ]
-}
+  },
+
   {
     id: 'sasol-communications-2024',
     title: 'Sasol Strategic Communications & Stakeholder Engagement',
