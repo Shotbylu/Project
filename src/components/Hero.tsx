@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Linkedin, Mail, FileText, Folder } from 'lucide-react';
+import { Github, Linkedin, Mail, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Hero = () => {
@@ -53,40 +53,6 @@ const downloadCV = async () => {
   }
 };
 
-const downloadPortfolio = async () => {
-  try {
-    // First, try to fetch the file to check if it exists
-    const response = await fetch('/assets/documents/Lungelo_Sibisi_Portfolio.pdf');
-    
-    if (!response.ok) {
-      console.error('Portfolio file not found');
-      alert('Portfolio file not found. Please contact the administrator.');
-      return;
-    }
-    
-    // Create blob with explicit PDF MIME type
-    const blob = await response.blob();
-    const pdfBlob = new Blob([blob], { type: 'application/pdf' });
-    
-    // Create download link
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(pdfBlob);
-    link.download = 'Lungelo_Sibisi_Portfolio.pdf';
-    
-    // Trigger download
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    // Clean up the URL object
-    URL.revokeObjectURL(link.href);
-  } catch (error) {
-    console.error('Error downloading Portfolio:', error);
-    // Fallback: open in new tab
-    window.open('/assets/documents/Lungelo_Sibisi_Portfolio.pdf', '_blank');
-  }
-};
-  
   return (
     <section id="reception" className="min-h-screen bg-gradient-to-br from-gray-50 to-white relative overflow-hidden pt-20">
       {/* Background Code Hints */}
@@ -154,19 +120,12 @@ const downloadPortfolio = async () => {
               >
                 Contact me
               </button>
-              <button 
+              <button
                 onClick={downloadCV}
                 className="px-4 sm:px-6 py-3 bg-[#0f1a2b] text-white rounded-2xl font-semibold hover:bg-gray-800 transition-all duration-200 hover:scale-105 flex items-center justify-center space-x-2 text-sm sm:text-base"
               >
                 <FileText size={18} className="sm:w-5 sm:h-5" />
                 <span>Download CV</span>
-              </button>
-              <button 
-                onClick={downloadPortfolio}
-                className="px-4 sm:px-6 py-3 border border-gray-300 text-gray-700 rounded-2xl font-semibold hover:bg-gray-50 transition-all duration-200 hover:scale-105 flex items-center justify-center space-x-2 text-sm sm:text-base"
-              >
-                <Folder size={18} className="sm:w-5 sm:h-5" />
-                <span>Download Portfolio</span>
               </button>
             </motion.div>
 
