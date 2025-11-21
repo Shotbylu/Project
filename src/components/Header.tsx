@@ -1,6 +1,6 @@
 import React, { useState, useCallback, memo } from 'react';
 import { Menu, X } from 'lucide-react';
-import useActiveSection from './Hooks/useActiveSection';
+import useActiveSection from '../hooks/useActiveSection';
 
 // Hoist menu items to module scope to prevent recreation on render
 export const menuItems = [
