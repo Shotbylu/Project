@@ -1,47 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { Menu, X } from 'lucide-react';
+import useActiveSection from './Hooks/useActiveSection';
+
+// Hoist menu items to module scope to prevent recreation on render
+export const menuItems = [
+  { id: 'reception', label: 'Reception' },
+  { id: 'campaigns', label: 'Campaigns' },
+  { id: 'background', label: 'Background' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'contact', label: 'Contact' }
+];
 
 const Header = () => {
-  const [activeSection, setActiveSection] = useState('reception');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  // Use the custom hook to track active section without scroll thrashing
+  const activeSection = useActiveSection(menuItems);
 
-  const menuItems = [
-    { id: 'reception', label: 'Reception' },
-    { id: 'campaigns', label: 'Campaigns' },
-    { id: 'background', label: 'Background' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'contact', label: 'Contact' }
-  ];
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = menuItems.map(item => document.getElementById(item.id));
-      const scrollPosition = window.scrollY + 100;
-
-      sections.forEach((section, index) => {
-        if (section) {
-          const sectionTop = section.offsetTop;
-          const sectionBottom = sectionTop + section.offsetHeight;
-          
-          if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-            setActiveSection(menuItems[index].id);
-          }
-        }
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (sectionId: string) => {
+  const scrollToSection = useCallback((sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     setIsMenuOpen(false);
-  };
+  }, []);
+
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => !prev);
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-b border-gray-100 z-50">
@@ -57,6 +44,7 @@ const Header = () => {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
+                aria-current={activeSection === item.id ? 'page' : undefined}
                 className={`text-sm font-medium transition-colors duration-200 relative ${
                   activeSection === item.id
                     ? 'text-orange-500'
@@ -73,7 +61,8 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={toggleMenu}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -88,6 +77,7 @@ const Header = () => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
+                  aria-current={activeSection === item.id ? 'page' : undefined}
                   className={`text-left text-sm font-medium transition-colors duration-200 px-2 py-1 rounded ${
                     activeSection === item.id
                       ? 'text-orange-500 bg-orange-50'
@@ -105,4 +95,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default memo(Header);
