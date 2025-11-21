@@ -1,122 +1,123 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, memo } from 'react';
 import { ChevronLeft, ChevronRight, GraduationCap, Briefcase } from 'lucide-react';
+
+// --- Static Data Hoisted to Module Scope ---
+const filters = ['Education', 'Work Experience'];
+const years = ['2018', '2019', '2022', '2023', '2024', '2025'];
+
+const stats = [
+  { label: 'Education', value: '2 Qualifications' },
+  { label: 'Experience', value: '6+ Years' },
+  { label: 'Key Roles', value: '5 Positions' }
+];
+
+const timelineData = [
+  {
+    year: '2018',
+    category: 'Education',
+    title: 'Matric Senior Certificate',
+    institution: 'Richards Bay Secondary',
+    location: 'Richards Bay',
+    description: 'NQF4 - Completed high school education with a focus on Physical Science.',
+    icon: GraduationCap,
+    color: 'indigo'
+  },
+  {
+    year: '2019',
+    category: 'Work Experience',
+    title: 'Sales Consultant',
+    institution: 'CCI Global',
+    location: 'Durban',
+    description: 'Started career in sales, developing customer relationship and communication skills.',
+    icon: Briefcase,
+    color: 'navy'
+  },
+  {
+    year: '2022',
+    category: 'Education',
+    title: 'Diploma Marketing Management',
+    institution: 'Boston City Campus',
+    location: 'Durban',
+    description: 'NQF 6 - Specialized in marketing strategies, consumer behaviour, and digital marketing.',
+    icon: GraduationCap,
+    color: 'indigo'
+  },
+  {
+    year: '2023',
+    category: 'Work Experience',
+    title: 'Social Media & Community Manager',
+    institution: 'Empangeni High School',
+    location: 'Empangeni',
+    description: 'Managed media strategy, advertising, and community engagement.',
+    icon: Briefcase,
+    color: 'navy'
+  },
+  {
+    year: '2023',
+    category: 'Work Experience',
+    title: 'Digital Marketing Coordinator',
+    institution: 'South32',
+    location: 'Richards Bay',
+    description: 'Focused on Google Analytics, SEO optimization, and digital coordination.',
+    icon: Briefcase,
+    color: 'navy'
+  },
+  {
+    year: '2024',
+    category: 'Work Experience',
+    title: 'Communications Officer, (ESD)',
+    institution: 'Sasol',
+    location: 'Johannesburg',
+    description: 'Executed B2B marketing strategies and corporate communication for Enterprise Supplier Development.',
+    icon: Briefcase,
+    color: 'navy'
+  },
+  {
+    year: '2025',
+    category: 'Work Experience',
+    title: 'Paid Media & Digital Marketing Consultant',
+    institution: 'Initium Venture Solutions',
+    location: 'Kempton Park (Remote)',
+    description: 'Freelance consultation focusing on paid media strategies and digital optimization.',
+    icon: Briefcase,
+    color: 'navy'
+  },
+  {
+    year: '2025',
+    category: 'Work Experience',
+    title: 'Digital Marketing Specialist',
+    institution: 'Mazda Southern Africa',
+    location: 'Midrand',
+    description: 'Applying data-driven strategies and SEO to elevate Mazda’s brand and online presence.',
+    icon: Briefcase,
+    color: 'navy'
+  }
+];
+
+const getColorClasses = (color) => {
+  switch (color) {
+    case 'indigo':
+      return 'border-l-indigo-500 bg-indigo-50';
+    case 'navy':
+      return 'border-l-blue-900 bg-blue-50';
+    case 'orange':
+      return 'border-l-orange-500 bg-orange-50';
+    default:
+      return 'border-l-gray-500 bg-gray-50';
+  }
+};
 
 const Background = () => {
   const [activeFilter, setActiveFilter] = useState('Work Experience');
   const [activeYear, setActiveYear] = useState('All');
 
-  const filters = ['Education', 'Work Experience'];
-  // Updated years array to remove future dates associated with removed education
-  const years = ['2018', '2019', '2022', '2023', '2024', '2025'];
-
-  const timelineData = [
-    {
-      year: '2018',
-      category: 'Education',
-      title: 'Matric Senior Certificate',
-      institution: 'Richards Bay Secondary',
-      location: 'Richards Bay',
-      description: 'NQF4 - Completed high school education with a focus on Physical Science.',
-      icon: GraduationCap,
-      color: 'indigo'
-    },
-    {
-      year: '2019',
-      category: 'Work Experience',
-      title: 'Sales Consultant',
-      institution: 'CCI Global',
-      location: 'Durban',
-      description: 'Started career in sales, developing customer relationship and communication skills.',
-      icon: Briefcase,
-      color: 'navy'
-    },
-    {
-      year: '2022',
-      category: 'Education',
-      title: 'Diploma Marketing Management',
-      institution: 'Boston City Campus',
-      location: 'Durban',
-      description: 'NQF 6 - Specialized in marketing strategies, consumer behaviour, and digital marketing.',
-      icon: GraduationCap,
-      color: 'indigo'
-    },
-    {
-      year: '2023',
-      category: 'Work Experience',
-      title: 'Social Media & Community Manager',
-      institution: 'Empangeni High School',
-      location: 'Empangeni',
-      description: 'Managed media strategy, advertising, and community engagement.',
-      icon: Briefcase,
-      color: 'navy'
-    },
-    {
-      year: '2023',
-      category: 'Work Experience',
-      title: 'Digital Marketing Coordinator',
-      institution: 'South32',
-      location: 'Richards Bay',
-      description: 'Focused on Google Analytics, SEO optimization, and digital coordination.',
-      icon: Briefcase,
-      color: 'navy'
-    },
-    {
-      year: '2024',
-      category: 'Work Experience',
-      title: 'Communications Officer, (ESD)',
-      institution: 'Sasol',
-      location: 'Johannesburg',
-      description: 'Executed B2B marketing strategies and corporate communication for Enterprise Supplier Development.',
-      icon: Briefcase,
-      color: 'navy'
-    },
-    {
-      year: '2025',
-      category: 'Work Experience',
-      title: 'Paid Media & Digital Marketing Consultant',
-      institution: 'Initium Venture Solutions',
-      location: 'Kempton Park (Remote)',
-      description: 'Freelance consultation focusing on paid media strategies and digital optimization.',
-      icon: Briefcase,
-      color: 'navy'
-    },
-    {
-      year: '2025',
-      category: 'Work Experience',
-      title: 'Digital Marketing Specialist',
-      institution: 'Mazda Southern Africa',
-      location: 'Midrand',
-      description: 'Applying data-driven strategies and SEO to elevate Mazda’s brand and online presence.',
-      icon: Briefcase,
-      color: 'navy'
-    }
-  ];
-
-  const filteredData = timelineData.filter(item => {
-    const filterMatch = item.category === activeFilter;
-    const yearMatch = activeYear === 'All' || item.year === activeYear;
-    return filterMatch && yearMatch;
-  });
-
-  const getColorClasses = (color) => {
-    switch (color) {
-      case 'indigo':
-        return 'border-l-indigo-500 bg-indigo-50';
-      case 'navy':
-        return 'border-l-blue-900 bg-blue-50';
-      case 'orange':
-        return 'border-l-orange-500 bg-orange-50';
-      default:
-        return 'border-l-gray-500 bg-gray-50';
-    }
-  };
-
-  // Updated stats to reflect current data state
-  const stats = [
-    { label: 'Education', value: '2 Qualifications' },
-    { label: 'Experience', value: '6+ Years' },
-    { label: 'Key Roles', value: '5 Positions' }
-  ];
+  const filteredData = useMemo(() => {
+    return timelineData.filter(item => {
+      const filterMatch = item.category === activeFilter;
+      const yearMatch = activeYear === 'All' || item.year === activeYear;
+      return filterMatch && yearMatch;
+    });
+  }, [activeFilter, activeYear]);
 
   return (
     <section id="background" className="py-12 sm:py-20 bg-gray-50">
@@ -232,4 +233,4 @@ const Background = () => {
   );
 };
 
-export default Background;
+export default memo(Background);
