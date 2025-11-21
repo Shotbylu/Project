@@ -6,7 +6,8 @@ const Background = () => {
   const [activeYear, setActiveYear] = useState('All');
 
   const filters = ['Education', 'Work Experience'];
-  const years = ['2018', '2019', '2022', '2023', '2024', '2025', '2025-2027'];
+  // Updated years array to remove future dates associated with removed education
+  const years = ['2018', '2019', '2022', '2023', '2024', '2025'];
 
   const timelineData = [
     {
@@ -35,77 +36,57 @@ const Background = () => {
       title: 'Diploma Marketing Management',
       institution: 'Boston City Campus',
       location: 'Durban',
-      description: 'NQF 6 - Specialized in marketing strategies, consumer behavior, and digital marketing.',
-      icon: GraduationCap,
-      color: 'indigo'
-    },
-    {
-      year: '2025',
-      category: 'Education',
-      title: 'Higher Certificate Data Science',
-      institution: 'MICTSETA',
-      location: 'Johannesburg',
-      description: 'NQF 5 - Advanced training in data science methodologies and tools.',
-      icon: GraduationCap,
-      color: 'indigo'
-    },
-    {
-      year: '2025-2027',
-      category: 'Education',
-      title: 'BCom Degree, Marketing Management',
-      institution: 'University Of South Africa (UNISA)',
-      location: 'Johannesburg',
-      description: 'NQF 7 - Bachelor of Commerce degree specializing in Marketing Management.',
+      description: 'NQF 6 - Specialized in marketing strategies, consumer behaviour, and digital marketing.',
       icon: GraduationCap,
       color: 'indigo'
     },
     {
       year: '2023',
       category: 'Work Experience',
-      title: 'Media, Marketing & Brand Officer',
+      title: 'Social Media & Community Manager',
       institution: 'Empangeni High School',
       location: 'Empangeni',
-      description: 'Gained experience in Media, Marketing and Branding.',
+      description: 'Managed media strategy, advertising, and community engagement.',
       icon: Briefcase,
       color: 'navy'
     },
     {
       year: '2023',
       category: 'Work Experience',
-      title: 'Data Analyst Intern',
-      institution: 'South32, Hillside',
+      title: 'Digital Marketing Coordinator',
+      institution: 'South32',
       location: 'Richards Bay',
-      description: 'Gained experience in data analysis and business intelligence.',
+      description: 'Focused on Google Analytics, SEO optimization, and digital coordination.',
       icon: Briefcase,
       color: 'navy'
     },
     {
       year: '2024',
       category: 'Work Experience',
-      title: 'Communications Officer',
+      title: 'Communications Officer, (ESD)',
       institution: 'Sasol',
-      location: 'Sandton',
-      description: 'Crafted and executed corporate communication strategies.',
+      location: 'Johannesburg',
+      description: 'Executed B2B marketing strategies and corporate communication for Enterprise Supplier Development.',
       icon: Briefcase,
       color: 'navy'
     },
     {
       year: '2025',
       category: 'Work Experience',
-      title: 'Marketing Coordinator',
+      title: 'Paid Media & Digital Marketing Consultant',
       institution: 'Initium Venture Solutions',
-      location: 'Kempton Park',
-      description: 'Freelance role which focused on marketing for Initium Venture Solutions.',
+      location: 'Kempton Park (Remote)',
+      description: 'Freelance consultation focusing on paid media strategies and digital optimization.',
       icon: Briefcase,
       color: 'navy'
     },
-        {
+    {
       year: '2025',
       category: 'Work Experience',
       title: 'Digital Marketing Specialist',
       institution: 'Mazda Southern Africa',
       location: 'Midrand',
-      description: 'Digital Marketing Specialist applying data-driven strategies and consumer insights to elevate Mazda’s brand and online presence.',
+      description: 'Applying data-driven strategies and SEO to elevate Mazda’s brand and online presence.',
       icon: Briefcase,
       color: 'navy'
     }
@@ -130,10 +111,11 @@ const Background = () => {
     }
   };
 
+  // Updated stats to reflect current data state
   const stats = [
-    { label: 'Education', value: '3 qualifications + 1 pending' },
-    { label: 'Experience', value: '4+ years' },
-    { label: 'Campaigns', value: '3+ & projects' }
+    { label: 'Education', value: '2 Qualifications' },
+    { label: 'Experience', value: '6+ Years' },
+    { label: 'Key Roles', value: '5 Positions' }
   ];
 
   return (
@@ -142,7 +124,7 @@ const Background = () => {
         <div className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-4">My Background</h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-            From education to on the job experience, discover my evolution in the digital world
+            From education to on-the-job experience, discover my evolution in the digital world.
           </p>
         </div>
 
@@ -225,8 +207,6 @@ const Background = () => {
                   <h3 className="text-lg sm:text-xl font-bold text-slate-800 mb-1">{item.title}</h3>
                   <p className="text-blue-600 font-semibold mb-2 text-sm sm:text-base">{item.institution}</p>
                   <p className="text-gray-600 mb-4 text-sm sm:text-base">{item.description}</p>
-                  <button className="text-orange-600 font-semibold hover:text-orange-700 transition-colors text-sm">
-                  </button>
                 </div>
               </div>
             </div>
@@ -244,7 +224,7 @@ const Background = () => {
             ))}
           </div>
           <p className="text-center text-gray-500 mt-6 text-sm sm:text-base">
-            A steady progression since 2018 with a total of 37 skills acquired.
+            A steady progression in the marketing and data landscape since 2018.
           </p>
         </div>
       </div>
