@@ -1,7 +1,9 @@
-import React, { useState, useMemo, memo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, GraduationCap, Briefcase } from 'lucide-react';
 
 // --- Static Data Hoisted to Module Scope ---
+// This prevents array recreation on every render (Garbage Collection optimization)
+
 const filters = ['Education', 'Work Experience'];
 const years = ['2018', '2019', '2022', '2023', '2024', '2025'];
 
@@ -94,6 +96,7 @@ const timelineData = [
   }
 ];
 
+// Pure helper function extracted from component
 const getColorClasses = (color) => {
   switch (color) {
     case 'indigo':
@@ -111,6 +114,8 @@ const Background = () => {
   const [activeFilter, setActiveFilter] = useState('Work Experience');
   const [activeYear, setActiveYear] = useState('All');
 
+  // optimize filtering with useMemo
+  // Only re-runs if activeFilter or activeYear changes
   const filteredData = useMemo(() => {
     return timelineData.filter(item => {
       const filterMatch = item.category === activeFilter;
@@ -233,4 +238,4 @@ const Background = () => {
   );
 };
 
-export default memo(Background);
+export default Background;
