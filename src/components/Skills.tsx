@@ -41,6 +41,10 @@ const Skills = () => {
     'Google - Digital Marketing Certification',
     'IBM - Python for Data Science',
     'Johns Hopkins University - Advanced Statistics for Data Science',
+    'HubSpot - SEO',
+    'HubSpot - Email Marketing',
+    'HubSpot - HubSpot Marketing Software',
+    'Google - Google Ads Search Certification',
   ];
 
   const getSkillLevel = (level: number) => {
