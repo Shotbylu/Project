@@ -23,16 +23,6 @@ const timelineData = [
     color: 'indigo'
   },
   {
-    year: '2019',
-    category: 'Work Experience',
-    title: 'Sales Consultant',
-    institution: 'CCI Global',
-    location: 'Durban',
-    description: 'Started career in sales, developing customer relationship and communication skills.',
-    icon: Briefcase,
-    color: 'navy'
-  },
-  {
     year: '2022',
     category: 'Education',
     title: 'Diploma Marketing Management',
@@ -68,7 +58,7 @@ const timelineData = [
     title: 'Communications Officer, (ESD)',
     institution: 'Sasol',
     location: 'Johannesburg',
-    description: 'Executed B2B marketing strategies and corporate communication for Enterprise Supplier Development.',
+    description: 'Executed internal & external marketing strategies and corporate communication for Enterprise Supplier Development.',
     icon: Briefcase,
     color: 'navy'
   },
