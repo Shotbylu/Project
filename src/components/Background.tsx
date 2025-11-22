@@ -7,7 +7,7 @@ const years = ['2018', '2019', '2022', '2023', '2024', '2025'];
 
 const stats = [
   { label: 'Education', value: '2 Qualifications' },
-  { label: 'Experience', value: '6+ Years' },
+  { label: 'Experience', value: '4+ Years' },
   { label: 'Key Roles', value: '5 Positions' }
 ];
 
@@ -115,7 +115,7 @@ const Background = () => {
         <div className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-4">My Background</h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-            From education to on-the-job experience, discover my evolution in the digital world.
+            From education to on-the-job experience, discover my evolution in the digital Marketing world.
           </p>
         </div>
 
